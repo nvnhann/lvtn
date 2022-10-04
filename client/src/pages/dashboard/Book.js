@@ -240,6 +240,7 @@ export default function BookList() {
                               <Avatar
                                 variant="square"
                                 alt={sp_masp}
+                                sx={{ mr: 1}}
                                 src={`${
                                   URL_PUBLIC_IMAGES + sp_hinhanh[0]?.ha_hinh
                                 }`}

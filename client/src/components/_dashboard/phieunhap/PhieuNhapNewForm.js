@@ -22,11 +22,10 @@ import {
 // routes
 //
 import { useEffect, useState } from 'react';
-import { getData, postData, putData } from 'src/_helper/httpProvider';
+import { getData, postData } from 'src/_helper/httpProvider';
 import { API_BASE_URL } from 'src/config/configUrl';
 import { Icon } from '@iconify/react';
 
-import { formatDate } from 'src/_helper/formatDate';
 import { MIconButton } from 'src/components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
 import { fCurrency } from 'src/_helper/formatCurrentCy';
@@ -72,7 +71,7 @@ export default function PhieuNhapNewForm({ isEdit, currentUser, id, user }) {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      pn_id: user?.id,
+      pn_idnv: user?.id,
       fullname: user?.fullname || '',
       ctpn_idsp: '',
       ctpn_soluong: 1,
@@ -117,6 +116,37 @@ export default function PhieuNhapNewForm({ isEdit, currentUser, id, user }) {
     values,
     setFieldValue,
   } = formik;
+
+  const handleSubmitPN = async () => {
+    if (listBooks.length === 0) {
+      enqueueSnackbar('Chưa có sản phẩm!', {
+        variant: 'error',
+        action: (key) => (
+          <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+            <Icon icon={closeFill} />
+          </MIconButton>
+        ),
+      });
+      return;
+    }
+    let _values = {};
+    _values.pn_idncc = values.pn_idncc.ncc_id;
+    _values.pn_idnv = values.pn_idnv;
+    _values.pn_tongtien = listBooks.reduce(
+      (total, item) => item.ctpn_soluong * item.ctpn_gia + total,
+      0,
+    );
+    _values.sanpham = listBooks;
+    try {
+      await postData(API_BASE_URL + '/phieunhap', _values);
+      enqueueSnackbar(!isEdit ? 'Thêm thành công' : 'Cập nhật thành công', {
+        variant: 'success',
+      });
+      setListBooks([]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <FormikProvider value={formik}>
@@ -216,7 +246,11 @@ export default function PhieuNhapNewForm({ isEdit, currentUser, id, user }) {
                 <Box
                   sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}
                 >
-                  <LoadingButton type="submit" variant="contained">
+                  <LoadingButton
+                    type="button"
+                    variant="contained"
+                    onClick={() => handleSubmitPN()}
+                  >
                     {!isEdit ? 'Thêm' : 'Lưu'}
                   </LoadingButton>
                 </Box>
