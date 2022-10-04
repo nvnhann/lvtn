@@ -24,7 +24,6 @@ import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 //
 import sidebarConfig from './SidebarConfig';
-import { DocIllustration } from '../../assets';
 import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
@@ -148,7 +147,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           <Box component={RouterLink} to="/" sx={{ display: 'inline-flex' }}>
             <Logo />
           </Box>
-          <Typography variant='h5'>HYPE</Typography>
+          <Typography variant="h5">HYBE</Typography>
 
           <MHidden width="lgDown">
             {!isCollapse && (
@@ -193,8 +192,6 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
           alignItems="center"
           sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center' }}
         >
-          <DocIllustration sx={{ width: 1 }} />
-
           <div>
             <Typography gutterBottom variant="subtitle1">
               Hi, {user?.fullname}

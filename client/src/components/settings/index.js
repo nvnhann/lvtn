@@ -3,14 +3,20 @@ import { Icon } from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 import options2Fill from '@iconify/icons-eva/options-2-fill';
 // material
-import { Box, Backdrop, Paper, Tooltip, Divider, Typography, Stack } from '@material-ui/core';
+import {
+  Box,
+  Backdrop,
+  Paper,
+  Tooltip,
+  Divider,
+  Typography,
+  Stack,
+} from '@material-ui/core';
 //
 import Scrollbar from '../Scrollbar';
 import { MIconButton } from '../@material-extend';
 import SettingMode from './SettingMode';
 import SettingColor from './SettingColor';
-import SettingStretch from './SettingStretch';
-import SettingDirection from './SettingDirection';
 import SettingFullscreen from './SettingFullscreen';
 
 // ----------------------------------------------------------------------
@@ -38,7 +44,11 @@ export default function Settings() {
 
   return (
     <>
-      <Backdrop sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open} onClick={handleClose} />
+      <Backdrop
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClick={handleClose}
+      />
 
       <Box
         sx={{
@@ -47,7 +57,7 @@ export default function Settings() {
           right: 0,
           position: 'fixed',
           zIndex: 2001,
-          ...(open && { right: 12 })
+          ...(open && { right: 12 }),
         }}
       >
         <Box
@@ -61,10 +71,10 @@ export default function Settings() {
             position: 'absolute',
             bgcolor: 'common.white',
             borderRadius: '24px 0 16px 24px',
-            boxShadow: (theme) => theme.customShadows.z12
+            boxShadow: (theme) => theme.customShadows.z12,
           }}
         >
-          <Tooltip title="Settings">
+          <Tooltip title="Cài đặt">
             <MIconButton
               color="inherit"
               onClick={handleToggle}
@@ -73,10 +83,14 @@ export default function Settings() {
                 width: 40,
                 height: 40,
                 transition: (theme) => theme.transitions.create('all'),
-                '&:hover': { color: 'primary.main', bgcolor: 'transparent' }
+                '&:hover': { color: 'primary.main', bgcolor: 'transparent' },
               }}
             >
-              <Icon icon={open ? closeFill : options2Fill} width={20} height={20} />
+              <Icon
+                icon={open ? closeFill : options2Fill}
+                width={20}
+                height={20}
+              />
             </MIconButton>
           </Tooltip>
         </Box>
@@ -88,11 +102,16 @@ export default function Settings() {
             overflow: 'hidden',
             boxShadow: (theme) => theme.customShadows.z24,
             transition: (theme) => theme.transitions.create('width'),
-            ...(open && { width: DRAWER_WIDTH })
+            ...(open && { width: DRAWER_WIDTH }),
           }}
         >
-          <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ py: 2, pr: 1, pl: 2.5 }}>
-            <Typography variant="subtitle1">Settings</Typography>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+            sx={{ py: 2, pr: 1, pl: 2.5 }}
+          >
+            <Typography variant="subtitle1">Cài đặt</Typography>
             <MIconButton onClick={handleClose}>
               <Icon icon={closeFill} width={20} height={20} />
             </MIconButton>
@@ -102,23 +121,12 @@ export default function Settings() {
           <Scrollbar sx={{ height: 1 }}>
             <Stack spacing={4} sx={{ pt: 3, px: 3, pb: 15 }}>
               <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Mode</Typography>
+                <Typography variant="subtitle2">Giao diện</Typography>
                 <SettingMode />
               </Stack>
-
               <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Direction</Typography>
-                <SettingDirection />
-              </Stack>
-
-              <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Color</Typography>
+                <Typography variant="subtitle2">Màu</Typography>
                 <SettingColor />
-              </Stack>
-
-              <Stack spacing={1.5}>
-                <Typography variant="subtitle2">Stretch</Typography>
-                <SettingStretch />
               </Stack>
 
               <SettingFullscreen />

@@ -48,7 +48,6 @@ const ContentStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Login() {
-
   return (
     <RootStyle title="Login | Minimal-UI">
       <AuthLayout>
@@ -65,10 +64,10 @@ export default function Login() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Cửa hàng sách HYPE xin chào!!
+          <Typography variant="h4" sx={{ px: 5, mt: 10, mb: 5 }}>
+            Cửa hàng HYBE xin chào!!
           </Typography>
-          <img src="/static/illustrations/illustration_login.png" alt="login" />
+          <img src="/static/illustrations/login.png" alt="login" />
         </SectionStyle>
       </MHidden>
 
@@ -81,11 +80,11 @@ export default function Login() {
               </Typography>
             </Box>
 
-              <Box
-                component="img"
-                src={`/static/auth/ic_jwt.png`}
-                sx={{ width: 32, height: 32 }}
-              />
+            <Box
+              component="img"
+              src={`/static/auth/ic_jwt.png`}
+              sx={{ width: 32, height: 32 }}
+            />
           </Stack>
 
           <LoginForm />

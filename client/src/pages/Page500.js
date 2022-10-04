@@ -4,7 +4,8 @@ import { styled } from '@material-ui/core/styles';
 import { Box, Button, Typography, Container } from '@material-ui/core';
 // components
 import Page from '../components/Page';
-import { SeverErrorIllustration } from '../assets';
+import { motion } from 'framer-motion';
+import { MotionContainer, varBounceIn } from '../components/animate';
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +14,7 @@ const RootStyle = styled(Page)(({ theme }) => ({
   minHeight: '100%',
   alignItems: 'center',
   paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10)
+  paddingBottom: theme.spacing(10),
 }));
 
 // ----------------------------------------------------------------------
@@ -22,18 +23,27 @@ export default function Page500() {
   return (
     <RootStyle title="500 Internal Server Error | Minimal-UI">
       <Container>
-        <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
-          <Typography variant="h3" paragraph>
-            500 Internal Server Error
-          </Typography>
-          <Typography sx={{ color: 'text.secondary' }}>There was an error, please try again later.</Typography>
+        <MotionContainer initial="initial" open>
+          <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>
+            <motion.div variants={varBounceIn}>
+              <Typography variant="h3" paragraph>
+                500 Internal Server Error
+              </Typography>
+              <Typography sx={{ color: 'text.secondary' }}>
+                Trang không phản hồi vui lòng quay lại sau!.
+              </Typography>
 
-          <SeverErrorIllustration sx={{ height: 260, my: { xs: 5, sm: 10 } }} />
-
-          <Button to="/" size="large" variant="contained" component={RouterLink}>
-            Go to Home
-          </Button>
-        </Box>
+              <Button
+                to="/"
+                size="large"
+                variant="contained"
+                component={RouterLink}
+              >
+                Trang chủ
+              </Button>
+            </motion.div>
+          </Box>
+        </MotionContainer>
       </Container>
     </RootStyle>
   );

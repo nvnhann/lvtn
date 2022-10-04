@@ -6,44 +6,52 @@ import { Box } from '@material-ui/core';
 // ----------------------------------------------------------------------
 
 Logo.propTypes = {
-  sx: PropTypes.object
+  sx: PropTypes.object,
 };
 
 export default function Logo({ sx }) {
   const theme = useTheme();
-  const PRIMARY_LIGHT = theme.palette.primary.light;
   const PRIMARY_MAIN = theme.palette.primary.main;
-  const PRIMARY_DARK = theme.palette.primary.dark;
 
   return (
     <Box sx={{ width: 40, height: 40, ...sx }}>
-      <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 512 512">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.5 47.5">
         <defs>
-          <linearGradient id="BG1" x1="100%" x2="50%" y1="9.946%" y2="50%">
-            <stop offset="0%" stopColor={PRIMARY_DARK} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-          <linearGradient id="BG2" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
-          <linearGradient id="BG3" x1="50%" x2="50%" y1="0%" y2="100%">
-            <stop offset="0%" stopColor={PRIMARY_LIGHT} />
-            <stop offset="100%" stopColor={PRIMARY_MAIN} />
-          </linearGradient>
+          <clipPath id="a">
+            <path d="M0 38h38V0H0v38Z" />
+          </clipPath>
         </defs>
-        <g fill={PRIMARY_MAIN} fillRule="evenodd" stroke="none" strokeWidth="1">
+        <g
+          clip-path="url(#a)"
+          transform="matrix(1.25 0 0 -1.25 0 47.5)"
+          fill={PRIMARY_MAIN}
+          fillRule="evenodd"
+          stroke="none"
+          strokeWidth="1"
+        >
           <path
-            fill="url(#BG1)"
-            d="M183.168 285.573l-2.918 5.298-2.973 5.363-2.846 5.095-2.274 4.043-2.186 3.857-2.506 4.383-1.6 2.774-2.294 3.939-1.099 1.869-1.416 2.388-1.025 1.713-1.317 2.18-.95 1.558-1.514 2.447-.866 1.38-.833 1.312-.802 1.246-.77 1.18-.739 1.111-.935 1.38-.664.956-.425.6-.41.572-.59.8-.376.497-.537.69-.171.214c-10.76 13.37-22.496 23.493-36.93 29.334-30.346 14.262-68.07 14.929-97.202-2.704l72.347-124.682 2.8-1.72c49.257-29.326 73.08 1.117 94.02 40.927z"
+            fill={PRIMARY_MAIN}
+            d="M36 11a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v19.687C2 32.896 7.791 37 10 37h20.625C33.719 37 36 34.687 36 31.625V11Z"
           />
           <path
-            fill="url(#BG2)"
-            d="M444.31 229.726c-46.27-80.956-94.1-157.228-149.043-45.344-7.516 14.384-12.995 42.337-25.267 42.337v-.142c-12.272 0-17.75-27.953-25.265-42.337C189.79 72.356 141.96 148.628 95.69 229.584c-3.483 6.106-6.828 11.932-9.69 16.996 106.038-67.127 97.11 135.667 184 137.278V384c86.891-1.611 77.962-204.405 184-137.28-2.86-5.062-6.206-10.888-9.69-16.994"
+            fill="#ccd6dd"
+            d="M34 7a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v24c0 4.119-.021 4 5 4h21a4 4 0 0 0 4-4V7Z"
           />
           <path
-            fill="url(#BG3)"
-            d="M450 384c26.509 0 48-21.491 48-48s-21.491-48-48-48-48 21.491-48 48 21.491 48 48 48"
+            fill="#e1e8ed"
+            d="M32 6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v24a3 3 0 0 0 3 3h24a3 3 0 0 0 3-3V6Z"
+          />
+          <path
+            fill={PRIMARY_MAIN}
+            d="M32 5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v22a4 4 0 0 0 4 4h21a4 4 0 0 0 4-4V5Z"
+          />
+          <path
+            fill={PRIMARY_MAIN}
+            d="M30 5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v20a4 4 0 0 0 4 4h19.335C28.544 29 30 27.544 30 25.335V5Z"
+          />
+          <path
+            fill={PRIMARY_MAIN}
+            d="M7 31c-1.687 0-1.731 1.922-1 2.75.832.941 2.125 1.25 4.438 1.25H12v2H9.281C5.313 37 2 34.5 2 31.625V5a4 4 0 0 1 4-4h2v30H7z"
           />
         </g>
       </svg>

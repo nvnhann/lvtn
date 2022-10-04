@@ -27,16 +27,22 @@ export default function SettingFullscreen() {
       size="large"
       variant="outlined"
       color={fullscreen ? 'primary' : 'inherit'}
-      startIcon={<Icon icon={fullscreen ? roundFullscreenExit : roundFullscreen} />}
+      startIcon={
+        <Icon icon={fullscreen ? roundFullscreenExit : roundFullscreen} />
+      }
       onClick={toggleFullScreen}
       sx={{
         fontSize: 14,
         ...(fullscreen && {
-          bgcolor: (theme) => alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity)
-        })
+          bgcolor: (theme) =>
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.selectedOpacity,
+            ),
+        }),
       }}
     >
-      {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+      {fullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
     </Button>
   );
 }

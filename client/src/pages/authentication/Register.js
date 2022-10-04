@@ -65,12 +65,12 @@ export default function Register() {
 
       <MHidden width="mdDown">
         <SectionStyle>
-          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-            Chào mừng bạn đến với HYPE!
+          <Typography variant="h4" sx={{ px: 5, mt: 10, mb: 5 }}>
+            Chào mừng bạn đến với HYBE!
           </Typography>
           <img
             alt="register"
-            src="/static/illustrations/illustration_register.png"
+            src="/static/illustrations/register.png"
           />
         </SectionStyle>
       </MHidden>

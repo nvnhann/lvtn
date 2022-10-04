@@ -10,8 +10,6 @@ import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import { MHidden } from '../../components/@material-extend';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
-import ContactsPopover from './ContactsPopover';
 
 // ----------------------------------------------------------------------
 
@@ -74,8 +72,6 @@ export default function DashboardNavbar({ onOpenSidebar }) {
           alignItems="center"
           spacing={{ xs: 0.5, sm: 1.5 }}
         >
-          <LanguagePopover />
-          <ContactsPopover />
           <AccountPopover />
         </Stack>
       </ToolbarStyle>
