@@ -22,7 +22,7 @@ import {
 //
 import { QuillEditor } from '../../editor';
 import { UploadMultiFile } from '../../upload';
-import { getData, postData } from 'src/_helper/httpProvider';
+import { getData, postData, putData } from 'src/_helper/httpProvider';
 import { API_BASE_URL, URL_PUBLIC_IMAGES } from 'src/config/configUrl';
 import { MIconButton } from 'src/components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
@@ -45,7 +45,6 @@ ProductNewForm.propTypes = {
 export default function ProductNewForm({ isEdit, currentProduct }) {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [tacgiaList, setTacgiaList] = useState([]);
-  const [nccList, setNccList] = useState([]);
   const [nxbList, setNxbList] = useState([]);
   const [tlList, setTlList] = useState([]);
   const [nnList, setNnList] = useState([]);
@@ -54,8 +53,6 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     (async () => {
       const _tacgia = await getData(API_BASE_URL + '/tacgia');
       setTacgiaList(_tacgia.data);
-      const _ncc = await getData(API_BASE_URL + '/nhacungcap');
-      setNccList(_ncc.data);
       const _nxb = await getData(API_BASE_URL + '/nhaxuatban');
       setNxbList(_nxb.data);
       const _tl = await getData(API_BASE_URL + '/theloai');
@@ -88,11 +85,6 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
           tl_ten: currentProduct?.tl_ten,
           tl_id: currentProduct?.sp_idtl,
         } || '',
-      sp_idncc:
-        {
-          ncc_ten: currentProduct?.ncc_ten,
-          ncc_id: currentProduct?.sp_idncc,
-        } || '',
       sp_idtg:
         {
           tg_ten: currentProduct?.tg_ten,
@@ -110,9 +102,15 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
         } || '',
       active: Boolean(currentProduct?.active) || true,
       sp_masp: currentProduct?.sp_masp || '',
+      sp_hinhanh_old: currentProduct?.sp_hinhanh || [],
     },
     validationSchema: NewProductSchema,
     onSubmit: async (values, { setSubmitting, resetForm, setErrors }) => {
+      let _values = { ...values };
+      _values.sp_idnxb = values.sp_idnxb.nxb_id;
+      _values.sp_idtg = values.sp_idtg.tg_id;
+      _values.sp_idtl = values.sp_idtl.tl_id;
+      _values.sp_idnn = values.sp_idnn.nn_id;
       try {
         const formDt = new FormData();
         if (values.sp_hinhanh.length > 0) {
@@ -120,15 +118,24 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
             return formDt.append('sp_hinhanh', value);
           });
         }
-        formDt.append('data', JSON.stringify(values));
-        console.log(values);
-        await postData(API_BASE_URL + '/book/create', formDt, {
-          'content-type': 'multipart/form-data',
-        });
+        formDt.append('data', JSON.stringify(_values));
+        if (isEdit) {
+          await putData(
+            API_BASE_URL + `/book/${currentProduct.sp_id}`,
+            formDt,
+            {
+              'content-type': 'multipart/form-data',
+            },
+          );
+        } else {
+          await postData(API_BASE_URL + '/book/create', formDt, {
+            'content-type': 'multipart/form-data',
+          });
+          resetForm();
+        }
         enqueueSnackbar(!isEdit ? 'Thêm thành công' : 'Cập nhật thành công', {
           variant: 'success',
         });
-        resetForm();
       } catch (error) {
         console.error(error);
         enqueueSnackbar(error.response.data, {
@@ -151,8 +158,8 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
     setFieldValue,
     getFieldProps,
   } = formik;
-
   console.log(values);
+
   const handleDrop = useCallback(
     (acceptedFiles) => {
       setFieldValue(
@@ -253,21 +260,6 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                   />
 
                   <Autocomplete
-                    value={values.sp_idncc}
-                    onChange={(event, newValue) => {
-                      setFieldValue('sp_idncc', newValue);
-                    }}
-                    options={nccList.map((option) => ({
-                      ncc_id: option.ncc_id,
-                      ncc_ten: option.ncc_ten,
-                    }))}
-                    getOptionLabel={(option) => option.ncc_ten}
-                    renderInput={(params) => (
-                      <TextField label="Nhà cung cấp" {...params} />
-                    )}
-                  />
-
-                  <Autocomplete
                     freeSolo
                     value={values.sp_idnxb}
                     onChange={(event, newValue) => {
@@ -280,7 +272,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     renderInput={(params) => (
                       <TextField label="Nhà xuất bản" {...params} />
                     )}
-                    getOptionLabel={(option) => option.nxb_ten}
+                    getOptionLabel={(option) => option.nxb_ten || ''}
                   />
 
                   <Autocomplete
@@ -296,7 +288,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     renderInput={(params) => (
                       <TextField label="Tác giả" {...params} />
                     )}
-                    getOptionLabel={(option) => option.tg_ten}
+                    getOptionLabel={(option) => option.tg_ten || ''}
                   />
 
                   <Autocomplete
@@ -312,7 +304,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     renderInput={(params) => (
                       <TextField label="Thể loại" {...params} />
                     )}
-                    getOptionLabel={(option) => option.tl_ten}
+                    getOptionLabel={(option) => option.tl_ten || ''}
                   />
                   <Autocomplete
                     freeSolo
@@ -327,7 +319,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     renderInput={(params) => (
                       <TextField label="Ngôn ngữ" {...params} />
                     )}
-                    getOptionLabel={(option) => option.nn_ten}
+                    getOptionLabel={(option) => option.nn_ten || ''}
                   />
                 </Stack>
               </Card>

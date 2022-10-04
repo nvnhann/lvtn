@@ -83,7 +83,7 @@ export default function NhaXuatBanList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = datas.map((n) => n.q_id);
+      const newSelecteds = datas.map((n) => n.nxb_id);
       setSelected(newSelecteds);
       return;
     }

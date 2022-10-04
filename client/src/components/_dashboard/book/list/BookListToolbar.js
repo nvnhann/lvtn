@@ -46,7 +46,7 @@ const SearchStyle = styled(OutlinedInput)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-UserListToolbar.propTypes = {
+BookListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
@@ -54,7 +54,7 @@ UserListToolbar.propTypes = {
   setSelected: PropTypes.func,
 };
 // ----------------------------------------------------------------------
-export default function UserListToolbar({
+export default function BookListToolbar({
   selected,
   filterName,
   onFilterName,
@@ -77,7 +77,7 @@ export default function UserListToolbar({
 
   const deleteUser = async () => {
     try {
-      const res = await deleteData(API_BASE_URL + '/user/delete', {
+      const res = await deleteData(API_BASE_URL + '/book/delete', {
         arrID: JSON.stringify(selected),
       });
       if (setLoad) setLoad((e) => e + 1);
@@ -112,7 +112,7 @@ export default function UserListToolbar({
           <SearchStyle
             value={filterName}
             onChange={onFilterName}
-            placeholder="Tìm kiếm tài khoản..."
+            placeholder="Tìm kiếm..."
             startAdornment={
               <InputAdornment position="start">
                 <Box

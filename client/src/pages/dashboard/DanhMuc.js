@@ -80,7 +80,7 @@ export default function DanhMucList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = datas.map((n) => n.q_id);
+      const newSelecteds = datas.map((n) => n.dm_id);
       setSelected(newSelecteds);
       return;
     }

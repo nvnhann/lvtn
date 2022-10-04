@@ -8,7 +8,6 @@ import {
   Table,
   Stack,
   Button,
-  Checkbox,
   TableRow,
   TableBody,
   TableCell,
@@ -33,9 +32,9 @@ import { API_BASE_URL, URL_PUBLIC_IMAGES } from 'src/config/configUrl';
 import { useSnackbar } from 'notistack5';
 import { MIconButton } from 'src/components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
-import BookListToolbar from 'src/components/_dashboard/book/list/BookListToolbar';
-import BookListHead from 'src/components/_dashboard/book/list/BookListHead';
 import BookMoreMenu from 'src/components/_dashboard/book/list/BookMoreMenu';
+import PhieuNhapListHead from 'src/components/_dashboard/phieunhap/list/PhieuNhapListHead';
+import PhieuNhapToolbar from 'src/components/_dashboard/phieunhap/list/PhieuNhapToolbar';
 
 // ----------------------------------------------------------------------
 
@@ -84,31 +83,12 @@ export default function BookList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = _datas.map((n) => n.sp_id);
+      const newSelecteds = _datas.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
-    }
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -151,26 +131,26 @@ export default function BookList() {
     <Page title="Book: List | HYPE">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Sách"
+          heading="Nhập hàng"
           links={[
             { name: 'Quản lý', href: PATH_DASHBOARD.root },
-            { name: 'Sách', href: PATH_DASHBOARD.user.list },
-            { name: 'Danh sách' },
+            { name: 'Sách', href: PATH_DASHBOARD.phieunhap.root },
+            { name: 'Nhập hàng' },
           ]}
           action={
             <Button
               variant="contained"
               component={RouterLink}
-              to={PATH_DASHBOARD.book.new}
+              to={PATH_DASHBOARD.phieunhap.new}
               startIcon={<Icon icon={plusFill} />}
             >
-              Thêm sách
+              Phiếu nhập mới
             </Button>
           }
         />
 
         <Card>
-          <BookListToolbar
+          <PhieuNhapToolbar
             selected={selected}
             filterName={filterName}
             onFilterName={handleFilterByName}
@@ -180,7 +160,7 @@ export default function BookList() {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <BookListHead
+                <PhieuNhapListHead
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
@@ -214,12 +194,6 @@ export default function BookList() {
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              checked={isItemSelected}
-                              onChange={(event) => handleClick(event, sp_id)}
-                            />
-                          </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack
                               direction="row"

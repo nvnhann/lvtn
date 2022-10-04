@@ -116,6 +116,23 @@ export default function Router() {
           ],
         },
         {
+          path: 'phieunhap',
+          children: [
+            {
+              path: '/',
+              element: <PhieuNhapList />,
+            },
+            {
+              path: '/new',
+              element: <PhieuNhapCreate />,
+            },
+            {
+              path: '/:id/edit',
+              element: <PhieuNhapCreate />,
+            },
+          ],
+        },
+        {
           path: 'role',
           children: [
             {
@@ -419,9 +436,21 @@ const TheLoaiList = Loadable(lazy(() => import('../pages/dashboard/TheLoai')));
 const NgonNguList = Loadable(lazy(() => import('../pages/dashboard/NgonNgu')));
 //--------------------------Sách-------------------------------------------
 const BookList = Loadable(lazy(() => import('../pages/dashboard/Book')));
+
 const BookCreate = Loadable(
   lazy(() => import('../pages/dashboard/BookCreate')),
 );
+
+//--------------------------Phiếu nhập-------------------------------------------
+
+const PhieuNhapList = Loadable(
+  lazy(() => import('../pages/dashboard/PhieuNhap')),
+);
+
+const PhieuNhapCreate = Loadable(
+  lazy(() => import('../pages/dashboard/PhieuNhapCreate')),
+);
+
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));

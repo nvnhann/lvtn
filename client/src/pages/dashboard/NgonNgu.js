@@ -80,7 +80,7 @@ export default function NgonNguList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = datas.map((n) => n.q_id);
+      const newSelecteds = datas.map((n) => n.nn_id);
       setSelected(newSelecteds);
       return;
     }

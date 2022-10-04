@@ -31,6 +31,7 @@ const ICONS = {
   danhmuc: getIcon('ic_category'),
   ngonngu: getIcon('ic_translate'),
   book: getIcon('ic_book'),
+  phieunhap: getIcon('ic_addbook'),
 };
 
 const sidebarConfig = [
@@ -53,6 +54,11 @@ const sidebarConfig = [
         title: 'Sách',
         path: PATH_DASHBOARD.book.root,
         icon: ICONS.book,
+      },
+      {
+        title: 'Nhập hàng',
+        path: PATH_DASHBOARD.phieunhap.root,
+        icon: ICONS.phieunhap,
       },
       {
         title: 'Nhà xuất bản',

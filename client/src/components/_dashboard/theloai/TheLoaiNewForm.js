@@ -73,7 +73,7 @@ export default function TheLoaiNewForm({ isEdit, current, setEdit, setLoad }) {
         }
         if (setLoad) setLoad((e) => e + 1);
         enqueueSnackbar(
-          !isEdit ? 'Thêm danh mục thành công' : 'Cập nhật thành công!',
+          !isEdit ? 'Thêm thể loại thành công' : 'Cập nhật thành công!',
           {
             variant: 'success',
           },

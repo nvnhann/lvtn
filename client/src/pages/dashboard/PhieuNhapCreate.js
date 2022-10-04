@@ -12,40 +12,49 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { API_BASE_URL } from 'src/config/configUrl';
 import { getData } from 'src/_helper/httpProvider';
-import BookNewForm from 'src/components/_dashboard/book/BookNewForm';
+import PhieuNhapNewForm from 'src/components/_dashboard/phieunhap/PhieuNhapNewForm';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreate() {
+export default function PhieuNhapCreate() {
   const { themeStretch } = useSettings();
   const { pathname } = useLocation();
   const { id } = useParams();
   const isEdit = pathname.includes('edit');
   const [current, setCurrent] = useState({});
+  const [user, setUser] = useState({});
+
+  const { email } = useSelector((state) => state.user.current);
 
   useEffect(() => {
     (async () => {
       if (isEdit) {
         const _res = await getData(API_BASE_URL + `/book/${id}`);
         setCurrent(_res.data);
-        console.log(_res.data);
       }
+      const _user = await getData(API_BASE_URL + `/user/${email}/email`);
+      setUser(_user.data);
     })();
-  }, [id,  isEdit]);
-
+  }, [id, isEdit, email]);
   return (
-    <Page title="Book | HYPE">
+    <Page title="PN | HYPE">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Thêm sách' : 'Chỉnh sửa'}
+          heading={!isEdit ? 'Phiếu nhập mới' : 'Chỉnh sửa'}
           links={[
             { name: 'Quản lý', href: PATH_DASHBOARD.root },
-            { name: 'sách', href: PATH_DASHBOARD.book.root },
-            { name: !isEdit ? 'Thêm sách' : id },
+            { name: 'sách', href: PATH_DASHBOARD.phieunhap.root },
+            { name: !isEdit ? 'nhập hàng' : id },
           ]}
         />
 
-        <BookNewForm isEdit={isEdit} currentProduct={current} id={id} />
+        <PhieuNhapNewForm
+          isEdit={isEdit}
+          currentProduct={current}
+          id={id}
+          user={user}
+        />
       </Container>
     </Page>
   );

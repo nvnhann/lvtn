@@ -69,6 +69,10 @@ export const PATH_DASHBOARD = {
     root: path(ROOTS_DASHBOARD, '/book'),
     new: path(ROOTS_DASHBOARD, '/book/new'),
   },
+  phieunhap: {
+    root: path(ROOTS_DASHBOARD, '/phieunhap'),
+    new: path(ROOTS_DASHBOARD, '/phieunhap/new'),
+  },
   nhaxuatban: {
     root: path(ROOTS_DASHBOARD, '/nhaxuatban'),
     new: path(ROOTS_DASHBOARD, '/nhaxuatban/new'),

@@ -80,7 +80,7 @@ export default function TheLoaiList() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = datas.map((n) => n.q_id);
+      const newSelecteds = datas.map((n) => n.tl_id);
       setSelected(newSelecteds);
       return;
     }
@@ -190,7 +190,8 @@ export default function TheLoaiList() {
                           page * rowsPerPage + rowsPerPage,
                         )
                         .map((row) => {
-                          const { tl_id, tl_ten, dm_ten, active, tl_iddm } = row;
+                          const { tl_id, tl_ten, dm_ten, active, tl_iddm } =
+                            row;
                           const isItemSelected = selected.indexOf(tl_id) !== -1;
                           return (
                             <TableRow
@@ -247,7 +248,7 @@ export default function TheLoaiList() {
                                         current: {
                                           id: tl_id,
                                           tl_ten: tl_ten,
-                                          tl_iddm: tl_iddm
+                                          tl_iddm: tl_iddm,
                                         },
                                       })
                                     }
