@@ -26,12 +26,11 @@ import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { getData } from 'src/_helper/httpProvider';
 import { API_BASE_URL } from 'src/config/configUrl';
-
-import BookMoreMenu from 'src/components/_dashboard/book/list/BookMoreMenu';
 import PhieuNhapListHead from 'src/components/_dashboard/phieunhap/list/PhieuNhapListHead';
 import PhieuNhapToolbar from 'src/components/_dashboard/phieunhap/list/PhieuNhapToolbar';
 import { fCurrency } from 'src/_helper/formatCurrentCy';
 import { formatDateTime } from 'src/_helper/formatDate';
+import PhieuNhapMoreMenu from 'src/components/_dashboard/phieunhap/list/PhieuNhapMoreMenu';
 
 // ----------------------------------------------------------------------
 
@@ -188,7 +187,7 @@ export default function BookList() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <BookMoreMenu id={pn_id} />
+                            <PhieuNhapMoreMenu id={pn_id} />
                           </TableCell>
                         </TableRow>
                       );

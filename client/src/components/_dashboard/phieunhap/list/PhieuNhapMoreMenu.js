@@ -16,12 +16,11 @@ import {
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
-
-UserMoreMenu.propTypes = {
+PhieuNhapMoreMenu.propTypes = {
   id: PropTypes.string,
 };
 
-export default function UserMoreMenu({ id }) {
+export default function PhieuNhapMoreMenu({ id }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,6 +50,19 @@ export default function UserMoreMenu({ id }) {
           </ListItemIcon>
           <ListItemText
             primary="Chỉnh sửa"
+            primaryTypographyProps={{ variant: 'body2' }}
+          />
+        </MenuItem>
+        <MenuItem
+          component={RouterLink}
+          to={`${PATH_DASHBOARD.phieunhap.root}/${id}/detail`}
+          sx={{ color: 'text.secondary' }}
+        >
+          <ListItemIcon>
+            <Icon icon="clarity:details-line" width={24} height={24} />
+          </ListItemIcon>
+          <ListItemText
+            primary="Xem chi tiết"
             primaryTypographyProps={{ variant: 'body2' }}
           />
         </MenuItem>

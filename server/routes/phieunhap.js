@@ -1,4 +1,3 @@
-const multer = require("multer");
 const query = require("../lib/query");
 const db = require("../db");
 

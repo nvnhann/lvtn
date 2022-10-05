@@ -101,6 +101,10 @@ export default function Router() {
               path: '/:id/edit',
               element: <PhieuNhapCreate />,
             },
+            {
+              path: '/:id/detail',
+              element: <PhieuNhapDetail />,
+            },
           ],
         },
         {
@@ -273,6 +277,12 @@ const PhieuNhapList = Loadable(
 const PhieuNhapCreate = Loadable(
   lazy(() => import('../pages/dashboard/PhieuNhapCreate')),
 );
+
+const PhieuNhapDetail = Loadable(
+  lazy(() => import('../pages/dashboard/PhieuNhapDetail')),
+);
+
+//-------------------------------------------------------------------------------
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
