@@ -1,5 +1,5 @@
-import {Suspense, lazy} from 'react';
-import {Navigate, useRoutes, useLocation} from 'react-router-dom';
+import {lazy, Suspense} from 'react';
+import {Navigate, useLocation, useRoutes} from 'react-router-dom';
 // layouts
 import MainLayout from '../layouts/main';
 import DashboardLayout from '../layouts/dashboard';

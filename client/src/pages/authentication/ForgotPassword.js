@@ -1,12 +1,6 @@
 // material
 import {styled} from '@material-ui/core/styles';
-import {
-    Box,
-    Card,
-    Stack,
-    Container,
-    Typography,
-} from '@material-ui/core';
+import {Box, Card, Container, Stack, Typography,} from '@material-ui/core';
 // components
 import Page from '../../components/Page';
 import {MHidden} from '../../components/@material-extend';
@@ -41,7 +35,7 @@ const ContentStyle = styled('div')(({theme}) => ({
 
 // ----------------------------------------------------------------------
 
-export default function Login() {
+export default function ForgotPassword() {
     return (
         <RootStyle title="Quên mật khẩu">
 
@@ -69,12 +63,10 @@ export default function Login() {
                             sx={{width: 32, height: 32}}
                         />
                     </Stack>
-
                     <ForgotPasswordForm/>
-
-
                 </ContentStyle>
             </Container>
+
         </RootStyle>
     );
 }

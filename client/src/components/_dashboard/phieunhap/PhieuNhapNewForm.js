@@ -22,7 +22,7 @@ import {
 import {useEffect, useState} from 'react';
 import {Icon} from '@iconify/react';
 
-import {MIconButton} from 'src/components/@material-extend';
+import {MIconButton} from '../../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
 import {getData, postData, putData} from "../../../_helper/httpProvider";
 import {API_BASE_URL} from "../../../config/configUrl";

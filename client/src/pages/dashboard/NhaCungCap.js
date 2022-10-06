@@ -1,20 +1,20 @@
 import {Icon} from '@iconify/react';
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import {Link as RouterLink} from 'react-router-dom';
 // material
 import {
-    Card,
-    Table,
     Button,
+    Card,
     Checkbox,
-    TableRow,
+    Container,
+    Switch,
+    Table,
     TableBody,
     TableCell,
-    Container,
     TableContainer,
     TablePagination,
-    Switch,
+    TableRow,
 } from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
@@ -25,14 +25,14 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {getData, postData} from 'src/_helper/httpProvider';
-import {API_BASE_URL} from 'src/config/configUrl';
+import {getData, postData} from '../../_helper/httpProvider';
+import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
-import {MIconButton} from 'src/components/@material-extend';
+import {MIconButton} from '../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
-import NCCListToolbar from 'src/components/_dashboard/nhacungcap/list/NCCListToolbar';
-import NCCListHead from 'src/components/_dashboard/nhacungcap/list/NCCListHead';
-import NCCMoreMenu from 'src/components/_dashboard/nhacungcap/list/NCCMoreMenu';
+import NCCListToolbar from '../../components/_dashboard/nhacungcap/list/NCCListToolbar';
+import NCCListHead from '../../components/_dashboard/nhacungcap/list/NCCListHead';
+import NCCMoreMenu from '../../components/_dashboard/nhacungcap/list/NCCMoreMenu';
 
 // ----------------------------------------------------------------------
 

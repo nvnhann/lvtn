@@ -1,12 +1,11 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 // slices
-
 import userReducer from './slices/user';
 
 // ----------------------------------------------------------------------
 
 const rootReducer = combineReducers({
-  user: userReducer,
+    user: userReducer,
 });
 
-export { rootReducer };
+export {rootReducer};

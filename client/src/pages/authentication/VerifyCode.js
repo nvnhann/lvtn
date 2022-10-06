@@ -27,11 +27,9 @@ export default function VerifyCode() {
     const [searchParams] = useSearchParams();
     let email = searchParams.get('email');
     let forgot = searchParams.get('forgot');
-    console.log(forgot)
     return (
         <RootStyle title="Verify | Minimal UI">
             <LogoOnlyLayout/>
-
             <Container>
                 <Box sx={{maxWidth: 500, mx: 'auto'}}>
                     <Button

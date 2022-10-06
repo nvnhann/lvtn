@@ -2,27 +2,21 @@ import * as Yup from 'yup';
 import {useState} from 'react';
 import {useSnackbar} from 'notistack5';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
-import {useFormik, Form, FormikProvider} from 'formik';
+import {Form, FormikProvider, useFormik} from 'formik';
 import {Icon} from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
 import closeFill from '@iconify/icons-eva/close-fill';
 import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 // material
-import {
-    Link,
-    Stack,
-    TextField,
-    IconButton,
-    InputAdornment,
-} from '@material-ui/core';
+import {IconButton, InputAdornment, Link, Stack, TextField,} from '@material-ui/core';
 import {LoadingButton} from '@material-ui/lab';
 // routes
 import {PATH_AUTH} from '../../../routes/paths';
 // hooks
 //
 import {MIconButton} from '../../@material-extend';
-import {postData} from 'src/_helper/httpProvider';
-import {API_BASE_URL} from 'src/config/configUrl';
+import {postData} from '../../../_helper/httpProvider';
+import {API_BASE_URL} from '../../../config/configUrl';
 
 // ----------------------------------------------------------------------
 

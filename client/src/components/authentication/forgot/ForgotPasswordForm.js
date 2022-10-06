@@ -1,20 +1,17 @@
 import * as Yup from 'yup';
 import {useSnackbar} from 'notistack5';
-import {useFormik, Form, FormikProvider} from 'formik';
+import {Form, FormikProvider, useFormik} from 'formik';
 import {Icon} from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 // material
-import {
-    Stack,
-    TextField,
-} from '@material-ui/core';
+import {Stack, TextField,} from '@material-ui/core';
 import {LoadingButton} from '@material-ui/lab';
 // routes
 // hooks
 //
 import {MIconButton} from '../../@material-extend';
-import {postData} from 'src/_helper/httpProvider';
-import {API_BASE_URL} from 'src/config/configUrl';
+import {postData} from '../../../_helper/httpProvider';
+import {API_BASE_URL} from '../../../config/configUrl';
 import {useNavigate} from "react-router-dom";
 
 // ----------------------------------------------------------------------

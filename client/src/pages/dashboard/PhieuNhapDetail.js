@@ -1,10 +1,10 @@
 import {Box, Container, Stack, Table, TableCell, TableHead, TableRow, Typography} from '@material-ui/core';
 import {useEffect, useState} from 'react';
 import {useParams} from 'react-router';
-import HeaderBreadcrumbs from 'src/components/HeaderBreadcrumbs';
-import Page from 'src/components/Page';
-import useSettings from 'src/hooks/useSettings';
-import {PATH_DASHBOARD} from 'src/routes/paths';
+import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import Page from '../../components/Page';
+import useSettings from '../../hooks/useSettings';
+import {PATH_DASHBOARD} from '../../routes/paths';
 import {getData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
 import {fCurrency} from "../../_helper/formatCurrentCy";
@@ -47,8 +47,8 @@ export default function PhieuNhapDetail() {
                             <Typography>
                                 Nhà cung cấp: <b>{phieunhapDetail[0].ncc_ten}</b>
                             </Typography><Typography>
-                                Tổng tiền: <b>{fCurrency(phieunhapDetail[0]?.pn_tongtien)}</b>
-                            </Typography>
+                            Tổng tiền: <b>{fCurrency(phieunhapDetail[0]?.pn_tongtien)}</b>
+                        </Typography>
                             <Typography>
                                 Ngày nhập: <b>{formatDateTime(phieunhapDetail[0]?.pn_ngaylapphieu)}</b>
                             </Typography>

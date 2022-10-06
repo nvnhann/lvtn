@@ -1,70 +1,73 @@
 import PropTypes from 'prop-types';
-import { createContext, useState, useEffect } from 'react';
+import {createContext, useEffect, useState} from 'react';
 // material
-import { useMediaQuery } from '@material-ui/core';
-import { useTheme } from '@material-ui/core/styles';
+import {useMediaQuery} from '@material-ui/core';
+import {useTheme} from '@material-ui/core/styles';
 
 // ----------------------------------------------------------------------
 
 const initialState = {
-  collapseClick: false,
-  collapseHover: false,
-  onToggleCollapse: () => {},
-  onHoverEnter: () => {},
-  onHoverLeave: () => {}
+    collapseClick: false,
+    collapseHover: false,
+    onToggleCollapse: () => {
+    },
+    onHoverEnter: () => {
+    },
+    onHoverLeave: () => {
+    }
 };
 
 const CollapseDrawerContext = createContext(initialState);
 
 CollapseDrawerProvider.propTypes = {
-  children: PropTypes.node
+    children: PropTypes.node
 };
 
-function CollapseDrawerProvider({ children }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-  const [collapse, setCollapse] = useState({
-    click: false,
-    hover: false
-  });
-
-  useEffect(() => {
-    if (isMobile) {
-      setCollapse({
+function CollapseDrawerProvider({children}) {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+    const [collapse, setCollapse] = useState({
         click: false,
         hover: false
-      });
-    }
-  }, [isMobile]);
+    });
 
-  const handleToggleCollapse = () => {
-    setCollapse({ ...collapse, click: !collapse.click });
-  };
+    useEffect(() => {
+        if (isMobile) {
+            setCollapse({
+                click: false,
+                hover: false
+            });
+        }
+    }, [isMobile]);
 
-  const handleHoverEnter = () => {
-    if (collapse.click) {
-      setCollapse({ ...collapse, hover: true });
-    }
-  };
+    const handleToggleCollapse = () => {
+        setCollapse({...collapse, click: !collapse.click});
+    };
 
-  const handleHoverLeave = () => {
-    setCollapse({ ...collapse, hover: false });
-  };
+    const handleHoverEnter = () => {
+        if (collapse.click) {
+            setCollapse({...collapse, hover: true});
+        }
+    };
 
-  return (
-    <CollapseDrawerContext.Provider
-      value={{
-        isCollapse: collapse.click && !collapse.hover,
-        collapseClick: collapse.click,
-        collapseHover: collapse.hover,
-        onToggleCollapse: handleToggleCollapse,
-        onHoverEnter: handleHoverEnter,
-        onHoverLeave: handleHoverLeave
-      }}
-    >
-      {children}
-    </CollapseDrawerContext.Provider>
-  );
+    const handleHoverLeave = () => {
+        setCollapse({...collapse, hover: false});
+    };
+
+    return (
+        <CollapseDrawerContext.Provider
+            value={{
+                isCollapse: collapse.click && !collapse.hover,
+                collapseClick: collapse.click,
+                collapseHover: collapse.hover,
+                onToggleCollapse: handleToggleCollapse,
+                onHoverEnter: handleHoverEnter,
+                onHoverLeave: handleHoverLeave
+            }}
+        >
+            {children}
+        </CollapseDrawerContext.Provider>
+    );
 }
 
-export { CollapseDrawerProvider, CollapseDrawerContext };
+export {CollapseDrawerProvider, CollapseDrawerContext};

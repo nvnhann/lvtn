@@ -17,50 +17,50 @@ app.use(express.json());
 // cors option
 app.use("/public", express.static(publicPath));
 const corsOptions = {
-  origin: true, //included origin as true
-  credentials: true, //included credentials as true
+    origin: true, //included origin as true
+    credentials: true, //included credentials as true
 };
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(function (req, res, next) {
-  res.header(
-    "Access-Control-Allow-Headers",
-    req.headers.origin,
-    "x-access-token, Origin, Content-Type, Accept",
-    "Access-Control-Allow-Credentials"
-  );
-  next();
+    res.header(
+        "Access-Control-Allow-Headers",
+        req.headers.origin,
+        "x-access-token, Origin, Content-Type, Accept",
+        "Access-Control-Allow-Credentials"
+    );
+    next();
 });
 
-app.use(session({ secret: "cats", resave: true, saveUninitialized: true }));
+app.use(session({secret: "cats", resave: true, saveUninitialized: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+    "/auth/google",
+    passport.authenticate("google", {scope: ["email", "profile"]})
 );
 
 app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/auth/login/google",
-    failureRedirect: "/auth/google/failure",
-  })
+    "/auth/google/callback",
+    passport.authenticate("google", {
+        successRedirect: "/auth/login/google",
+        failureRedirect: "/auth/google/failure",
+    })
 );
 app.get("/logout", (req, res) => {
-  req.session.destroy();
-  req.logout();
-  res.clearCookie("connect.sid");
-  res.clearCookie("token");
-  res.clearCookie("email");
-  res.clearCookie("fullname");
-  return res.status(200).send("Goodbye!");
+    req.session.destroy();
+    req.logout();
+    res.clearCookie("connect.sid");
+    res.clearCookie("token");
+    res.clearCookie("email");
+    res.clearCookie("fullname");
+    return res.status(200).send("Goodbye!");
 });
 require("./routes/auth")(app);
 require("./routes/Users")(app);
@@ -74,9 +74,9 @@ require("./routes/ngonngu")(app);
 require("./routes/book")(app);
 require("./routes/phieunhap")(app);
 app.get("/", (req, res) => {
-  res.send('<a href="/auth/google">Authenticate with Google</a>');
+    res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+    console.log(`Server is running on port ${PORT}.`);
 });

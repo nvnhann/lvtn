@@ -5,7 +5,7 @@ import personFill from '@iconify/icons-eva/person-fill';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 // material
 import {alpha} from '@material-ui/core/styles';
-import {Button, Box, Divider, MenuItem, Typography} from '@material-ui/core';
+import {Box, Button, Divider, MenuItem, Typography} from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
 // hooks
