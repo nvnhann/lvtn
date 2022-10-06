@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 05, 2022 at 05:15 AM
+-- Generation Time: Oct 06, 2022 at 08:19 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -64,18 +64,6 @@ CREATE TABLE `chi_tiet_phieu_nhap` (
   `ctpn_idpn` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `chi_tiet_phieu_nhap`
---
-
-INSERT INTO `chi_tiet_phieu_nhap` (`ctpn_id`, `ctpn_idsp`, `ctpn_soluong`, `ctpn_gia`, `ctpn_idpn`) VALUES
-(1, 18, 1, 1000, 1),
-(2, 17, 17, 10000, 1),
-(3, 19, 18, 12000, 1),
-(4, 17, 150, 50000, 2),
-(5, 18, 150, 64000, 2),
-(6, 19, 150, 72000, 2);
-
 -- --------------------------------------------------------
 
 --
@@ -127,31 +115,6 @@ CREATE TABLE `hinh_anh` (
   `ha_hinh` varchar(250) NOT NULL,
   `ha_idsp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `hinh_anh`
---
-
-INSERT INTO `hinh_anh` (`ha_id`, `ha_hinh`, `ha_idsp`) VALUES
-(13, 'sp_hinhanh-1664851338782.jpg', 17),
-(14, 'sp_hinhanh-1664851338802.jpg', 17),
-(15, 'sp_hinhanh-1664851338810.jpg', 17),
-(16, 'sp_hinhanh-1664851858473.jpg', 18),
-(17, 'sp_hinhanh-1664851858475.jpg', 18),
-(18, 'sp_hinhanh-1664851858488.jpg', 18),
-(19, 'sp_hinhanh-1664852213265.jpg', 19),
-(20, 'sp_hinhanh-1664852213268.jpg', 19),
-(21, 'sp_hinhanh-1664852213274.jpg', 19),
-(22, 'sp_hinhanh-1664852213280.jpg', 19),
-(23, 'sp_hinhanh-1664852213284.jpg', 19),
-(24, 'sp_hinhanh-1664852213287.jpg', 19),
-(25, 'sp_hinhanh-1664852213292.jpg', 19),
-(26, 'sp_hinhanh-1664852213295.jpg', 19),
-(27, 'sp_hinhanh-1664852397519.jpg', 20),
-(28, 'sp_hinhanh-1664852397523.jpg', 20),
-(29, 'sp_hinhanh-1664852397528.jpg', 20),
-(30, 'sp_hinhanh-1664852397537.jpg', 20),
-(31, 'sp_hinhanh-1664852397544.jpg', 20);
 
 -- --------------------------------------------------------
 
@@ -490,14 +453,6 @@ CREATE TABLE `phieu_nhap` (
   `pn_idnv` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `phieu_nhap`
---
-
-INSERT INTO `phieu_nhap` (`pn_id`, `pn_ngaylapphieu`, `pn_tongtien`, `pn_idncc`, `pn_idnv`) VALUES
-(1, '2022-10-04 09:19:58', 387000, 1, 111),
-(2, '2022-10-04 09:25:09', 27900000, 2, 111);
-
 -- --------------------------------------------------------
 
 --
@@ -541,16 +496,6 @@ CREATE TABLE `san_pham` (
   `sp_idnxb` int(11) NOT NULL,
   `sp_idtg` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `san_pham`
---
-
-INSERT INTO `san_pham` (`sp_id`, `sp_masp`, `sp_ten`, `sp_mota`, `active`, `sp_chieudai`, `sp_chieurong`, `sp_idtl`, `sp_idnn`, `sp_idnxb`, `sp_idtg`) VALUES
-(17, '8935235226272', 'Nhà Giả Kim (Tái Bản 2020)', '<p class=\"ql-align-justify\"><em>Tất cả những trải nghiệm trong chuyến phiêu du theo đuổi vận mệnh của mình đã giúp Santiago thấu hiểu được ý nghĩa sâu xa nhất của hạnh phúc, hòa hợp với vũ trụ và con người</em>.&nbsp;</p><p class=\"ql-align-justify\">Tiểu thuyết&nbsp;<em>Nhà giả kim&nbsp;</em>của Paulo Coelho như một câu chuyện cổ tích giản dị, nhân ái, giàu chất thơ, thấm đẫm những minh triết huyền bí của phương Đông. Trong lần xuất bản đầu tiên tại Brazil vào năm 1988, sách chỉ bán được 900 bản. Nhưng, với số phận đặc biệt của cuốn sách dành cho toàn nhân loại, vượt ra ngoài biên giới quốc gia,&nbsp;<em>Nhà giả kim&nbsp;</em>đã làm rung động hàng triệu tâm hồn, trở thành một trong những cuốn sách bán chạy nhất mọi thời đại, và có thể làm thay đổi cuộc đời người đọc.</p><p class=\"ql-align-justify\">“Nhưng nhà luyện kim đan không quan tâm mấy đến những điều ấy. Ông đã từng thấy nhiều người đến rồi đi, trong khi ốc đảo và sa mạc vẫn là ốc đảo và sa mạc. Ông đã thấy vua chúa và kẻ ăn xin đi qua biển cát này, cái biển cát thường xuyên thay hình đổi dạng vì gió thổi nhưng vẫn mãi mãi là biển cát mà ông đã biết từ thuở nhỏ. Tuy vậy, tự đáy lòng mình, ông không thể không cảm thấy vui trước hạnh phúc của mỗi người lữ khách, sau bao ngày chỉ có cát vàng với trời xanh nay được thấy chà là xanh tươi hiện ra trước mắt. ‘Có thể Thượng đế tạo ra sa mạc chỉ để cho con người biết quý trọng cây chà là,’ ông nghĩ.”</p><p class=\"ql-align-justify\">- Trích&nbsp;<em>Nhà giả kim</em></p><p class=\"ql-align-justify\"><strong>Nhận định</strong></p><p class=\"ql-align-justify\">“Sau Garcia Márquez, đây là nhà văn Mỹ Latinh được đọc nhiều nhất thế giới.”&nbsp;<em>- The Economist</em>, London, Anh</p><p class=\"ql-align-justify\">&nbsp;</p><p class=\"ql-align-justify\">“Santiago có khả năng cảm nhận bằng trái tim như&nbsp;<em>Hoàng tử bé</em>&nbsp;của Saint-Exupéry.”&nbsp;<em>- Frankfurter Allgemeine Zeitung, Đức</em></p>', 1, 21, 13, 5, 4, 6, 22),
-(18, '8934974175995', 'Ra Bờ Suối Ngắm Hoa Kèn Hồng', '<p class=\"ql-align-justify\">Ra Bờ Suối Ngắm Hoa Kèn Hồng</p><p class=\"ql-align-justify\"><strong>Ra bờ suối ngắm hoa kèn hồng</strong>&nbsp;là tác phẩm trong trẻo, tràn đầy tình yêu thương mát lành, trải ra trước mắt người đọc khu vườn trại rực rỡ cỏ hoa của vùng quê thanh bình, kèm theo đó là những “nhân vật” đáng yêu, làm nên một “thế giới giàu có, rộng lớn và vô cùng hấp dẫn” mà dường như người lớn đã bỏ quên đâu đó từ lâu.</p><p class=\"ql-align-justify\">Sau&nbsp;<em>Tôi là Bê Tô, Có hai con mèo ngồi bên cửa sổ, Con chó nhỏ mang giỏ hoa hồng,&nbsp;</em>đây là một cuốn sách nữa của nhà văn Nguyễn Nhật Ánh mà nhân vật chính là những bé động vật ngộ nghĩnh, được mô tả sống động dưới ngòi bút tài hoa và giàu tình thương.</p><p class=\"ql-align-justify\">Câu chuyện chạy qua 8 phần với 64 chương sách nhỏ đầy ắp lòng thương yêu, tính lương thiện, tình thân bạn bè, lòng dũng cảm và bao dung, đánh bạt sự ác độc và cả mọi thói xấu.</p><p class=\"ql-align-justify\">Khép cuốn sách lại, tự nhiên thấy lòng mình dịu lắng, bình yên đến lạ lùng…</p><p class=\"ql-align-justify\"><strong><em>Vài đoạn trích&nbsp;trong tác phẩm&nbsp;</em>Ra bờ suối ngắm hoa kèn hồng</strong></p><p class=\"ql-align-justify\"><em>“Tắm mình trong suối âm thanh, vẫn là những điệu buồn quen thuộc, nhưng đêm nay Mắt Tròn thấy tâm hồn mình như bay lên. Âm nhạc như một bàn tay vô hình đã nâng đỡ nó, lên cao, lên cao mãi. Cao hơn nỗi buồn, cao hơn những phiền muộn vẫn dày vò nó trong những ngày qua.</em></p><p class=\"ql-align-justify\"><em>Nỗi buồn, ờ thì nó vẫn ở đó, trong trái tim Mắt Tròn, nhưng nó không làm trái tim con gà xây xát nữa. Mắt Tròn ngạc nhiên nhận ra nỗi buồn có thể phát sáng, trở nên đẹp đẽ dưới sự vỗ về của âm nhạc.</em></p><p class=\"ql-align-justify\"><em>Tiếng đàn của chàng nhạc sĩ giang hồ đã sưởi ấm con gà, đã an ủi nó thật nhiều trong đêm hôm đó.</em></p><p class=\"ql-align-justify\"><em>Mắt Tròn neo mình trên cỏ, bất động, lặng thinh, đầy xao xuyến. Nó lắng nghe tiếng đàn, cảm tưởng đang lắng nghe chính bản thân nó, bắt gặp mình đang xúc động.</em></p><p class=\"ql-align-justify\"><em>Có lẽ bạn cũng thế thôi, khi nỗi buồn trong lòng bạn được âm nhạc chắp cánh, nó sẽ thăng hoa. Thay vì nhấn chìm bạn, nỗi buồn sẽ giúp bạn giàu có hơn về cảm xúc. Nó trở thành một giá trị và bạn chợt nhận ra nó là một phần thanh xuân của bạn.</em></p><p class=\"ql-align-justify\"><em>.............................................</em></p><p class=\"ql-align-justify\"><em>Có gì đâu! Đâu có gì đâu!</em></p><p class=\"ql-align-justify\"><em>Thời gian như nước chảy qua cầu</em></p><p class=\"ql-align-justify\"><em>Bờ cỏ không còn in dấu cũ</em></p><p class=\"ql-align-justify\"><em>Vườn địa đàng kia táo đã sâu.</em></p><p class=\"ql-align-justify\"><br></p><p class=\"ql-align-justify\"><em>Có gì không? Không có gì đâu!</em></p><p class=\"ql-align-justify\"><em>Tem chưa đóng dấu đã phai màu</em></p><p class=\"ql-align-justify\"><em>Đường đi không tới đành quay lại</em></p><p class=\"ql-align-justify\"><em>Cuộc sống chưa xong lại bắt đầu</em></p><p class=\"ql-align-justify\"><em>............................................</em></p><p class=\"ql-align-justify\"><em>Mắt Tròn đưa mắt nhìn quanh. Ở đằng xa kia, chỗ nhà giam, cây lộc vừng đang buông lững lờ những chuỗi hoa màu gạch cua, chốc chốc lại chao đi trong gió hệt như một tấm rèm ai treo trên nhánh lá. Trên bãi cỏ xanh bên dưới, thiên nhiên đã đính rải rác những chùm hoa ích mẫu, những cụm hoa mắc cỡ đan cài với cơ man là hoa xuyến chi và hoa sao nhái dệt nên một tấm thảm chi chít các hoa văn ngũ sắc.</em></p><p class=\"ql-align-justify\"><em>Cánh Cam nói đúng, “trong vườn thiếu gì hoa”. Và Mắt Tròn công nhận tất cả loài hoa trong vườn đều đẹp.</em></p><p class=\"ql-align-justify\"><em>Nhưng nó cũng thấy một điều khác đáng công nhận không kém: Chỉ có hoa kèn hồng kia bên dòng suối kia ngoài cánh đồng kia mới có thể đánh thức giấc mơ của nó, khiến trái tim nó tưng bừng reo ca như có chim về hót.”</em></p>', 1, 20, 13, 5, 4, 27, 20),
-(19, '8935235228351', 'Cây Cam Ngọt Của Tôi', '<p class=\"ql-align-justify\">“Vị chua chát của cái nghèo hòa trộn với vị ngọt ngào khi khám phá ra những điều khiến cuộc đời này đáng sống... một tác phẩm kinh điển của Brazil.”&nbsp;<strong>- Booklist</strong></p><p class=\"ql-align-justify\">“Một cách nhìn cuộc sống gần như hoàn chỉnh từ con mắt trẻ thơ… có sức mạnh sưởi ấm và làm tan nát cõi lòng, dù người đọc ở lứa tuổi nào.”<strong>&nbsp;- The National</strong></p><p class=\"ql-align-justify\">Hãy làm quen với Zezé, cậu bé tinh nghịch siêu hạng đồng thời cũng đáng yêu bậc nhất, với ước mơ lớn lên trở thành nhà thơ cổ thắt nơ bướm. Chẳng phải ai cũng công nhận khoản “đáng yêu” kia đâu nhé. Bởi vì, ở cái xóm ngoại ô nghèo ấy, nỗi khắc khổ bủa vây đã che mờ mắt người ta trước trái tim thiện lương cùng trí tưởng tượng tuyệt vời của cậu bé con năm tuổi.</p><p class=\"ql-align-justify\">Có hề gì đâu bao nhiêu là hắt hủi, đánh mắng, vì Zezé đã có một người bạn đặc biệt để trút nỗi lòng: cây cam ngọt nơi vườn sau. Và cả một người bạn nữa, bằng xương bằng thịt, một ngày kia xuất hiện, cho cậu bé nhạy cảm khôn sớm biết thế nào là trìu mến, thế nào là nỗi đau, và mãi mãi thay đổi cuộc đời cậu.</p><p class=\"ql-align-justify\">Mở đầu bằng những thanh âm trong sáng và kết thúc lắng lại trong những nốt trầm hoài niệm, Cây cam ngọt của tôi khiến ta nhận ra vẻ đẹp thực sự của cuộc sống đến từ những điều giản dị như bông hoa trắng của cái cây sau nhà, và rằng cuộc đời thật khốn khổ nếu thiếu đi lòng yêu thương và niềm trắc ẩn. Cuốn sách kinh điển này bởi thế không ngừng khiến trái tim người đọc khắp thế giới thổn thức, kể từ khi ra mắt lần đầu năm 1968 tại Brazil.</p><p class=\"ql-align-justify\"><strong>TÁC GIẢ:</strong></p><p class=\"ql-align-justify\">JOSÉ MAURO DE VASCONCELOS (1920-1984) là nhà văn người Brazil. Sinh ra trong một gia đình nghèo ở ngoại ô Rio de Janeiro, lớn lên ông phải làm đủ nghề để kiếm sống. Nhưng với tài kể chuyện thiên bẩm, trí nhớ phi thường, trí tưởng tượng tuyệt vời cùng vốn sống phong phú, José cảm thấy trong mình thôi thúc phải trở thành nhà văn nên đã bắt đầu sáng tác năm 22 tuổi. Tác phẩm nổi tiếng nhất của ông là tiểu thuyết mang màu sắc tự truyện Cây cam ngọt của tôi. Cuốn sách được đưa vào chương trình tiểu học của Brazil, được bán bản quyền cho hai mươi quốc gia và chuyển thể thành phim điện ảnh. Ngoài ra, José còn rất thành công trong vai trò diễn viên điện ảnh và biên kịch.</p>', 1, 20, 15, 5, 4, 6, 6),
-(20, '8935235212541', 'Người Bàn Bà Trên Cầu Thang', '<p class=\"ql-align-justify\">“Hòa trộn tuyệt vời văn chương hư cấu với các vấn đề của thời đại. Một tiểu thuyết gay cấn, thông minh, và đầy suy tư.” – Jens Frederiksen,&nbsp;<em>Rhein-Main-Press</em></p><p class=\"ql-align-justify\">Trong một phòng tranh ở Sydney, người đàn ông tình cờ bắt gặp bức tranh vẽ cô gái đã từng khiến ông sẵn sàng vứt bỏ hết thảy để rồi ngoạn mục biến khỏi đời ông. Sau đó, như từ bóng tối bước ra sân khấu, những nhân vật chính mắc kẹt trong cuộc tình tay bốn năm xưa đều xuất hiện. Họa sĩ nổi tiếng thế giới, nhà tài phiệt, và luật sư tái ngộ cùng cô gái trong tranh trên một bờ vịnh Úc, mong muốn giành lại thứ họ nghĩ phải thuộc về mình. Nhưng chuyện đời không đơn giản -&nbsp;đối với một tác phẩm nghệ thuật mà mọi bảo tàng thế giới đều săn lùng, cũng như đối với Irene mà cuộc đời có nhiều góc khuất, khi tuổi tác của tất cả họ đều đã về chiều, và định mệnh thì thường khắc nghiệt...</p><p class=\"ql-align-justify\">Với biệt tài mổ xẻ những ẩn ức tăm tối trong lòng người, Bernhard Schlink đã viết nên một tiểu thuyết về tình yêu thật cuốn hút, mê hoặc.&nbsp;<em>Người đàn bà trên cầu thang&nbsp;</em>cũng đồng thời khắc họa đậm nét hơn chân dung ông trong vai trò một nhà văn luôn nỗ lực khắc phục quá khứ đen tối của nước Đức, để khi lật đến hết trang cuối cùng, tâm trí độc giả sẽ mãi còn trầm tư sâu sắc về những cuộc đời người giữa biển lớn lịch sử.</p>', 1, 21, 14, 5, 4, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -726,7 +671,9 @@ INSERT INTO `users` (`id`, `user_id`, `email`, `fullname`, `credential`, `phone`
 (117, NULL, 'nvnhan.dev5@gmail.com', 'nguyen van b', '$2a$08$3yCugmqCW0Qx7qW.GLEjY.UN.RsTMsv.H06gkyzmgjeA8hNAaYbL.', '0794351150', 'male', '2000-01-10', 1, 1, 1),
 (118, NULL, 'nvnhan.dev6@gmail.com', 'Nguyen van c', '$2a$08$YyRr.7Ia4kThVphmra.a2Oj1W.w8WJITB4Q1ye0mEX5Rz06unvcOu', '', 'male', '2000-01-10', 1, 1, 1),
 (119, NULL, 'nvnhan.dev7@gmail.com', 'nguyen van D', '$2a$08$L7/bmih9H43h9mSLGkA8NOCN3m.WyLoAnoPDF.vN8ZTBYtRhhFabK', '0794351150', 'male', '2000-01-10', 3, 1, 1),
-(121, NULL, 'linhb1809253@student.ctu.edu.vn', 'Bùi Thị Diệu Linh', '$2a$08$NXYEBvERtlspBfqrQaqcGuiL4B597KEq2UB3hvMejx82nFzXRI2oa', '0794351156', 'female', '2000-01-10', 3, 1, 1);
+(121, NULL, 'linhb1809253@student.ctu.edu.vn', 'Bùi Thị Diệu Linh', '$2a$08$NXYEBvERtlspBfqrQaqcGuiL4B597KEq2UB3hvMejx82nFzXRI2oa', '0794351156', 'female', '2000-01-10', 3, 1, 1),
+(122, NULL, 'nvnhan.dev4@gmail.com', 'Nguyen van nhan', '$2a$08$n0UPnRP7vC2J3Q9epZDDHOH3q8ZwWp4qkIbm0KnKkxFIi5ULEK01a', '0794351150', 'male', '2000-01-10', 3, 1, 1),
+(123, NULL, 'nvnhan.dev2@gmail.com', 'Nguyen van nhan', '$2a$08$H/rDkgf/CBS5I2aPI.l/revLt5WAgBaQtJj/0/Xtdb1646bTfMsL.', NULL, NULL, NULL, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -898,7 +845,7 @@ ALTER TABLE `chi_tiet_hoa_don`
 -- AUTO_INCREMENT for table `chi_tiet_phieu_nhap`
 --
 ALTER TABLE `chi_tiet_phieu_nhap`
-  MODIFY `ctpn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ctpn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `danh_muc`
@@ -970,7 +917,7 @@ ALTER TABLE `phieu_giam_gia`
 -- AUTO_INCREMENT for table `phieu_nhap`
 --
 ALTER TABLE `phieu_nhap`
-  MODIFY `pn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `pn_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `quyen`
@@ -1006,7 +953,7 @@ ALTER TABLE `trang_thai`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `van_chuyen`
