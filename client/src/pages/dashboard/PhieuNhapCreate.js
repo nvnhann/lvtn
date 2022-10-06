@@ -30,7 +30,7 @@ export default function PhieuNhapCreate() {
   useEffect(() => {
     (async () => {
       if (isEdit) {
-        const _res = await getData(API_BASE_URL + `/book/${id}`);
+        const _res = await getData(API_BASE_URL + `/phieunhap/${id}`);
         setCurrent(_res.data);
       }
       const _user = await getData(API_BASE_URL + `/user/${email}/email`);
@@ -51,7 +51,7 @@ export default function PhieuNhapCreate() {
 
         <PhieuNhapNewForm
           isEdit={isEdit}
-          currentProduct={current}
+          current={current}
           id={id}
           user={user}
         />

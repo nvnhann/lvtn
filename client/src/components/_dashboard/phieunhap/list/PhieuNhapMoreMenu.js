@@ -42,7 +42,7 @@ export default function PhieuNhapMoreMenu({ id }) {
       >
         <MenuItem
           component={RouterLink}
-          to={`${PATH_DASHBOARD.user.root}/${id}/edit`}
+          to={`${PATH_DASHBOARD.phieunhap.root}/${id}/edit`}
           sx={{ color: 'text.secondary' }}
         >
           <ListItemIcon>

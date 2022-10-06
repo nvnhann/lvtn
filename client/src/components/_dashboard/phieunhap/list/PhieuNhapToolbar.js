@@ -75,9 +75,9 @@ export default function PhieuNhapToolbar({
     setOpen(false);
   };
 
-  const deleteUser = async () => {
+  const deletePhieunhap = async () => {
     try {
-      const res = await deleteData(API_BASE_URL + '/user/delete', {
+      const res = await deleteData(API_BASE_URL + '/phieunhap', {
         arrID: JSON.stringify(selected),
       });
       if (setLoad) setLoad((e) => e + 1);
@@ -147,7 +147,7 @@ export default function PhieuNhapToolbar({
             Bạn chắc chắn muốn xóa?
           </Typography>
         }
-        excFunc={deleteUser}
+        excFunc={deletePhieunhap}
       />
     </>
   );

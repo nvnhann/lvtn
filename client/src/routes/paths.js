@@ -17,6 +17,7 @@ export const PATH_AUTH = {
   registerUnprotected: path(ROOTS_AUTH, '/register-unprotected'),
   resetPassword: path(ROOTS_AUTH, '/reset-password'),
   verify: path(ROOTS_AUTH, '/verify'),
+  forgotPassword: path(ROOTS_AUTH, '/forgot-password'),
 };
 
 export const PATH_PAGE = {
