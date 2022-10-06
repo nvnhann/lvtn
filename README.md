@@ -7,3 +7,5 @@
 * Chạy file ```run_client.bat``` (win) chạy client
 * Cấu hình biến môi trường file ```.env``` trong thư mục ```server```
 * Chạy file ```run_server.bat``` (win) chạy server
+
+![anh_demo](./server/public/images/demo.png)
