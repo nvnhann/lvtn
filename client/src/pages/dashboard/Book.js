@@ -241,7 +241,7 @@ export default function BookList() {
                                                                 alt={sp_masp}
                                                                 sx={{mr: 1}}
                                                                 src={`${
-                                                                    URL_PUBLIC_IMAGES + sp_hinhanh[0]?.ha_hinh
+                                                                    URL_PUBLIC_IMAGES + sp_hinhanh[sp_hinhanh.length - 1]?.ha_hinh
                                                                 }`}
                                                             />
                                                             {sp_ten}

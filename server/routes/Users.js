@@ -78,7 +78,7 @@ module.exports = function (app) {
     app.get("/user/:email/email", async (req, res) => {
         const {email} = req.params;
         if (!email) return res.status(404).send(null);
-        const qr = " SELECT id, email, fullname, role_id FROM users where email = ?";
+        const qr = " SELECT * FROM users where email = ?";
         await sql.query(qr, email, (err, data) => {
             if (err) return res.status(500).send(err);
             return res.status(200).send(data[0]);

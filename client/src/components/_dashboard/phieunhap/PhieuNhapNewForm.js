@@ -67,7 +67,7 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
         })();
     }, [isEdit, current]);
 
-    const NewUserSchema = Yup.object().shape({
+    const NewPhieuNhapSchema = Yup.object().shape({
         fullname: Yup.string().required('Vui lòng nhập họ tên'),
         pn_idncc: Yup.object().required('Vui lòng chọn nhà cung cấp'),
         ctpn_idsp: Yup.object().required('Vui lòng chọn sách'),
@@ -89,12 +89,12 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
             ctpn_idsp: '',
             ctpn_soluong: 1,
             ctpn_gia: 1000,
-            pn_idncc: {
+            pn_idncc: current[0]?.ncc_id ? {
                 ncc_id: current[0]?.ncc_id,
                 ncc_ten: current[0]?.ncc_ten,
-            } || '',
+            } : '',
         },
-        validationSchema: NewUserSchema,
+        validationSchema: NewPhieuNhapSchema,
         onSubmit: async (values, {setFieldValue}) => {
             let check = false;
             // eslint-disable-next-line array-callback-return
@@ -132,6 +132,7 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
         values,
         setFieldValue,
     } = formik;
+    console.log(errors, values);
     const handleSubmitPN = async () => {
         if (listBooks.length === 0) {
             enqueueSnackbar('Chưa có sản phẩm!', {
@@ -189,7 +190,7 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
                                             freeSolo
                                             value={values.pn_idncc}
                                             onChange={(event, newValue) => {
-                                                setFieldValue('pn_idncc', newValue);
+                                                setFieldValue('pn_idncc', newValue || '');
                                             }}
                                             options={nhacungcap?.map((option) => ({
                                                 ncc_id: option.ncc_id,
@@ -213,7 +214,7 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
                                             freeSolo
                                             value={values.ctpn_idsp}
                                             onChange={(event, newValue) => {
-                                                setFieldValue('ctpn_idsp', newValue);
+                                                setFieldValue('ctpn_idsp', newValue || '');
                                             }}
                                             options={books?.map((option) => ({
                                                 sp_id: option.sp_id,

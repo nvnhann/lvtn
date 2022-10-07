@@ -33,6 +33,8 @@ import eyeOffFill from '@iconify/icons-eva/eye-off-fill';
 import {formatDate} from '../../../_helper/formatDate';
 import {MIconButton} from '../../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
+import {useDispatch} from "react-redux";
+import Login from "../../../pages/authentication/Login";
 
 // ----------------------------------------------------------------------
 
@@ -40,26 +42,28 @@ UserNewForm.propTypes = {
     isEdit: PropTypes.bool,
     currentUser: PropTypes.object,
     id: PropTypes.string,
+    isProfile: PropTypes.bool
 };
 
 // ----------------------------------------------------------------------
 
-export default function UserNewForm({isEdit, currentUser, id}) {
+export default function UserNewForm({isEdit, currentUser, id, isProfile}) {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [showPassword, setShowPassword] = useState(false);
     const [roles, setRoles] = useState([]);
     const [reset, setReset] = useState(0);
+    const dispatch = useDispatch();
 
     const handleShowPassword = () => {
         setShowPassword((show) => !show);
     };
 
     function makePwd(length) {
-        var result = '';
-        var characters =
+        let result = '';
+        let characters =
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength));
         }
         return result;
@@ -74,6 +78,7 @@ export default function UserNewForm({isEdit, currentUser, id}) {
 
     const NewUserSchema = Yup.object().shape({
         showPassword: Yup.boolean(),
+        showRole: Yup.boolean(),
         fullname: Yup.string().required('Vui lòng nhập họ tên'),
         email: Yup.string()
             .required('Vui lòng nhập địa chỉ email')
@@ -81,7 +86,10 @@ export default function UserNewForm({isEdit, currentUser, id}) {
         phone: Yup.string(),
         gender: Yup.string(),
         birthday: Yup.date(),
-        role_id: Yup.string().required('Vui lòng chọn quyền'),
+        role_id: Yup.string().when('showRole', {
+            is: true,
+            then: Yup.string().required('Vui lòng chọn quyền')
+        }),
         credential: Yup.string().when('showPassword', {
             is: true,
             then: Yup.string()
@@ -94,6 +102,7 @@ export default function UserNewForm({isEdit, currentUser, id}) {
         enableReinitialize: true,
         initialValues: {
             showPassword: !isEdit,
+            showRole: !isProfile,
             fullname: currentUser?.fullname || '',
             email: currentUser?.email || '',
             phone: currentUser?.phone || '',
@@ -106,6 +115,7 @@ export default function UserNewForm({isEdit, currentUser, id}) {
         onSubmit: async (values, {resetForm, setFieldValue}) => {
             try {
                 delete values.showPassword;
+                delete values.showRole;
                 values.birthday = formatDate(values.birthday);
                 if (isEdit) {
                     delete values.credential;
@@ -114,6 +124,9 @@ export default function UserNewForm({isEdit, currentUser, id}) {
                 } else {
                     values.verify = true;
                     await postData(API_BASE_URL + `/user/create`, values);
+                }
+                if (isProfile) {
+                    dispatch(Login());
                 }
                 enqueueSnackbar(
                     !isEdit ? 'Tạo tài khoản thành công' : 'Cập nhật thành công!',
@@ -217,21 +230,23 @@ export default function UserNewForm({isEdit, currentUser, id}) {
                                         </RadioGroup>
                                     </FormControl>
                                 </Stack>
-                                <FormControl>
-                                    <InputLabel id="role-select">Quyền</InputLabel>
-                                    <Select
-                                        labelId="role-select"
-                                        label="Quyền"
-                                        {...getFieldProps('role_id')}
-                                        values={values.role}
-                                    >
-                                        {roles.map((role) => (
-                                            <MenuItem key={role.q_id} value={role.q_id}>
-                                                {role.q_vaitro}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                {!isProfile && (
+                                    <FormControl>
+                                        <InputLabel id="role-select">Quyền</InputLabel>
+                                        <Select
+                                            labelId="role-select"
+                                            label="Quyền"
+                                            {...getFieldProps('role_id')}
+                                            values={values.role}
+                                        >
+                                            {roles.map((role) => (
+                                                <MenuItem key={role.q_id} value={role.q_id}>
+                                                    {role.q_vaitro}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
 
                                 {!isEdit && (
                                     <TextField

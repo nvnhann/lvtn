@@ -22,7 +22,7 @@ export default function Logo({sx}) {
                     </clipPath>
                 </defs>
                 <g
-                    clip-path="url(#a)"
+                    clipPath="url(#a)"
                     transform="matrix(1.25 0 0 -1.25 0 47.5)"
                     fill={PRIMARY_MAIN}
                     fillRule="evenodd"

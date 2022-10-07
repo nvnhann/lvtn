@@ -17,13 +17,17 @@ import {PATH_AUTH} from '../../../routes/paths';
 import {MIconButton} from '../../@material-extend';
 import {postData} from '../../../_helper/httpProvider';
 import {API_BASE_URL} from '../../../config/configUrl';
+import {useDispatch, useSelector} from "react-redux";
+import {login} from "../../../redux/slices/user";
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [showPassword, setShowPassword] = useState(false);
+    const user = useSelector(state => state.user.current)
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const LoginSchema = Yup.object().shape({
         email: Yup.string()
             .email('Địa chỉ email không hợp lệ')
@@ -40,6 +44,7 @@ export default function LoginForm() {
         onSubmit: async (values, {resetForm}) => {
             try {
                 await postData(API_BASE_URL + '/auth/login', values);
+                dispatch(login());
                 enqueueSnackbar('Đăng nhập thành công', {
                     variant: 'success',
                     action: (key) => (
@@ -48,7 +53,14 @@ export default function LoginForm() {
                         </MIconButton>
                     ),
                 });
-                navigate('/')
+                if (user.role === 'ADMIN') {
+                    navigate('/dashboard');
+                }else{
+                    navigate('/');
+                }
+
+
+
             } catch (error) {
                 enqueueSnackbar(error.response.data, {
                     variant: 'error',

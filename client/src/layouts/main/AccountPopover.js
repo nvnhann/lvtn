@@ -35,7 +35,7 @@ export default function AccountPopover() {
     const isMountedRef = useIsMountedRef();
     const [open, setOpen] = useState(false);
     const user = useSelector(state => state.user.current);
-    console.log(user)
+
     const handleOpen = () => {
         setOpen(true);
     };

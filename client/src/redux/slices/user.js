@@ -20,12 +20,8 @@ const initialState = {
     addressBook: [],
     invoices: [],
     notifications: null,
-    current: {
-        email: Cookies.get('email') || null,
-        fullname: Cookies.get('fullname') || null,
-        token: Cookies.get('token') || null,
-        role: Cookies.get('role') || null,
-    },
+    current: JSON.parse(Cookies.get('user')) || null,
+    token: Cookies.get('token') || null,
 };
 
 const slice = createSlice({
@@ -137,18 +133,13 @@ const slice = createSlice({
 
         logout(state) {
             state.current = {};
-            Cookies.remove('email');
-            Cookies.remove('fullname');
-            Cookies.remove('token');
+            Cookies.remove('user');
             Cookies.remove('role');
         },
         login(state) {
-            state.current = {
-                email: Cookies.get('email'),
-                fullname: Cookies.get('fullname'),
-                token: Cookies.get('token'),
-                role: Cookies.get('role'),
-            };
+            state.current = JSON.parse(Cookies.get('user'));
+            state.token = Cookies.get('token')
+
         },
     },
 });

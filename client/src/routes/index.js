@@ -49,7 +49,8 @@ export default function Router() {
                     element: <Register/>,
                 },
                 {path: 'verify', element: <VerifyCode/>},
-                {path: 'forgot-password', element: <ForgotPassword/>}
+                {path: 'forgot-password', element: <ForgotPassword/>},
+                {path: 'reset-password/:token', element: <ResetPassword/>}
             ],
         },
 
@@ -211,6 +212,15 @@ export default function Router() {
         {
             path: '/',
             element: <MainLayout/>,
+            children: [
+                {
+                    path: 'change-password',
+                    element: <ChangePassword/>
+                }, {
+                    path: 'profile',
+                    element: <Profile/>
+                }
+            ]
         },
         {path: '*', element: <Navigate to="/404" replace/>},
     ]);
@@ -223,17 +233,23 @@ const Login = Loadable(lazy(() => import('../pages/authentication/Login')));
 const Register = Loadable(
     lazy(() => import('../pages/authentication/Register')),
 );
-const ForgotPassword = Loadable(lazy(() => import('../pages/authentication/ForgotPassword')))
+const ForgotPassword = Loadable(lazy(() => import('../pages/authentication/ForgotPassword')));
 
 const VerifyCode = Loadable(
     lazy(() => import('../pages/authentication/VerifyCode')),
 );
 
+const ChangePassword = Loadable(lazy(() => import('../pages/authentication/ChangePassword')));
+
+const ResetPassword = Loadable(lazy(() => import('../pages/authentication/ResetPassword')));
+//--------------------------------user------------------------------
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 
 const UserCreate = Loadable(
     lazy(() => import('../pages/dashboard/UserCreate')),
 );
+
+const Profile = Loadable(lazy(() => import('../pages/homepages/Profile')))
 
 //-------------------------role-------------------------------------
 const RoleList = Loadable(lazy(() => import('../pages/dashboard/RoleList')));

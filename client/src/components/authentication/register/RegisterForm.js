@@ -61,7 +61,6 @@ export default function RegisterForm() {
                 });
                 navigate(`/auth/verify?email=${values.email}`)
             } catch (error) {
-                console.error(error);
                 enqueueSnackbar(error.response.data, {
                     variant: 'error',
                     action: (key) => (
