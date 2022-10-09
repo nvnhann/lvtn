@@ -51,7 +51,7 @@ export default function RegisterForm() {
         onSubmit: async (values, {setErrors, setSubmitting}) => {
             try {
                 await postData(API_BASE_URL + '/user/register', values);
-                enqueueSnackbar('Register success', {
+                enqueueSnackbar('Đăng ký thành công!', {
                     variant: 'success',
                     action: (key) => (
                         <MIconButton size="small" onClick={() => closeSnackbar(key)}>

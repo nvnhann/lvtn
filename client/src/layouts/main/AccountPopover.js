@@ -1,5 +1,4 @@
 import {Icon} from '@iconify/react';
-import {useSnackbar} from 'notistack5';
 import {useRef, useState} from 'react';
 import personFill from '@iconify/icons-eva/person-fill';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
@@ -7,14 +6,13 @@ import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {alpha} from '@material-ui/core/styles';
 import {Box, Button, Divider, MenuItem, Typography} from '@material-ui/core';
 // routes
-import {PATH_DASHBOARD} from '../../routes/paths';
-// hooks
-import useIsMountedRef from '../../hooks/useIsMountedRef';
+import {PATH_PAGE} from '../../routes/paths';
 // components
 import {MIconButton} from '../../components/@material-extend';
 import MyAvatar from '../../components/MyAvatar';
 import MenuPopover from '../../components/MenuPopover';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from "../../redux/slices/user";
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +20,7 @@ const MENU_OPTIONS = [
     {
         label: 'Thông tin tài khoản',
         icon: personFill,
-        linkTo: PATH_DASHBOARD.user.profile,
+        linkTo: PATH_PAGE.profile,
     },
 ];
 
@@ -31,9 +29,8 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
     const anchorRef = useRef(null);
     const navigate = useNavigate();
-    const {enqueueSnackbar} = useSnackbar();
-    const isMountedRef = useIsMountedRef();
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch();
     const user = useSelector(state => state.user.current);
 
     const handleOpen = () => {
@@ -45,13 +42,10 @@ export default function AccountPopover() {
 
     const handleLogout = async () => {
         try {
+            dispatch(logout());
             navigate('/');
-            if (isMountedRef.current) {
-                handleClose();
-            }
         } catch (error) {
             console.error(error);
-            enqueueSnackbar('Unable to logout', {variant: 'error'});
         }
     };
 

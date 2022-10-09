@@ -59,7 +59,7 @@ function MenuMobileItem({item, isOpen, isActive, onOpen}) {
                 <Collapse in={isOpen} timeout="auto" unmountOnExit>
                     <Box sx={{display: 'flex', flexDirection: 'column-reverse'}}>
                         <NavSection
-                            navConfig={menuConfig[2].children}
+                            navConfig={menuConfig[2]?.children}
                             sx={{
                                 '& .MuiList-root:last-of-type .MuiListItemButton-root': {
                                     height: 200,
@@ -200,9 +200,9 @@ export default function MenuMobile({isOffset, isHome}) {
                     </Link>
 
                     <List disablePadding>
-                        {menuConfig.map((link) => (
+                        {menuConfig.map((link,idx) => (
                             <MenuMobileItem
-                                key={link.title}
+                                key={idx}
                                 item={link}
                                 isOpen={open}
                                 onOpen={handleOpen}

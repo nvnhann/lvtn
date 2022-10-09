@@ -1,7 +1,7 @@
-import {NavLink as RouterLink, useLocation} from 'react-router-dom';
+import {Link, NavLink as RouterLink, useLocation} from 'react-router-dom';
 // material
 import {styled} from '@material-ui/core/styles';
-import {AppBar, Box, Button, Container, Toolbar, Typography,} from '@material-ui/core';
+import {AppBar, Badge, Box, Button, Container, Toolbar, Typography,} from '@material-ui/core';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -14,6 +14,9 @@ import navConfig from './MenuConfig';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import {useSelector} from 'react-redux';
+import IconCart from "../../components/IconCart";
+import {cartItemCount} from "../../redux/slices/cart";
+import {PATH_PAGE} from "../../routes/paths";
 
 // ----------------------------------------------------------------------
 
@@ -50,7 +53,8 @@ export default function MainNavbar() {
     const isOffset = useOffSetTop(100);
     const {pathname} = useLocation();
     const isHome = pathname === '/';
-    const isLogined = !!useSelector((state) => state.user.current.email);
+    const isLogined = !!useSelector((state) => state.user.current?.email);
+    const cartCount = useSelector(cartItemCount);
     return (
         <AppBar sx={{boxShadow: 0, bgcolor: 'transparent'}}>
             <ToolbarStyle
@@ -85,13 +89,18 @@ export default function MainNavbar() {
                         />
                     </MHidden>
                     <Searchbar/>
+                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart}>
+                        <Badge showZero badgeContent={cartCount} color="error" max={99}>
+                            <IconCart/>
+                        </Badge>
+                    </Box>
                     {isLogined ? (
                         <AccountPopover/>
                     ) : (
                         <Button
                             variant="contained"
-                            target="_blank"
-                            href="https://material-ui.com/store/items/minimal-dashboard/"
+                            component={Link}
+                            to={'/auth/login'}
                             sx={{ml: 4}}
                         >
                             Đăng nhập

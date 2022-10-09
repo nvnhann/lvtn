@@ -105,7 +105,7 @@ function MenuDesktopItem({item, pathname, isHome, isOpen, isOffset, onOpen, onCl
                     }}
                 >
                     <Grid container spacing={3}>
-                        {children.map((list) => {
+                        {children?.map((list) => {
                             const {subheader, items} = list;
 
                             return (
@@ -125,7 +125,7 @@ function MenuDesktopItem({item, pathname, isHome, isOpen, isOffset, onOpen, onCl
                                             <IconBullet type="subheader"/> {subheader}
                                         </ListSubheader>
 
-                                        {items.map((item) => (
+                                        {items?.map((item) => (
                                             <ListItem
                                                 key={item.title}
                                                 to={item.path}
@@ -241,9 +241,9 @@ export default function MenuDesktop({isOffset, isHome, navConfig}) {
 
     return (
         <Stack direction="row">
-            {navConfig.map((link) => (
+            {navConfig.map((link, idx) => (
                 <MenuDesktopItem
-                    key={link.title}
+                    key={idx}
                     item={link}
                     pathname={pathname}
                     isOpen={open}

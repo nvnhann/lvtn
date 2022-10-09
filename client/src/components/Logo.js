@@ -9,12 +9,12 @@ Logo.propTypes = {
     sx: PropTypes.object,
 };
 
-export default function Logo({sx}) {
+export default function Logo({sx, props}) {
     const theme = useTheme();
     const PRIMARY_MAIN = theme.palette.primary.main;
 
     return (
-        <Box sx={{width: 40, height: 40, ...sx}}>
+        <Box sx={{width: 40, height: 40, ...sx}} {...props}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.5 47.5">
                 <defs>
                     <clipPath id="a">

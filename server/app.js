@@ -53,15 +53,7 @@ app.get(
         failureRedirect: "/auth/google/failure",
     })
 );
-app.get("/logout", (req, res) => {
-    req.session.destroy();
-    req.logout();
-    res.clearCookie("connect.sid");
-    res.clearCookie("token");
-    res.clearCookie("email");
-    res.clearCookie("fullname");
-    return res.status(200).send("Goodbye!");
-});
+
 require("./routes/auth")(app);
 require("./routes/Users")(app);
 require("./routes/Role")(app);

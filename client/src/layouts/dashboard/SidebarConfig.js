@@ -13,24 +13,14 @@ const getIcon = (name) => (
 );
 
 const ICONS = {
-    blog: getIcon('ic_blog'),
-    cart: getIcon('ic_cart'),
-    chat: getIcon('ic_chat'),
-    mail: getIcon('ic_mail'),
     user: getIcon('ic_user'),
-    kanban: getIcon('ic_kanban'),
-    banking: getIcon('ic_banking'),
-    calendar: getIcon('ic_calendar'),
-    ecommerce: getIcon('ic_ecommerce'),
-    analytics: getIcon('ic_analytics'),
-    dashboard: getIcon('ic_dashboard'),
-    booking: getIcon('ic_booking'),
     role: getIcon('ic_role'),
     tacgia: getIcon('ic_new'),
     danhmuc: getIcon('ic_category'),
     ngonngu: getIcon('ic_translate'),
     book: getIcon('ic_book'),
     phieunhap: getIcon('ic_addbook'),
+    giamgia: getIcon('ic_discount')
 };
 
 const sidebarConfig = [
@@ -58,6 +48,10 @@ const sidebarConfig = [
                 title: 'Nhập hàng',
                 path: PATH_DASHBOARD.phieunhap.root,
                 icon: ICONS.phieunhap,
+            },{
+                title: 'Giảm giá',
+                path: PATH_DASHBOARD.giamgia.root,
+                icon: ICONS.giamgia,
             },
             {
                 title: 'Nhà xuất bản',

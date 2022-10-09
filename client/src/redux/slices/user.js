@@ -20,7 +20,7 @@ const initialState = {
     addressBook: [],
     invoices: [],
     notifications: null,
-    current: JSON.parse(Cookies.get('user')) || null,
+    current: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
     token: Cookies.get('token') || null,
 };
 
@@ -133,8 +133,11 @@ const slice = createSlice({
 
         logout(state) {
             state.current = {};
+            state.token = null;
             Cookies.remove('user');
+            Cookies.remove('token');
             Cookies.remove('role');
+            Cookies.remove('connect.sid');
         },
         login(state) {
             state.current = JSON.parse(Cookies.get('user'));

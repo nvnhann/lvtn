@@ -180,7 +180,7 @@ export default function NavSection({navConfig, isShow = true, ...other}) {
 
     return (
         <Box {...other}>
-            {navConfig.map((list, idx) => {
+            {navConfig?.map((list, idx) => {
                 const {subheader, items} = list;
                 return (
                     <List key={idx} disablePadding>

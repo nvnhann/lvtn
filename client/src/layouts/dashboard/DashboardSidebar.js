@@ -7,7 +7,7 @@ import {Box, CardActionArea, Drawer, Link, Stack, Tooltip, Typography,} from '@m
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // routes
-import {PATH_DASHBOARD} from '../../routes/paths';
+import {PATH_PAGE} from '../../routes/paths';
 // components
 import Logo from '../../components/Logo';
 import MyAvatar from '../../components/MyAvatar';
@@ -157,7 +157,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
                     <Link
                         underline="none"
                         component={RouterLink}
-                        to={PATH_DASHBOARD.user.account}
+                        to={PATH_PAGE.profile}
                     >
                         <AccountStyle>
                             <MyAvatar/>

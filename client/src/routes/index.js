@@ -195,7 +195,13 @@ export default function Router() {
                             element: <NgonNguList/>,
                         },
                     ],
-                },
+                }, {
+                    path: 'giamgia',
+                    children: [{
+                        path: '/',
+                        element: <GiamGia/>
+                    }]
+                }
             ],
         },
 
@@ -219,6 +225,12 @@ export default function Router() {
                 }, {
                     path: 'profile',
                     element: <Profile/>
+                }, {
+                    path: 'product',
+                    element: <ProductList/>
+                }, {
+                    path: 'shopcart',
+                    element: <ShopCart/>
                 }
             ]
         },
@@ -282,7 +294,8 @@ const TheLoaiList = Loadable(lazy(() => import('../pages/dashboard/TheLoai')));
 const NgonNguList = Loadable(lazy(() => import('../pages/dashboard/NgonNgu')));
 //--------------------------Sách-------------------------------------------
 const BookList = Loadable(lazy(() => import('../pages/dashboard/Book')));
-
+const ProductList = Loadable(lazy(() => import('../pages/homepages/ShopProduct')));
+const ShopCart = Loadable(lazy(() => import('../pages/homepages/ShopCart')));
 const BookCreate = Loadable(
     lazy(() => import('../pages/dashboard/BookCreate')),
 );
@@ -301,6 +314,8 @@ const PhieuNhapDetail = Loadable(
     lazy(() => import('../pages/dashboard/PhieuNhapDetail')),
 );
 
+//----------------d-----------------Giam gia--------------------------------------
+const GiamGia = Loadable(lazy(() => import('../pages/dashboard/GiamGia')));
 //-------------------------------------------------------------------------------
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));

@@ -99,8 +99,7 @@ module.exports = function (app) {
         LEFT JOIN the_loai ON the_loai.tl_id = san_pham.sp_idtl
         LEFT JOIN tac_gia ON tac_gia.tg_id = san_pham.sp_idtg
         LEFT JOIN ngon_ngu ON ngon_ngu.nn_id = san_pham.sp_idnn
-    WHERE sp_id = ?;
-    `;
+    WHERE sp_id = ?;`;
         const _books = await query(db, qr, id);
         _hinhanh = await query(db, "SELECT * FROM hinh_anh WHERE ha_idsp = ?", id);
         if (_books.length > 0) _books[0].sp_hinhanh = _hinhanh;
@@ -178,4 +177,58 @@ module.exports = function (app) {
             return res.status(201).send("Xóa thành công!");
         }
     });
+
+    app.get('/api/books', async (req, res) => {
+        const {pageURL} = req.query;
+        let limit = 32;
+        if (pageURL) {
+            limit = limit * pageURL
+        }
+        const qr_book = `SELECT * 
+                                FROM san_pham sp 
+                                    LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
+                                    LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id,
+                                    ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
+                                            FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
+                                            GROUP BY  ctpn.ctpn_idsp) date_min
+                                WHERE ctpn.ctpn_soluong > 0 AND sp.sp_id = date_min.ctpn_idsp AND pn.pn_ngaylapphieu = date_min.ngay_lap_phieu LIMIT ?`;
+        let _books = await query(db, qr_book, limit);
+        await Promise.all(
+            _books.map(async (book, idx) => {
+                _hinhanh = await query(
+                    db,
+                    "SELECT * FROM hinh_anh WHERE ha_idsp = ?",
+                    book.sp_id
+                );
+                _books[idx].sp_hinhanh = _hinhanh;
+            })
+        );
+        return res.status(200).send(_books);
+    });
+
+    app.post('/shopcart', async (req, res) => {
+        const {cart} = req.body
+        let qr = `
+    SELECT * 
+    FROM san_pham sp 
+        LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
+        LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id,
+        ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
+                FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
+                GROUP BY  ctpn.ctpn_idsp) date_min
+    WHERE ctpn.ctpn_soluong > 0 AND sp.sp_id = date_min.ctpn_idsp AND pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND sp.sp_id IN (?);`;
+        const _books = await query(db, qr, [cart.map(e => e.id_sp)]);
+        await Promise.all(
+            _books.map(async (book, idx) => {
+                _hinhanh = await query(
+                    db,
+                    "SELECT * FROM hinh_anh WHERE ha_idsp = ?",
+                    book.sp_id
+                );
+                _books[idx].sp_hinhanh = _hinhanh;
+                _books[idx].sp_soluong = cart[idx].so_luong > _books[idx].ctpn_soluong ? _books[idx].ctpn_soluong : cart[idx].so_luong;
+            })
+        );
+        return res.status(200).send(_books);
+    })
 };
