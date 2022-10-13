@@ -68,6 +68,8 @@ require("./routes/book")(app);
 require("./routes/phieunhap")(app);
 require("./routes/khuyenmai")(app);
 require("./routes/diachi")(app);
+require("./routes/hoadon")(app);
+
 app.get("/", (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google</a>');
 });

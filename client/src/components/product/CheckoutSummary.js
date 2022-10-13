@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 // material
-import {Box, Card, CardContent, CardHeader, Divider, Stack, Typography} from '@material-ui/core';
+import {Box, Button, Card, CardContent, CardHeader, Divider, Stack, Typography} from '@material-ui/core';
 import {fCurrency} from "../../_helper/formatCurrentCy";
+import editFill from "@iconify/icons-eva/edit-fill";
+import {Icon} from "@iconify/react";
 // utils
 
 // ----------------------------------------------------------------------
@@ -23,12 +25,20 @@ export default function CheckoutSummary({
                                             subtotal,
                                             shipping = null,
                                             onApplyDiscount,
-                                            enableDiscount = false
+                                            enableDiscount = false,
+                                            enableEdit = false
                                         }) {
     return (
         <Card sx={{mb: 3}}>
             <CardHeader
                 title="Thông tin thanh toán"
+                action={
+                    enableEdit && (
+                        <Button size="small" type="button" onClick={onEdit} startIcon={<Icon icon={editFill}/>}>
+                            Chỉnh sửa
+                        </Button>
+                    )
+                }
             />
 
             <CardContent>
@@ -41,7 +51,7 @@ export default function CheckoutSummary({
                     </Stack>
 
                     <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                        <Typography variant="body2" sx enableEdit={{color: 'text.secondary'}}>
                             Phí vận chuyển
                         </Typography>
                         <Typography variant="subtitle2">{shipping ? fCurrency(shipping) : ''}</Typography>

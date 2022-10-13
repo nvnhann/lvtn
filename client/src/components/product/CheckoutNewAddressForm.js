@@ -29,7 +29,7 @@ CheckoutNewAddressForm.propTypes = {
 
 export default function CheckoutNewAddressForm({open, onClose, onNextStep, setLoad}) {
     const {id} = useSelector(state => state.user.current);
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const NewAddressSchema = Yup.object().shape({
         dc_tenkh: Yup.string().required('Vui lòng nhập họ tên'),

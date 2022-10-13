@@ -6,6 +6,7 @@ import DashboardLayout from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // components
 import LoadingScreen from '../components/LoadingScreen';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -36,6 +37,9 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
+    const isLogined = !!useSelector(state => state.user.current.id);
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+
     return useRoutes([
         {
             path: 'auth',
@@ -57,7 +61,7 @@ export default function Router() {
         // Dashboard Routes
         {
             path: 'dashboard',
-            element: <DashboardLayout/>,
+            element: isAdmin ? <DashboardLayout/> : <Navigate to='/'/>,
             children: [
                 {
                     path: 'user',
@@ -218,20 +222,22 @@ export default function Router() {
         {
             path: '/',
             element: <MainLayout/>,
-            children: [
-                {
-                    path: 'change-password',
-                    element: <ChangePassword/>
-                }, {
-                    path: 'profile',
-                    element: <Profile/>
-                }, {
-                    path: 'product',
-                    element: <ProductList/>
-                }, {
-                    path: 'shopcart',
-                    element: <ShopCart/>
-                }
+            children: [{
+                path: '/',
+                element: <ProductList/>
+            }, {
+                path: 'change-password',
+                element: <ChangePassword/>
+            }, {
+                path: 'profile',
+                element: isLogined ? <Profile/> : <Navigate to='/'/>
+            }, {
+                path: 'product',
+                element: <ProductList/>
+            }, {
+                path: 'shopcart',
+                element: <ShopCart/>
+            }
             ]
         },
         {path: '*', element: <Navigate to="/404" replace/>},

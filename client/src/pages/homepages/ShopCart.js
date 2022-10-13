@@ -9,6 +9,7 @@ import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 import {withStyles} from "@material-ui/styles";
 import CheckoutCart from "../../components/product/CheckoutCart";
 import CheckoutAddress from "../../components/product/CheckoutAddress";
+import CheckoutPayment from "../../components/product/CheckoutPayment";
 
 // ----------------------------------------------------------------------
 
@@ -112,8 +113,9 @@ export default function ShopCart() {
                 </Grid>
                 {!isComplete ? (
                     <>
-                        {activeStep === 0 && <CheckoutCart />}
-                        {activeStep === 1 && <CheckoutAddress />}
+                        {activeStep === 0 && <CheckoutCart/>}
+                        {activeStep === 1 && <CheckoutAddress/>}
+                        {activeStep === 2 && <CheckoutPayment/>}
                     </>
                 ) : (
                     <div>aaa</div>

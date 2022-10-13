@@ -58,9 +58,6 @@ export default function LoginForm() {
                 }else{
                     navigate('/');
                 }
-
-
-
             } catch (error) {
                 enqueueSnackbar(error.response.data, {
                     variant: 'error',

@@ -7,8 +7,8 @@ import {Button, Card, CardHeader, Grid, Typography} from '@material-ui/core';
 // redux
 import CheckoutProductList from './CheckoutProductList';
 import {useDispatch, useSelector} from "react-redux";
-import {checkout, onNextStep} from "../../redux/slices/product";
-import {cartItemCount, removeFromCart} from "../../redux/slices/cart";
+import {checkout, checkoutProduct, onNextStep} from "../../redux/slices/product";
+import {cartItemCount} from "../../redux/slices/cart";
 import Scrollbar from "../Scrollbar";
 import EmptyContent from "../EmptyContent";
 import {PATH_PAGE} from "../../routes/paths";
@@ -31,10 +31,7 @@ export default function CheckoutCart() {
             const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
             setProducts(_products.data);
         })()
-    }, [totalItems]);
-    const handleDeleteCart = (productId) => {
-        dispatch(removeFromCart(productId));
-    };
+    }, [totalItems, cart]);
 
     const handleNextStep = () => {
         dispatch(onNextStep());
@@ -55,7 +52,8 @@ export default function CheckoutCart() {
         onSubmit: async (values, {setErrors, setSubmitting}) => {
             try {
                 setSubmitting(true);
-                dispatch(checkout({totalPrice: toltalPrice(), shipping: 30000}))
+                dispatch(checkout({totalPrice: toltalPrice(), shipping: 30000}));
+                dispatch(checkoutProduct(products))
                 handleNextStep();
             } catch (error) {
                 console.error(error);

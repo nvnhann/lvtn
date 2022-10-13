@@ -1,13 +1,8 @@
-import {Icon} from '@iconify/react';
-import googleFill from '@iconify/icons-eva/google-fill';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
-import facebookFill from '@iconify/icons-eva/facebook-fill';
-import linkedinFill from '@iconify/icons-eva/linkedin-fill';
 import {Link as ScrollLink} from 'react-scroll';
 import {Link as RouterLink} from 'react-router-dom';
 // material
 import {styled} from '@material-ui/core/styles';
-import {Container, Divider, Grid, IconButton, Link, Stack, Typography} from '@material-ui/core';
+import {Container, Divider, Grid, Link, Stack, Typography} from '@material-ui/core';
 // routes
 import {PATH_PAGE} from '../../routes/paths';
 //
@@ -15,34 +10,34 @@ import Logo from '../../components/Logo';
 
 // ----------------------------------------------------------------------
 
-const SOCIALS = [
-    {name: 'FaceBook', icon: facebookFill},
-    {name: 'Google', icon: googleFill},
-    {name: 'Linkedin', icon: linkedinFill},
-    {name: 'Twitter', icon: twitterFill}
-];
 
 const LINKS = [
     {
-        headline: 'Minimal',
+        headline: 'Dịch vụ',
         children: [
-            {name: 'About us', href: PATH_PAGE.about},
-            {name: 'Contact us', href: PATH_PAGE.contact},
-            {name: 'FAQs', href: PATH_PAGE.faqs}
+            {name: 'Điều khoản dịch vụ', href: PATH_PAGE.product},
+            {name: 'Chính sách bảo mật thông tin cá nhân', href: PATH_PAGE.product},
+            {name: 'Chính sách bảo mật thông tin thanh toán', href: PATH_PAGE.product},
+            {name: 'Giới thiệu HYPE', href: PATH_PAGE.product}
         ]
     },
     {
-        headline: 'Legal',
+        headline: 'Hỗ trợ',
         children: [
-            {name: 'Terms and Condition', href: '#'},
-            {name: 'Privacy Policy', href: '#'}
+            {name: 'Chính sách đổi - trả - hoàn tiền', href: '#'},
+            {name: 'Chính sách bảo hành- bồi hoàn', href: '#'},
+            {name: 'Chính sách vận chuyển', href: '#'},
+            {name: 'Chính sách bán sỉ', href: '#'},
+            {name: 'Phương thức thanh toán', href: '#'},
+            
         ]
     },
     {
-        headline: 'Contact',
+        headline: 'Tài khoản của tôi',
         children: [
-            {name: 'support@minimals.cc', href: '#'},
-            {name: 'Los Angeles, 359  Hidden Valley Road', href: '#'}
+            {name: 'Đăng nhập/Tạo mới tài khoản', href: '#'},
+            {name: 'Chi tiết tài khoản', href: '#'},
+            {name: 'Lịch sử mua hàng', href: '#'}
         ]
     }
 ];
@@ -71,26 +66,12 @@ export default function MainFooter() {
                     </Grid>
                     <Grid item xs={8} md={3}>
                         <Typography variant="body2" sx={{pr: {md: 5}}}>
-                            The starting point for your next project with Minimal UI Kit, built on the newest version of
-                            Material-UI
-                            ©, ready to be customized to your style.
+                           Đường 3/2, Xuân Khánh, Ninh Kiều, Cần Thơ <br /> Nhà sách HYBE nhận đặt hàng trực tuyến và giao hàng tận
+                            nơi trong Cần Thơ.
                         </Typography>
-
-                        <Stack
-                            spacing={1.5}
-                            direction="row"
-                            justifyContent={{xs: 'center', md: 'flex-start'}}
-                            sx={{mt: 5, mb: {xs: 5, md: 0}}}
-                        >
-                            {SOCIALS.map((social) => (
-                                <IconButton key={social.name} color="primary" sx={{p: 1}}>
-                                    <Icon icon={social.icon} width={16} height={16}/>
-                                </IconButton>
-                            ))}
-                        </Stack>
                     </Grid>
 
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={12} md={8}>
                         <Stack spacing={5} direction={{xs: 'column', md: 'row'}} justifyContent="space-between">
                             {LINKS.map((list) => {
                                 const {headline, children} = list;
@@ -128,7 +109,7 @@ export default function MainFooter() {
                         textAlign: {xs: 'center', md: 'left'}
                     }}
                 >
-                    © 2021. All rights reserved
+                    © 2022. HYPE bookstore
                 </Typography>
             </Container>
         </RootStyle>

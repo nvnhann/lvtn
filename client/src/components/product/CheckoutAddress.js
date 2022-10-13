@@ -12,6 +12,7 @@ import Label from "../Label";
 import PropTypes from 'prop-types';
 import CheckoutNewAddressForm from "./CheckoutNewAddressForm";
 import {useSnackbar} from "notistack5";
+import {useNavigate} from "react-router-dom";
 
 // ----------------------------------------------------------------------
 
@@ -80,10 +81,14 @@ export default function CheckoutAddress() {
     const {enqueueSnackbar} = useSnackbar();
     const [addresses, setAddresses] = useState();
     const [open, setOpen] = useState(false);
-    const {totalPrice, shipping} = useSelector(state => state.product.checkout);
+    const {totalPrice} = useSelector(state => state.product.checkout);
     const {id} = useSelector(state => state.user.current);
     const dispatch = useDispatch();
     const [load, setLoad] = useState(0);
+    const isLogined = !!useSelector(state => state.user.current.id);
+    const navigate = useNavigate();
+
+    if (!isLogined) navigate('/');
 
     useEffect(() => {
         (async () => {
