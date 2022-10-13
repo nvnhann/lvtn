@@ -82,7 +82,15 @@ export default function ProductList({products}) {
 
                 <TableBody>
                     {products.map((product) => {
-                        const {sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_soluong, ctpn_soluong} = product;
+                        const {
+                            sp_id,
+                            sp_ten,
+                            ctpn_gia,
+                            sp_hinhanh,
+                            sp_soluong,
+                            ctpn_soluong,
+                            sp_giakhuyenmai
+                        } = product;
                         return (
                             <TableRow key={sp_id}>
                                 <TableCell>
@@ -97,7 +105,21 @@ export default function ProductList({products}) {
                                     </Box>
                                 </TableCell>
 
-                                <TableCell align="left">{fCurrency(ctpn_gia)}</TableCell>
+                                <TableCell align="left">
+                                    <Typography
+                                        component="span"
+                                        variant="body1"
+                                        sx={{
+                                            color: 'text.disabled',
+                                            textDecoration: 'line-through'
+                                        }}
+                                    >
+                                        {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                                    </Typography>
+                                    <Typography>
+                                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                                    </Typography>
+                                </TableCell>
 
                                 <TableCell align="left">
                                     <Incrementer
@@ -114,7 +136,8 @@ export default function ProductList({products}) {
                                     />
                                 </TableCell>
 
-                                <TableCell align="right">{fCurrency(sp_soluong * ctpn_gia)}</TableCell>
+                                <TableCell
+                                    align="right">{fCurrency((sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia) * sp_soluong)}</TableCell>
 
                                 <TableCell align="right">
                                     <MIconButton onClick={() => dispatch(removeFromCart(sp_id))}>

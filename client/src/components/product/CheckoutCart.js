@@ -7,7 +7,7 @@ import {Button, Card, CardHeader, Grid, Typography} from '@material-ui/core';
 // redux
 import CheckoutProductList from './CheckoutProductList';
 import {useDispatch, useSelector} from "react-redux";
-import {onNextStep} from "../../redux/slices/product";
+import {checkout, onNextStep} from "../../redux/slices/product";
 import {cartItemCount, removeFromCart} from "../../redux/slices/cart";
 import Scrollbar from "../Scrollbar";
 import EmptyContent from "../EmptyContent";
@@ -27,6 +27,7 @@ export default function CheckoutCart() {
     const [products, setProducts] = useState([]);
     useEffect(() => {
         (async () => {
+            if (cart.length === 0) return;
             const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
             setProducts(_products.data);
         })()
@@ -43,12 +44,18 @@ export default function CheckoutCart() {
         console.log(value);
     };
 
+    const toltalPrice = () => {
+        if (products.length === 0) return 0;
+        return products.reduce((total, item) => total + (item.sp_giakhuyenmai ? item.sp_giakhuyenmai : item.ctpn_gia) * item.sp_soluong, 0);
+    }
+
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {products: cart},
         onSubmit: async (values, {setErrors, setSubmitting}) => {
             try {
                 setSubmitting(true);
+                dispatch(checkout({totalPrice: toltalPrice(), shipping: 30000}))
                 handleNextStep();
             } catch (error) {
                 console.error(error);
@@ -58,13 +65,6 @@ export default function CheckoutCart() {
     });
 
     const {handleSubmit} = formik;
-
-    const toltalPrice = () => {
-        console.log(products.reduce((total, item) => total + item.sp_soluong * item.ctpn_gia, 0))
-        return products.reduce((total, item) => total + item.sp_soluong * item.ctpn_gia, 0);
-    }
-
-
     return (
         <FormikProvider value={formik}>
             <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -91,8 +91,7 @@ export default function CheckoutCart() {
                                 </Scrollbar>
                             ) : (
                                 <EmptyContent
-                                    title="Cart is empty"
-                                    description="Look like you have no items in your shopping cart."
+                                    title="Giỏ hàng trống"
                                     img="/static/illustrations/illustration_empty_cart.svg"
                                 />
                             )}
@@ -110,11 +109,11 @@ export default function CheckoutCart() {
 
                     <Grid item xs={12} md={4}>
                         <CheckoutSummary
-                            total={toltalPrice()}
+                            total={toltalPrice() + 30000}
                             enableDiscount
-                            discount={5000}
                             subtotal={toltalPrice()}
                             onApplyDiscount={handleApplyDiscount}
+                            shipping={30000}
                         />
                         <Button fullWidth size="large" type="submit" variant="contained"
                                 disabled={products.length === 0}>

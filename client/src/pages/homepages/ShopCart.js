@@ -8,6 +8,7 @@ import {Icon} from '@iconify/react';
 import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
 import {withStyles} from "@material-ui/styles";
 import CheckoutCart from "../../components/product/CheckoutCart";
+import CheckoutAddress from "../../components/product/CheckoutAddress";
 
 // ----------------------------------------------------------------------
 
@@ -112,6 +113,7 @@ export default function ShopCart() {
                 {!isComplete ? (
                     <>
                         {activeStep === 0 && <CheckoutCart />}
+                        {activeStep === 1 && <CheckoutAddress />}
                     </>
                 ) : (
                     <div>aaa</div>

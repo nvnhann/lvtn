@@ -49,8 +49,8 @@ const sidebarConfig = [
                 path: PATH_DASHBOARD.phieunhap.root,
                 icon: ICONS.phieunhap,
             },{
-                title: 'Giảm giá',
-                path: PATH_DASHBOARD.giamgia.root,
+                title: 'Khuyến mãi',
+                path: PATH_DASHBOARD.khuyenmai.root,
                 icon: ICONS.giamgia,
             },
             {

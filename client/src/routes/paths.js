@@ -80,6 +80,9 @@ export const PATH_DASHBOARD = {
     giamgia: {
         root: path(ROOTS_DASHBOARD, '/giamgia'),
     },
+    khuyenmai: {
+        root: path(ROOTS_DASHBOARD, '/khuyenmai')
+    },
     nhaxuatban: {
         root: path(ROOTS_DASHBOARD, '/nhaxuatban'),
         new: path(ROOTS_DASHBOARD, '/nhaxuatban/new'),

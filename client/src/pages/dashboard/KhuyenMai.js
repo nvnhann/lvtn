@@ -14,7 +14,6 @@ import {
     TableContainer,
     TablePagination,
     TableRow,
-    Typography,
 } from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
@@ -30,22 +29,27 @@ import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
 import {MIconButton} from '../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
-import TheLoaiNewForm from '../../components/_dashboard/theloai/TheLoaiNewForm';
-import TheLoaiToolbar from '../../components/_dashboard/theloai/list/TheLoaiListToolbar';
-import TheLoaiListHead from '../../components/_dashboard/theloai/list/TheLoaiListHead';
+import KhuyenMaiNewForm from "../../components/_dashboard/khuyenmai/KhuyenMaiNewForm";
+import KhuyenMaiListToolbar from "../../components/_dashboard/khuyenmai/list/KhuyenMaiListToolbar";
+import KhuyenMaiListHead from "../../components/_dashboard/khuyenmai/list/KhuyenMaiListHead";
+import {formatDate} from "../../_helper/formatDate";
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    {id: 'tên', label: 'Tên danh mục', alignRight: false},
-    {id: 'tên', label: 'Tên thể loại', alignRight: false},
-    {id: 'status', label: 'Trạng thái', alignRight: false},
+    {id: 'id', label: 'Mã sản phẩm', alignRight: false},
+    {id: 'têntl', label: 'Tên thể loại', alignRight: false},
+    {id: 'tên', label: 'Tên sản phẩm', alignRight: false},
+    {id: 'phan_tram', label: 'Phần trăm giảm', alignRight: false},
+    {id: 'ngay_bd', label: 'Ngày bắt đầu', alignRight: false},
+    {id: 'ngay_kt', label: 'Ngày kết thúc', alignRight: false},
+    {id: 'trang_thai', label: 'Trạng thái', alignRight: false},
     {id: ''},
 ];
 
 // ----------------------------------------------------------------------
 
-export default function GiamGia() {
+export default function KhuyenMai() {
     const {themeStretch} = useSettings();
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
@@ -62,10 +66,9 @@ export default function GiamGia() {
         (async () => {
             try {
                 const res = await getData(
-                    API_BASE_URL + `/theloai?search=${filterName}`,
+                    API_BASE_URL + `/khuyenmai?search=${filterName}`,
                 );
                 setDatas(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }
@@ -80,7 +83,7 @@ export default function GiamGia() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = datas.map((n) => n.tl_id);
+            const newSelecteds = datas.map((n) => n.km_id);
             setSelected(newSelecteds);
             return;
         }
@@ -125,7 +128,7 @@ export default function GiamGia() {
 
     const changeActiveRole = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/theloai/active', {
+            const res = await postData(API_BASE_URL + '/khuyenmai/active', {
                 id: id,
                 active: active,
             });
@@ -143,28 +146,28 @@ export default function GiamGia() {
         }
     };
     return (
-        <Page title="The Loai|HYPE">
+        <Page title="Khuyen Mai|HYPE">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
-                    heading="Thể loại"
+                    heading="Khuyến mãi"
                     links={[
                         {name: 'Quản lý', href: PATH_DASHBOARD.root},
-                        {name: 'Thể loại', href: PATH_DASHBOARD.theloai.root},
+                        {name: 'Khuyến mãi', href: PATH_DASHBOARD.khuyenmai.root},
                     ]}
                 />
 
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
-                        <TheLoaiNewForm
+                    <Grid item xs={12} md={12}>
+                        <KhuyenMaiNewForm
                             isEdit={edit.isEdit}
                             current={edit.current}
                             setEdit={setEdit}
                             setLoad={setLoad}
                         />
                     </Grid>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={12}>
                         <Card>
-                            <TheLoaiToolbar
+                            <KhuyenMaiListToolbar
                                 selected={selected}
                                 filterName={filterName}
                                 onFilterName={handleFilterByName}
@@ -174,7 +177,7 @@ export default function GiamGia() {
                             <Scrollbar>
                                 <TableContainer sx={{minWidth: 800}}>
                                     <Table>
-                                        <TheLoaiListHead
+                                        <KhuyenMaiListHead
                                             order={order}
                                             orderBy={orderBy}
                                             headLabel={TABLE_HEAD}
@@ -190,13 +193,23 @@ export default function GiamGia() {
                                                     page * rowsPerPage + rowsPerPage,
                                                 )
                                                 .map((row) => {
-                                                    const {tl_id, tl_ten, dm_ten, active, tl_iddm} =
-                                                        row;
-                                                    const isItemSelected = selected.indexOf(tl_id) !== -1;
+                                                    const {
+                                                        km_id,
+                                                        sp_masp,
+                                                        sp_ten,
+                                                        tl_ten,
+                                                        km_phantramgiam,
+                                                        km_ngaybatdau,
+                                                        km_ngayketthuc,
+                                                        active,
+                                                        tl_id,
+                                                        km_idsp
+                                                    } = row;
+                                                    const isItemSelected = selected.indexOf(km_id) !== -1;
                                                     return (
                                                         <TableRow
                                                             hover
-                                                            key={tl_id}
+                                                            key={km_id}
                                                             tabIndex={-1}
                                                             role="checkbox"
                                                             selected={isItemSelected}
@@ -206,7 +219,7 @@ export default function GiamGia() {
                                                                 <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
-                                                                        handleClick(event, tl_id)
+                                                                        handleClick(event, km_id)
                                                                     }
                                                                 />
                                                             </TableCell>
@@ -215,24 +228,52 @@ export default function GiamGia() {
                                                                 scope="row"
                                                                 padding="none"
                                                             >
-                                                                <Typography variant="subtitle2" noWrap>
-                                                                    {dm_ten}
-                                                                </Typography>
+                                                                {sp_masp}
                                                             </TableCell>
                                                             <TableCell
                                                                 component="th"
                                                                 scope="row"
                                                                 padding="none"
                                                             >
-                                                                <Typography variant="subtitle2" noWrap>
-                                                                    {tl_ten}
-                                                                </Typography>
+                                                                {tl_ten}
+                                                            </TableCell>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                padding="none"
+                                                            >
+                                                                {sp_ten}
+                                                            </TableCell>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                padding="none"
+                                                                align="center"
+                                                            >
+                                                                {km_phantramgiam}%
+                                                            </TableCell>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                padding="none"
+                                                                sx={{minWidth: '5rem'}}
+                                                            >
+                                                                {formatDate(km_ngaybatdau) === '1970-01-01' ? '' : formatDate(km_ngaybatdau)}
+                                                            </TableCell>
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row"
+                                                                padding="none"
+                                                                sx={{minWidth: '5rem'}}
+
+                                                            >
+                                                                {formatDate(km_ngayketthuc) === '1970-01-01' ? '' : formatDate(km_ngayketthuc)}
                                                             </TableCell>
                                                             <TableCell align="left">
                                                                 <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
-                                                                        changeActiveRole(tl_id, !active);
+                                                                        changeActiveRole(km_id, !active);
                                                                     }}
                                                                 />
                                                             </TableCell>
@@ -246,10 +287,21 @@ export default function GiamGia() {
                                                                             setEdit({
                                                                                 isEdit: true,
                                                                                 current: {
-                                                                                    id: tl_id,
-                                                                                    tl_ten: tl_ten,
-                                                                                    tl_iddm: tl_iddm,
+                                                                                    km_phantramgiam: km_phantramgiam,
+                                                                                    km_ngaybatdau: km_ngaybatdau,
+                                                                                    km_ngayketthuc: km_ngayketthuc,
+                                                                                    sp_idtl: {
+                                                                                        tl_id: tl_id,
+                                                                                        tl_ten: tl_ten
+                                                                                    },
+                                                                                    sp_idsp: {
+                                                                                        sp_ten: sp_ten,
+                                                                                        sp_id: km_idsp,
+                                                                                        sp_masp: sp_masp
+                                                                                    },
+                                                                                    km_id: km_id
                                                                                 },
+
                                                                             })
                                                                         }
                                                                     />

@@ -3,6 +3,7 @@ module.exports = async (conn, q, params) =>
         const handler = (error, result) => {
             if (error) {
                 reject(error);
+                console.log(error);
                 return;
             }
             resolve(result);

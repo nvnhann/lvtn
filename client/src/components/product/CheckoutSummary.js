@@ -1,17 +1,6 @@
 import PropTypes from 'prop-types';
 // material
-import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Divider,
-    InputAdornment,
-    Stack,
-    TextField,
-    Typography
-} from '@material-ui/core';
+import {Box, Card, CardContent, CardHeader, Divider, Stack, Typography} from '@material-ui/core';
 import {fCurrency} from "../../_helper/formatCurrentCy";
 // utils
 
@@ -31,14 +20,11 @@ CheckoutSummary.propTypes = {
 export default function CheckoutSummary({
                                             total,
                                             onEdit,
-                                            discount,
                                             subtotal,
                                             shipping = null,
                                             onApplyDiscount,
                                             enableDiscount = false
                                         }) {
-    const displayShipping = shipping !== null ? 'Free' : '-';
-
     return (
         <Card sx={{mb: 3}}>
             <CardHeader
@@ -56,16 +42,9 @@ export default function CheckoutSummary({
 
                     <Stack direction="row" justifyContent="space-between">
                         <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                            Giảm giá
-                        </Typography>
-                        <Typography variant="subtitle2">{discount ? fCurrency(-discount) : '-'}</Typography>
-                    </Stack>
-
-                    <Stack direction="row" justifyContent="space-between">
-                        <Typography variant="body2" sx={{color: 'text.secondary'}}>
                             Phí vận chuyển
                         </Typography>
-                        <Typography variant="subtitle2">{shipping ? fCurrency(shipping) : displayShipping}</Typography>
+                        <Typography variant="subtitle2">{shipping ? fCurrency(shipping) : ''}</Typography>
                     </Stack>
 
                     <Divider/>
@@ -78,23 +57,6 @@ export default function CheckoutSummary({
                             </Typography>
                         </Box>
                     </Stack>
-
-                    {enableDiscount && (
-                        <TextField
-                            fullWidth
-                            placeholder="Discount codes / Gifts"
-                            value="DISCOUNT5"
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <Button type="button" onClick={() => onApplyDiscount(5)} sx={{mr: -0.5}}>
-                                            Áp dụng
-                                        </Button>
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                    )}
                 </Stack>
             </CardContent>
         </Card>

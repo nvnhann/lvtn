@@ -196,10 +196,10 @@ export default function Router() {
                         },
                     ],
                 }, {
-                    path: 'giamgia',
+                    path: 'khuyenmai',
                     children: [{
                         path: '/',
-                        element: <GiamGia/>
+                        element: <KhuyenMai/>
                     }]
                 }
             ],
@@ -315,7 +315,7 @@ const PhieuNhapDetail = Loadable(
 );
 
 //----------------d-----------------Giam gia--------------------------------------
-const GiamGia = Loadable(lazy(() => import('../pages/dashboard/GiamGia')));
+const KhuyenMai = Loadable(lazy(() => import('../pages/dashboard/KhuyenMai')));
 //-------------------------------------------------------------------------------
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));

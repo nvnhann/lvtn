@@ -36,7 +36,7 @@ ProductCard.propTypes = {
 };
 
 export default function ProductCard({product}) {
-    const {sp_ten, sp_hinhanh, ctpn_gia, status, priceSale, sp_id} = product;
+    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id} = product;
     const linkTo = `${PATH_PAGE.product}/${paramCase(sp_ten)}`;
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
@@ -79,10 +79,10 @@ export default function ProductCard({product}) {
                                 textDecoration: 'line-through'
                             }}
                         >
-                            {priceSale && fCurrency(priceSale)}
+                            {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
                         </Typography>
                         &nbsp;
-                        {fCurrency(ctpn_gia)}
+                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
                     </Typography>
                     <IconButton onClick={() => {
                         dispatch(addToCart({id_sp: sp_id, so_luong: 1}));

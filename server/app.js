@@ -15,12 +15,13 @@ app.use(CookieParser());
 app.use(express.json());
 
 // cors option
-app.use("/public", express.static(publicPath));
 const corsOptions = {
     origin: true, //included origin as true
     credentials: true, //included credentials as true
 };
 app.use(cors(corsOptions));
+
+app.use("/public", express.static(publicPath));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -65,6 +66,8 @@ require("./routes/theloai")(app);
 require("./routes/ngonngu")(app);
 require("./routes/book")(app);
 require("./routes/phieunhap")(app);
+require("./routes/khuyenmai")(app);
+require("./routes/diachi")(app);
 app.get("/", (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
