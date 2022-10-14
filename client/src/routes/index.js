@@ -37,8 +37,8 @@ const Loadable = (Component) => (props) => {
 };
 
 export default function Router() {
-    const isLogined = !!useSelector(state => state.user.current.id);
-    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+    const isLogined = !!useSelector(state => state.user.current?.id);
+    const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
 
     return useRoutes([
         {
