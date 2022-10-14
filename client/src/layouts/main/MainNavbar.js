@@ -1,4 +1,4 @@
-import {Link, NavLink as RouterLink, useLocation} from 'react-router-dom';
+import {Link, NavLink as RouterLink} from 'react-router-dom';
 // material
 import {styled} from '@material-ui/core/styles';
 import {AppBar, Badge, Box, Button, Container, Toolbar, Typography,} from '@material-ui/core';
@@ -6,11 +6,7 @@ import {AppBar, Badge, Box, Button, Container, Toolbar, Typography,} from '@mate
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
-import {MHidden} from '../../components/@material-extend';
 //
-import MenuDesktop from './MenuDesktop';
-import MenuMobile from './MenuMobile';
-import navConfig from './MenuConfig';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import {useSelector} from 'react-redux';
@@ -51,10 +47,9 @@ const ToolbarShadowStyle = styled('div')(({theme}) => ({
 
 export default function MainNavbar() {
     const isOffset = useOffSetTop(100);
-    const {pathname} = useLocation();
-    const isHome = pathname === '/';
     const isLogined = !!useSelector((state) => state.user.current?.email);
     const cartCount = useSelector(cartItemCount);
+
     return (
         <AppBar sx={{boxShadow: 0, bgcolor: 'transparent'}}>
             <ToolbarStyle
@@ -81,13 +76,6 @@ export default function MainNavbar() {
                         HYPE
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
-                    <MHidden width="mdDown">
-                        <MenuDesktop
-                            isOffset={isOffset}
-                            isHome={isHome}
-                            navConfig={navConfig}
-                        />
-                    </MHidden>
                     <Searchbar/>
                     <Box mx={2} component={Link} to={PATH_PAGE.shopcart}>
                         <Badge showZero badgeContent={cartCount} color="error" max={99}>
@@ -106,17 +94,8 @@ export default function MainNavbar() {
                             Đăng nhập
                         </Button>
                     )}
-
-                    <MHidden width="mdUp">
-                        <MenuMobile
-                            isOffset={isOffset}
-                            isHome={isHome}
-                            navConfig={navConfig}
-                        />
-                    </MHidden>
                 </Container>
             </ToolbarStyle>
-
             {isOffset && <ToolbarShadowStyle/>}
         </AppBar>
     );

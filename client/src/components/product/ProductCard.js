@@ -37,7 +37,7 @@ ProductCard.propTypes = {
 
 export default function ProductCard({product}) {
     const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id} = product;
-    const linkTo = `${PATH_PAGE.product}/${paramCase(sp_ten)}`;
+    const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 

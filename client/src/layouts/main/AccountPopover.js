@@ -6,7 +6,7 @@ import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {alpha} from '@material-ui/core/styles';
 import {Box, Button, Divider, MenuItem, Typography} from '@material-ui/core';
 // routes
-import {PATH_PAGE} from '../../routes/paths';
+import {PATH_DASHBOARD, PATH_PAGE} from '../../routes/paths';
 // components
 import {MIconButton} from '../../components/@material-extend';
 import MyAvatar from '../../components/MyAvatar';
@@ -21,6 +21,10 @@ const MENU_OPTIONS = [
         label: 'Thông tin tài khoản',
         icon: personFill,
         linkTo: PATH_PAGE.profile,
+    },{
+        label: 'Quản lý',
+        icon: "eos-icons:cluster-management",
+        linkTo: PATH_DASHBOARD.root,
     },
 ];
 

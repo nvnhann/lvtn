@@ -33,7 +33,8 @@ export const PATH_PAGE = {
     components: '/components',
     profile: '/profile',
     product: '/product',
-    shopcart: '/shopcart'
+    shopcart: '/shopcart',
+    productDetail: '/product-detail'
 };
 
 export const PATH_DASHBOARD = {

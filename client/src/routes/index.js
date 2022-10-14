@@ -237,6 +237,9 @@ export default function Router() {
             }, {
                 path: 'shopcart',
                 element: <ShopCart/>
+            }, {
+                path: 'product-detail/:id',
+                element: <ProductDetail/>
             }
             ]
         },
@@ -301,6 +304,7 @@ const NgonNguList = Loadable(lazy(() => import('../pages/dashboard/NgonNgu')));
 //--------------------------Sách-------------------------------------------
 const BookList = Loadable(lazy(() => import('../pages/dashboard/Book')));
 const ProductList = Loadable(lazy(() => import('../pages/homepages/ShopProduct')));
+const ProductDetail = Loadable(lazy(() => import('../pages/homepages/ProductDetail')));
 const ShopCart = Loadable(lazy(() => import('../pages/homepages/ShopCart')));
 const BookCreate = Loadable(
     lazy(() => import('../pages/dashboard/BookCreate')),

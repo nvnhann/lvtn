@@ -9,6 +9,7 @@ import {Icon} from "@iconify/react";
 import {useState} from "react";
 
 import UserNewForm from "../../components/_dashboard/user/UserNewForm";
+import ChangePasswordForm from "../../components/authentication/change-password/ChangePasswordForm";
 //----------------------------------------------------------------------------------------------
 const RootStyle = styled(Page)(({theme}) => ({
     paddingTop: theme.spacing(8),
@@ -47,6 +48,10 @@ export default function Profile() {
         value: 'Thông tin tài khoản',
         icon: <Icon icon="bxs:user-rectangle" width={20} height={20}/>,
         component: <UserNewForm currentUser={user} isEdit={true} id={user?.id} isProfile={true}/>
+    }, {
+        value: 'Đổi mật khẩu',
+        icon: <Icon icon="ic:sharp-change-circle" width={20} height={20}/>,
+        component: <ChangePasswordForm />
     }]
     return (
         <RootStyle title='Profile'>

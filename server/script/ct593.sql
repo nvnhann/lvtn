@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 13, 2022 at 03:39 AM
+-- Generation Time: Oct 14, 2022 at 05:38 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -65,9 +65,21 @@ CREATE TABLE `binh_luan` (
 CREATE TABLE `chi_tiet_hoa_don` (
   `cthd_id` int(11) NOT NULL,
   `cthd_giaban` float NOT NULL,
-  `hd_id` int(11) NOT NULL,
-  `sp_id` int(11) NOT NULL
+  `cthd_idhd` int(11) NOT NULL,
+  `cthd_idsp` int(11) NOT NULL,
+  `cthd_giakm` float DEFAULT NULL,
+  `cthd_soluong` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `chi_tiet_hoa_don`
+--
+
+INSERT INTO `chi_tiet_hoa_don` (`cthd_id`, `cthd_giaban`, `cthd_idhd`, `cthd_idsp`, `cthd_giakm`, `cthd_soluong`) VALUES
+(1, 85000, 3, 35, 76500, 3),
+(2, 78000, 3, 36, 70200, 1),
+(3, 80000, 3, 37, 72000, 1),
+(4, 50000, 3, 40, 45000, 1);
 
 -- --------------------------------------------------------
 
@@ -431,7 +443,8 @@ CREATE TABLE `dia_chi` (
 INSERT INTO `dia_chi` (`dc_id`, `dc_tenkh`, `dc_sdt`, `dc_diachi`, `dc_email`, `dc_idkh`, `dc_macdinh`, `active`) VALUES
 (4, 'Nguyễn Văn Nhẫn', 794351150, '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', 'nvnhan.dev@gmail.com', 111, 0, 1),
 (5, 'Nguyen Van A', 794351151, 'can tho', 'nvnhan.dev@gmail.com', 111, 0, 0),
-(6, 'Nguyễn Văn Nhân', 794351152, 'Châu Thành, Hậu Giang', 'nvnhan.dev@gmail.com', 111, 1, 1);
+(6, 'Nguyễn Văn Nhân', 794351152, 'Châu Thành, Hậu Giang', 'nvnhan.dev@gmail.com', 111, 0, 0),
+(7, 'Nguyen Van A', 794351150, 'Can Tho', 'nvnhan.dev@gmail.com', 111, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1134,13 +1147,23 @@ INSERT INTO `hinh_anh` (`ha_id`, `ha_hinh`, `ha_idsp`) VALUES
 
 CREATE TABLE `hoa_don` (
   `hd_id` int(11) NOT NULL,
-  `hd_pttt` varchar(20) NOT NULL,
+  `hd_tenkh` varchar(100) NOT NULL,
+  `hd_diachi` varchar(255) NOT NULL,
+  `hd_sdt` varchar(11) NOT NULL,
+  `hd_email` varchar(255) NOT NULL,
   `hd_tongtien` float NOT NULL,
-  `nv_id` int(11) NOT NULL,
-  `tt_id` int(11) NOT NULL,
-  `kh_id` int(11) NOT NULL,
-  `vc_id` int(11) NOT NULL
+  `hd_ngaytao` timestamp NOT NULL DEFAULT current_timestamp(),
+  `hd_tienvc` float NOT NULL,
+  `hd_hinhthucthanhtoan` varchar(10) NOT NULL DEFAULT 'offline',
+  `hd_idkh` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `hoa_don`
+--
+
+INSERT INTO `hoa_don` (`hd_id`, `hd_tenkh`, `hd_diachi`, `hd_sdt`, `hd_email`, `hd_tongtien`, `hd_ngaytao`, `hd_tienvc`, `hd_hinhthucthanhtoan`, `hd_idkh`) VALUES
+(3, 'Nguyễn Văn Nhân', 'Châu Thành, Hậu Giang', '794351152', 'nvnhan.dev@gmail.com', 416700, '2022-10-13 15:16:37', 30000, 'offline', 111);
 
 -- --------------------------------------------------------
 
@@ -2309,7 +2332,7 @@ ALTER TABLE `binh_luan`
 -- AUTO_INCREMENT for table `chi_tiet_hoa_don`
 --
 ALTER TABLE `chi_tiet_hoa_don`
-  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `chi_tiet_phieu_nhap`
@@ -2327,7 +2350,7 @@ ALTER TABLE `danh_muc`
 -- AUTO_INCREMENT for table `dia_chi`
 --
 ALTER TABLE `dia_chi`
-  MODIFY `dc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `dc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `hinh_anh`
@@ -2339,7 +2362,7 @@ ALTER TABLE `hinh_anh`
 -- AUTO_INCREMENT for table `hoa_don`
 --
 ALTER TABLE `hoa_don`
-  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `khach_hang`

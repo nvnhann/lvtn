@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import {Form, FormikProvider, useFormik} from 'formik';
 // material
-import {IconButton, InputAdornment, Stack, TextField} from '@material-ui/core';
+import {Card, IconButton, InputAdornment, Stack, TextField} from '@material-ui/core';
 import {LoadingButton} from '@material-ui/lab';
 import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
@@ -13,10 +13,19 @@ import {API_BASE_URL} from "../../../config/configUrl";
 import {useSnackbar} from "notistack5";
 import {MIconButton} from "../../@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
+import {styled} from "@material-ui/core/styles";
 
 // ----------------------------------------------------------------------
 
+const ContentStyle = styled('div')(({theme}) => ({
+    maxWidth: 480,
+    margin: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+}));
 export default function ChangePasswordForm() {
+
     const email = useSelector(state => state.user.current.email);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [showPassword, setShowPassword] = useState(false);
@@ -82,74 +91,79 @@ export default function ChangePasswordForm() {
 
     return (<FormikProvider value={formik}>
         <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
-            <Stack spacing={3}>
-                {user?.credential && (
-                    <TextField
-                        fullWidth
-                        {...getFieldProps('password')}
-                        label="Mật khẩu cũ"
-                        type={showPassword ? 'text' : 'password'}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        edge="end"
-                                        onClick={() => setShowPassword((prev) => !prev)}
-                                    >
-                                        <Icon icon={showPassword ? eyeFill : eyeOffFill}/>
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                        error={Boolean(touched.password && errors.password)}
-                        helperText={touched.password && errors.password}
-                    />
-                )}
-                <TextField
-                    fullWidth
-                    {...getFieldProps('newPass')}
-                    label="Mật khẩu mới"
-                    type={showNewPass ? 'text' : 'password'}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    edge="end"
-                                    onClick={() => setShowNewPass((prev) => !prev)}
-                                >
-                                    <Icon icon={showNewPass ? eyeFill : eyeOffFill}/>
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    error={Boolean(touched.newPass && errors.newPass)}
-                    helperText={touched.newPass && errors.newPass}
-                />
-                <TextField
-                    fullWidth
-                    {...getFieldProps('reNewPass')}
-                    label="Nhập lại mật khẩu mới"
-                    type={showReNewPass ? 'text' : 'password'}
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton
-                                    edge="end"
-                                    onClick={() => setShowReNewPass((prev) => !prev)}
-                                >
-                                    <Icon icon={showReNewPass ? eyeFill : eyeOffFill}/>
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    error={Boolean(touched.reNewPass && errors.reNewPass)}
-                    helperText={touched.reNewPass && errors.reNewPass}
-                />
+            <ContentStyle>
+                <Card sx={{p: 3}}>
+                    <Stack spacing={3}>
+                        {user?.credential && (
+                            <TextField
+                                fullWidth
+                                {...getFieldProps('password')}
+                                label="Mật khẩu cũ"
+                                type={showPassword ? 'text' : 'password'}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton
+                                                edge="end"
+                                                onClick={() => setShowPassword((prev) => !prev)}
+                                            >
+                                                <Icon icon={showPassword ? eyeFill : eyeOffFill}/>
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                error={Boolean(touched.password && errors.password)}
+                                helperText={touched.password && errors.password}
+                            />
+                        )}
+                        <TextField
+                            fullWidth
+                            {...getFieldProps('newPass')}
+                            label="Mật khẩu mới"
+                            type={showNewPass ? 'text' : 'password'}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                            onClick={() => setShowNewPass((prev) => !prev)}
+                                        >
+                                            <Icon icon={showNewPass ? eyeFill : eyeOffFill}/>
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            error={Boolean(touched.newPass && errors.newPass)}
+                            helperText={touched.newPass && errors.newPass}
+                        />
+                        <TextField
+                            fullWidth
+                            {...getFieldProps('reNewPass')}
+                            label="Nhập lại mật khẩu mới"
+                            type={showReNewPass ? 'text' : 'password'}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            edge="end"
+                                            onClick={() => setShowReNewPass((prev) => !prev)}
+                                        >
+                                            <Icon icon={showReNewPass ? eyeFill : eyeOffFill}/>
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            error={Boolean(touched.reNewPass && errors.reNewPass)}
+                            helperText={touched.reNewPass && errors.reNewPass}
+                        />
 
-                <LoadingButton fullWidth size="large" type="submit" variant="contained">
-                    Đổi mật khẩu
-                </LoadingButton>
-            </Stack>
+                        <LoadingButton fullWidth size="large" type="submit" variant="contained">
+                            Đổi mật khẩu
+                        </LoadingButton>
+                    </Stack>
+                </Card>
+            </ContentStyle>
         </Form>
-    </FormikProvider>);
+    </FormikProvider>)
+        ;
 }
