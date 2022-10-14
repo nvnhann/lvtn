@@ -79,14 +79,14 @@ function AddressItem({address, onNextStep, onCreateBilling, deleteAddress}) {
 
 export default function CheckoutAddress() {
     const {enqueueSnackbar} = useSnackbar();
+    const navigate = useNavigate();
     const [addresses, setAddresses] = useState();
     const [open, setOpen] = useState(false);
+    const isLogined = !!useSelector(state => state.user.current?.id);
     const {totalPrice} = useSelector(state => state.product.checkout);
     const {id} = useSelector(state => state.user.current);
     const dispatch = useDispatch();
     const [load, setLoad] = useState(0);
-    const isLogined = !!useSelector(state => state.user.current.id);
-    const navigate = useNavigate();
 
     if (!isLogined) navigate('/');
 

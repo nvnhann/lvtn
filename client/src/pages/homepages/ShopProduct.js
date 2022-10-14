@@ -34,7 +34,7 @@ export default function ShopProduct() {
 
 
     return (
-        <RootStyle title="Ecommerce: Shop | Minimal-UI">
+        <RootStyle title="HYBE">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <ProductList products={products} isLoad={load}/>
                 <Box mt={4} display='flex' justifyContent='center'>

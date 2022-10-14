@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import {paramCase} from 'change-case';
 import {Link as RouterLink} from 'react-router-dom';
 // material
 import {Box, Card, IconButton, Link, Stack, Typography} from '@material-ui/core';
@@ -85,7 +84,11 @@ export default function ProductCard({product}) {
                         {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
                     </Typography>
                     <IconButton onClick={() => {
-                        dispatch(addToCart({id_sp: sp_id, so_luong: 1}));
+                        dispatch(addToCart({
+                            id_sp: sp_id,
+                            so_luong: 1,
+                            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+                        }));
                         enqueueSnackbar('Đã thêm sách vào giỏ hàng!', {
                             variant: 'success',
                             action: (key) => (

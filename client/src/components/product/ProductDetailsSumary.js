@@ -118,7 +118,11 @@ export default function ProductDetailsSumary(props) {
     const isMaxQuantity = values.quantity >= ctpn_soluong;
 
     const handleAddCart = () => {
-        dispatch(addToCart({id_sp: sp_id, so_luong: values.quantity}));
+        dispatch(addToCart({
+            id_sp: sp_id,
+            so_luong: values.quantity,
+            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+        }));
     };
 
 

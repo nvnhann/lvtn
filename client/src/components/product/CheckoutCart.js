@@ -1,5 +1,5 @@
 import {Icon} from '@iconify/react';
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {Form, FormikProvider, useFormik} from 'formik';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 // material
@@ -8,7 +8,7 @@ import {Button, Card, CardHeader, Grid, Typography} from '@material-ui/core';
 import CheckoutProductList from './CheckoutProductList';
 import {useDispatch, useSelector} from "react-redux";
 import {checkout, checkoutProduct, onNextStep} from "../../redux/slices/product";
-import {cartItemCount} from "../../redux/slices/cart";
+import {cartItemCount, cartItemTotal} from "../../redux/slices/cart";
 import Scrollbar from "../Scrollbar";
 import EmptyContent from "../EmptyContent";
 import {PATH_PAGE} from "../../routes/paths";
@@ -24,7 +24,11 @@ export default function CheckoutCart() {
     const cart = useSelector((state) => state.cart.cartItem);
     const totalItems = useSelector(cartItemCount);
     const isEmptyCart = cart.length === 0;
+    const isLogined = !!useSelector(state => state.user.current?.id);
     const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
+    const totalPrice = useSelector(cartItemTotal);
+
     useEffect(() => {
         (async () => {
             if (cart.length === 0) return;
@@ -41,18 +45,14 @@ export default function CheckoutCart() {
         console.log(value);
     };
 
-    const toltalPrice = () => {
-        if (products.length === 0) return 0;
-        return products.reduce((total, item) => total + (item.sp_giakhuyenmai ? item.sp_giakhuyenmai : item.ctpn_gia) * item.sp_soluong, 0);
-    }
-
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {products: cart},
         onSubmit: async (values, {setErrors, setSubmitting}) => {
             try {
                 setSubmitting(true);
-                dispatch(checkout({totalPrice: toltalPrice(), shipping: 30000}));
+                if(!isLogined) navigate('/auth/login')
+                dispatch(checkout({totalPrice: totalPrice, shipping: 30000}));
                 dispatch(checkoutProduct(products))
                 handleNextStep();
             } catch (error) {
@@ -107,14 +107,14 @@ export default function CheckoutCart() {
 
                     <Grid item xs={12} md={4}>
                         <CheckoutSummary
-                            total={toltalPrice() + 30000}
+                            total={totalPrice + 30000}
                             enableDiscount
-                            subtotal={toltalPrice()}
+                            subtotal={totalPrice}
                             onApplyDiscount={handleApplyDiscount}
                             shipping={30000}
                         />
                         <Button fullWidth size="large" type="submit" variant="contained"
-                                disabled={products.length === 0}>
+                                disabled={cart.length === 0}>
                             Thanh toán
                         </Button>
                     </Grid>
