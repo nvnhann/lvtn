@@ -1,4 +1,4 @@
-import {Box, Button, FormControlLabel, Grid, Radio, RadioGroup, styled, Typography} from "@material-ui/core";
+import {Box, Button, Card, FormControlLabel, Grid, Radio, RadioGroup, styled, Typography} from "@material-ui/core";
 import CheckoutAddressInfor from "./CheckoutAddressInfor";
 import {onBackStep, onGotoStep} from "../../redux/slices/product";
 import {useDispatch, useSelector} from "react-redux";
@@ -10,7 +10,17 @@ import checkmarkCircle2Fill from "@iconify/icons-eva/checkmark-circle-2-fill";
 import {LoadingButton} from "@material-ui/lab";
 import {postData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
+import {PayPalButton} from "react-paypal-button-v2";
+import {useSnackbar} from "notistack5";
 
+
+//-----------------------------------------------------------------------------------------------
+const options = {
+    clientId: "AYRkZtJ2wMXh54-3LxsP2kWZS7dY-QhCO7PYZSNrias-s2ZFMvzUgvwS2DeZGxGvz9AeUP-wQtVn0hqG",
+    currency: "USD"
+}
+
+//-----------------------------------------------------------------------------------------------
 const OptionStyle = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
@@ -25,14 +35,17 @@ const DELIVERY_OPTIONS = [
     {
         value: 0,
         title: 'Thanh toán khi nhận hàng (phí vận chuyển 30,000đ)',
+    }, {
+        value: 1,
+        title: 'Thanh toán bằng tài khoản Paypal'
     }
 ];
 //---------------------------------------------------------------------------
 
 export default function CheckoutPayment() {
+    const {enqueueSnackbar} = useSnackbar();
     const dispatch = useDispatch();
-    const {totalPrice, shipping, address, product} = useSelector(state => state.product.checkout);
-
+    let {totalPrice, shipping, address, product} = useSelector(state => state.product.checkout);
 
     const handleBackStep = () => {
         dispatch(onBackStep());
@@ -42,9 +55,39 @@ export default function CheckoutPayment() {
         dispatch(onGotoStep(step));
     };
 
+    const onError = err => {
+        enqueueSnackbar('Có lỗi xảy ra', {variant: 'error', autoHideDuration: 2000});
+
+        // The main Paypal's script cannot be loaded or somethings block the loading of that script!
+        console.log("Error!", err);
+        // Because the Paypal's main script is loaded asynchronously from "https://www.paypalobjects.com/api/checkout.js"
+        // => sometimes it may take about 0.5 second for everything to get set, or for the button to appear
+    };
+
+    const onSuccess = async (payment) => {
+
+        try {
+            let _values = {};
+            _values.hd_tenkh = address.dc_tenkh;
+            _values.hd_idkh = address.dc_idkh;
+            _values.hd_sdt = address.dc_sdt;
+            _values.hd_email = address.dc_email;
+            _values.hd_tongtien = totalPrice;
+            _values.hd_tienvc = 0;
+            _values.hd_hinhthucthanhtoan='online';
+            _values.hd_diachi = address.dc_diachi;
+            _values.product = product;
+            await postData(API_BASE_URL + '/hoadon', _values);
+            enqueueSnackbar('Thanh toán thành công', {variant: 'success', autoHideDuration: 2000});
+        } catch (err) {
+            enqueueSnackbar('Lỗi tạo hóa đơn', {variant: 'error', autoHideDuration: 2000});
+        }
+
+    }
+
     const formik = useFormik({
         initialValues: {
-            delivery: totalPrice,
+            delivery: 0,
             shipping: 3000,
             payment: ''
         },
@@ -60,8 +103,6 @@ export default function CheckoutPayment() {
                 _values.hd_diachi = address.dc_diachi;
                 _values.product = product;
                 await postData(API_BASE_URL + '/hoadon', _values);
-                // handleNextStep();
-                console.log(_values)
             } catch (error) {
                 console.error(error);
                 setSubmitting(false);
@@ -70,7 +111,6 @@ export default function CheckoutPayment() {
         }
     });
     const {isSubmitting, handleSubmit, values, setFieldValue} = formik;
-
     return (
         <>
             <FormikProvider value={formik}>
@@ -86,33 +126,46 @@ export default function CheckoutPayment() {
                                     setFieldValue('delivery', Number(value));
                                 }}
                             >
-                                {DELIVERY_OPTIONS.map((delivery) => {
-                                    const {value, title} = delivery;
-                                    return (
-                                        <Grid key={value} item xs={12} md={6}>
-                                            <OptionStyle
-                                                sx={{
-                                                    ...(values.delivery === value && {
-                                                        boxShadow: (theme) => theme.customShadows.z8
-                                                    })
-                                                }}
-                                            >
-                                                <FormControlLabel
-                                                    value={value}
-                                                    checked={value === 0}
-                                                    control={<Radio checkedIcon={<Icon icon={checkmarkCircle2Fill}/>}/>}
-                                                    label={
-                                                        <Box sx={{ml: 1}}>
-                                                            <Typography variant="subtitle2">{title}</Typography>
-                                                        </Box>
-                                                    }
-                                                    sx={{py: 3, flexGrow: 1, mr: 0}}
-                                                />
-                                            </OptionStyle>
-                                        </Grid>
-                                    );
-                                })}
+                                <Grid container spacing={2}>
+
+                                    {DELIVERY_OPTIONS.map((delivery) => {
+                                        const {value, title} = delivery;
+                                        return (
+                                            <Grid key={value} item xs={12} md={6}>
+                                                <OptionStyle
+                                                    sx={{
+                                                        ...(values.delivery === value && {
+                                                            boxShadow: (theme) => theme.customShadows.z8
+                                                        })
+                                                    }}
+                                                >
+                                                    <FormControlLabel
+                                                        value={value}
+                                                        control={<Radio
+                                                            checkedIcon={<Icon icon={checkmarkCircle2Fill}/>}/>}
+                                                        label={
+                                                            <Box sx={{ml: 1}}>
+                                                                <Typography variant="subtitle2">{title}</Typography>
+                                                            </Box>
+                                                        }
+                                                        sx={{py: 3, flexGrow: 1, mr: 0}}
+                                                    />
+                                                </OptionStyle>
+                                            </Grid>
+                                        );
+                                    })}
+                                </Grid>
                             </RadioGroup>
+
+                            {values.delivery === 1 && <Card sx={{my: 4}}>
+                                <PayPalButton
+                                    amount={parseFloat(totalPrice / 24000).toFixed(2)}
+                                    options={options}
+                                    onSuccess={onSuccess}
+                                    onError={onError}
+                                    style={{color: 'blue'}}
+                                />
+                            </Card>}
 
                             <Button
                                 type="button"
@@ -128,15 +181,15 @@ export default function CheckoutPayment() {
                         <Grid item xs={12} md={4}>
                             <CheckoutAddressInfor onBackStep={handleBackStep}/>
                             <CheckoutSummary
-                                total={totalPrice + 30000}
+                                total={values.delivery === 0 ? totalPrice + 30000 : totalPrice}
                                 enableDiscount
                                 subtotal={totalPrice}
-                                shipping={30000}
+                                shipping={values.delivery === 0 ? 30000 : 0 }
                                 onEdit={() => handleGotoStep(0)}
                                 enableEdit={true}
                             />
                             <LoadingButton fullWidth size="large" type="submit" variant="contained"
-                                           loading={isSubmitting}>
+                                           loading={isSubmitting} disabled={values.delivery === 1}>
                                 Thanh toán
                             </LoadingButton>
                         </Grid>

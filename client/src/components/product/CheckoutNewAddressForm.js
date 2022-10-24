@@ -58,6 +58,7 @@ export default function CheckoutNewAddressForm({open, onClose, onNextStep, setLo
                         variant: 'success',
                     },
                 );
+
                 resetForm();
                 if (setLoad) setLoad(e => e + 1);
                 setSubmitting(true);

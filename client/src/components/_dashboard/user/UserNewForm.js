@@ -34,7 +34,7 @@ import {formatDate} from '../../../_helper/formatDate';
 import {MIconButton} from '../../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
 import {useDispatch} from "react-redux";
-import Login from "../../../pages/authentication/Login";
+import {login} from "../../../redux/slices/user";
 
 // ----------------------------------------------------------------------
 
@@ -126,7 +126,7 @@ export default function UserNewForm({isEdit, currentUser, id, isProfile}) {
                     await postData(API_BASE_URL + `/user/create`, values);
                 }
                 if (isProfile) {
-                    dispatch(Login());
+                    dispatch(login());
                 }
                 enqueueSnackbar(
                     !isEdit ? 'Tạo tài khoản thành công' : 'Cập nhật thành công!',

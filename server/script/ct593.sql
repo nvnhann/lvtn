@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 14, 2022 at 05:38 AM
+-- Generation Time: Oct 24, 2022 at 04:17 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -76,10 +76,17 @@ CREATE TABLE `chi_tiet_hoa_don` (
 --
 
 INSERT INTO `chi_tiet_hoa_don` (`cthd_id`, `cthd_giaban`, `cthd_idhd`, `cthd_idsp`, `cthd_giakm`, `cthd_soluong`) VALUES
-(1, 85000, 3, 35, 76500, 3),
-(2, 78000, 3, 36, 70200, 1),
-(3, 80000, 3, 37, 72000, 1),
-(4, 50000, 3, 40, 45000, 1);
+(10, 64000, 6, 23, 57600, 1),
+(11, 85000, 6, 35, 76500, 1),
+(12, 78000, 6, 36, 70200, 1),
+(13, 80000, 6, 37, 72000, 1),
+(14, 45000, 6, 39, 40500, 1),
+(15, 64000, 7, 23, 57600, 1),
+(16, 85000, 7, 35, 76500, 1),
+(17, 78000, 7, 36, 70200, 1),
+(18, 80000, 7, 37, 72000, 1),
+(19, 45000, 7, 39, 40500, 1),
+(20, 65000, 8, 28, NULL, 2);
 
 -- --------------------------------------------------------
 
@@ -428,7 +435,7 @@ INSERT INTO `danh_muc` (`dm_id`, `dm_ten`, `active`) VALUES
 CREATE TABLE `dia_chi` (
   `dc_id` int(11) NOT NULL,
   `dc_tenkh` varchar(100) NOT NULL,
-  `dc_sdt` int(12) NOT NULL,
+  `dc_sdt` varchar(12) NOT NULL,
   `dc_diachi` varchar(250) NOT NULL,
   `dc_email` varchar(255) NOT NULL,
   `dc_idkh` int(11) NOT NULL,
@@ -441,10 +448,12 @@ CREATE TABLE `dia_chi` (
 --
 
 INSERT INTO `dia_chi` (`dc_id`, `dc_tenkh`, `dc_sdt`, `dc_diachi`, `dc_email`, `dc_idkh`, `dc_macdinh`, `active`) VALUES
-(4, 'Nguyễn Văn Nhẫn', 794351150, '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', 'nvnhan.dev@gmail.com', 111, 0, 1),
-(5, 'Nguyen Van A', 794351151, 'can tho', 'nvnhan.dev@gmail.com', 111, 0, 0),
-(6, 'Nguyễn Văn Nhân', 794351152, 'Châu Thành, Hậu Giang', 'nvnhan.dev@gmail.com', 111, 0, 0),
-(7, 'Nguyen Van A', 794351150, 'Can Tho', 'nvnhan.dev@gmail.com', 111, 1, 1);
+(4, 'Nguyễn Văn Nhẫn', '0794351150', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', 'nvnhan.dev@gmail.com', 111, 0, 1),
+(5, 'Nguyen Van A', '0794351151', 'can tho', 'nvnhan.dev@gmail.com', 111, 0, 0),
+(6, 'Nguyễn Văn Nhân', '0794351152', 'Châu Thành, Hậu Giang', 'nvnhan.dev@gmail.com', 111, 0, 0),
+(7, 'Nguyen Van A', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 0, 0),
+(8, 'Nguyen Van Nhan', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 0, 1),
+(9, 'Nguyen van a', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -1155,15 +1164,18 @@ CREATE TABLE `hoa_don` (
   `hd_ngaytao` timestamp NOT NULL DEFAULT current_timestamp(),
   `hd_tienvc` float NOT NULL,
   `hd_hinhthucthanhtoan` varchar(10) NOT NULL DEFAULT 'offline',
-  `hd_idkh` int(11) NOT NULL
+  `hd_idkh` int(11) NOT NULL,
+  `hd_idnv` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hoa_don`
 --
 
-INSERT INTO `hoa_don` (`hd_id`, `hd_tenkh`, `hd_diachi`, `hd_sdt`, `hd_email`, `hd_tongtien`, `hd_ngaytao`, `hd_tienvc`, `hd_hinhthucthanhtoan`, `hd_idkh`) VALUES
-(3, 'Nguyễn Văn Nhân', 'Châu Thành, Hậu Giang', '794351152', 'nvnhan.dev@gmail.com', 416700, '2022-10-13 15:16:37', 30000, 'offline', 111);
+INSERT INTO `hoa_don` (`hd_id`, `hd_tenkh`, `hd_diachi`, `hd_sdt`, `hd_email`, `hd_tongtien`, `hd_ngaytao`, `hd_tienvc`, `hd_hinhthucthanhtoan`, `hd_idkh`, `hd_idnv`) VALUES
+(6, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 316800, '2022-10-21 06:48:58', 0, 'online', 111, NULL),
+(7, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 316800, '2022-10-21 06:53:59', 0, 'online', 111, NULL),
+(8, 'Nguyen van a', 'Can Tho', '0794351150', 'nvnhan.dev@gmail.com', 130000, '2022-10-21 09:51:20', 0, 'online', 111, NULL);
 
 -- --------------------------------------------------------
 
@@ -2131,8 +2143,19 @@ CREATE TABLE `trang_thai` (
   `tt_id` int(11) NOT NULL,
   `tt_ngaycapnhat` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `tt_trangthai` int(11) NOT NULL,
-  `tt_thongtin` varchar(250) NOT NULL
+  `tt_idnv` int(11) DEFAULT NULL,
+  `tt_idhd` int(11) NOT NULL,
+  `tt_note` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `trang_thai`
+--
+
+INSERT INTO `trang_thai` (`tt_id`, `tt_ngaycapnhat`, `tt_trangthai`, `tt_idnv`, `tt_idhd`, `tt_note`) VALUES
+(1, '2022-10-21 09:20:56', 3, NULL, 6, NULL),
+(2, '2022-10-21 06:53:59', 0, NULL, 7, NULL),
+(3, '2022-10-21 09:51:20', 0, NULL, 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -2159,13 +2182,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `user_id`, `email`, `fullname`, `credential`, `phone`, `gender`, `birthday`, `role_id`, `verify`, `active`) VALUES
-(111, '114872046152355360109', 'nvnhan.dev@gmail.com', 'Nguyễn Văn Nhẫn', '$2a$08$cv9v90NIsYoszCJq7XsXU.V/j/doSbvgN9icLsqH98OCeakWcBMoa', '0794351150', 'male', '2000-01-01', 2, 1, 1),
-(115, NULL, 'nvnhan.dev3@gmail.com', 'Nguyễn Văn Nhẫn A', '$2a$08$pDdIGVk23.bL3wt2SQ6CFebNZdhjBU7p1MT/bDYrhzacfWGoGPtIu', '0794351159', 'male', '2000-01-10', 1, 1, 1),
-(117, NULL, 'nvnhan.dev5@gmail.com', 'nguyen van b', '$2a$08$3yCugmqCW0Qx7qW.GLEjY.UN.RsTMsv.H06gkyzmgjeA8hNAaYbL.', '0794351150', 'male', '2000-01-10', 1, 1, 1),
+(111, '114872046152355360109', 'nvnhan.dev@gmail.com', 'Nguyễn Văn Nhẫn', '$2a$08$cv9v90NIsYoszCJq7XsXU.V/j/doSbvgN9icLsqH98OCeakWcBMoa', '0794351150', 'male', '2000-01-03', 2, 1, 1),
+(115, NULL, 'nvnhan.dev3@gmail.com', 'Nguyễn Văn Nhẫn A', '$2a$08$pDdIGVk23.bL3wt2SQ6CFebNZdhjBU7p1MT/bDYrhzacfWGoGPtIu', '0794351159', 'male', '2000-01-10', 4, 1, 1),
+(117, NULL, 'nvnhan.dev5@gmail.com', 'nguyen van b', '$2a$08$3yCugmqCW0Qx7qW.GLEjY.UN.RsTMsv.H06gkyzmgjeA8hNAaYbL.', '0794351150', 'male', '2000-01-10', 4, 1, 1),
 (118, NULL, 'nvnhan.dev6@gmail.com', 'Nguyen van c', '$2a$08$YyRr.7Ia4kThVphmra.a2Oj1W.w8WJITB4Q1ye0mEX5Rz06unvcOu', '', 'male', '2000-01-10', 1, 1, 1),
 (119, NULL, 'nvnhan.dev7@gmail.com', 'nguyen van D', '$2a$08$L7/bmih9H43h9mSLGkA8NOCN3m.WyLoAnoPDF.vN8ZTBYtRhhFabK', '0794351150', 'male', '2000-01-10', 3, 1, 1),
 (122, NULL, 'nvnhan.dev4@gmail.com', 'Nguyen van nhan', '$2a$08$n0UPnRP7vC2J3Q9epZDDHOH3q8ZwWp4qkIbm0KnKkxFIi5ULEK01a', '0794351150', 'male', '2000-01-10', 3, 1, 1),
-(123, NULL, 'nvnhan.dev2@gmail.com', 'Nguyen van nhan', '$2a$08$H/rDkgf/CBS5I2aPI.l/revLt5WAgBaQtJj/0/Xtdb1646bTfMsL.', NULL, NULL, NULL, 1, 0, 1),
+(123, NULL, 'nvnhan.dev2@gmail.com', 'Nguyen van nhan', '$2a$08$H/rDkgf/CBS5I2aPI.l/revLt5WAgBaQtJj/0/Xtdb1646bTfMsL.', NULL, NULL, NULL, 4, 0, 1),
 (124, NULL, 'linhb1809253@student.ctu.edu.vn', 'Bùi Thi Diệu Linh', '$2a$08$LBbM9j7UvSG/LAaotx4WGuPi8njp3zI8S2FPaC4.afXxl8t74zJwK', '0835788522', 'female', '2000-03-19', 2, 1, 1);
 
 -- --------------------------------------------------------
@@ -2332,7 +2355,7 @@ ALTER TABLE `binh_luan`
 -- AUTO_INCREMENT for table `chi_tiet_hoa_don`
 --
 ALTER TABLE `chi_tiet_hoa_don`
-  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `chi_tiet_phieu_nhap`
@@ -2350,7 +2373,7 @@ ALTER TABLE `danh_muc`
 -- AUTO_INCREMENT for table `dia_chi`
 --
 ALTER TABLE `dia_chi`
-  MODIFY `dc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `dc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `hinh_anh`
@@ -2362,7 +2385,7 @@ ALTER TABLE `hinh_anh`
 -- AUTO_INCREMENT for table `hoa_don`
 --
 ALTER TABLE `hoa_don`
-  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `khach_hang`
@@ -2440,7 +2463,7 @@ ALTER TABLE `the_loai`
 -- AUTO_INCREMENT for table `trang_thai`
 --
 ALTER TABLE `trang_thai`
-  MODIFY `tt_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`

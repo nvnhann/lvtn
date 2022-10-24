@@ -8,7 +8,7 @@ import Label from "../Label";
 import {fCurrency} from "../../_helper/formatCurrentCy";
 import {URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import IconCart from "../IconCart";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {addToCart} from "../../redux/slices/cart";
 import {useSnackbar} from "notistack5";
 import {MIconButton} from "../@material-extend";
@@ -35,11 +35,12 @@ ProductCard.propTypes = {
 };
 
 export default function ProductCard({product}) {
-    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id} = product;
+    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id, ctpn_soluong} = product;
     const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-
+    const {cartItem} = useSelector(state => state.cart);
+    const CartItemQuantity = cartItem.filter(e => e.id_sp === sp_id)[0];
     return (
         <Card>
             <Box sx={{pt: '100%', position: 'relative'}}>
@@ -84,11 +85,22 @@ export default function ProductCard({product}) {
                         {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
                     </Typography>
                     <IconButton onClick={() => {
+                        
+                        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > ctpn_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
+                            variant: 'error',
+                            action: (key) => (
+                                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                                    <Icon icon={closeFill}/>
+                                </MIconButton>
+                            ),
+                        });
+
                         dispatch(addToCart({
                             id_sp: sp_id,
                             so_luong: 1,
                             sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
                         }));
+
                         enqueueSnackbar('Đã thêm sách vào giỏ hàng!', {
                             variant: 'success',
                             action: (key) => (

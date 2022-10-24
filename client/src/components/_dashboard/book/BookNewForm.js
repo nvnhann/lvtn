@@ -158,7 +158,6 @@ export default function BookNewForm({isEdit, currentProduct}) {
         setFieldValue,
         getFieldProps,
     } = formik;
-    console.log(values);
 
     const handleDrop = useCallback(
         (acceptedFiles) => {

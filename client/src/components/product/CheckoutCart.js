@@ -33,6 +33,7 @@ export default function CheckoutCart() {
         (async () => {
             if (cart.length === 0) return;
             const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
+            cart.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].ctpn_soluong ? _products.data[idx].ctpn_soluong : e.so_luong)
             setProducts(_products.data);
         })()
     }, [totalItems, cart]);
@@ -51,7 +52,7 @@ export default function CheckoutCart() {
         onSubmit: async (values, {setErrors, setSubmitting}) => {
             try {
                 setSubmitting(true);
-                if(!isLogined) navigate('/auth/login')
+                if (!isLogined) navigate('/auth/login')
                 dispatch(checkout({totalPrice: totalPrice, shipping: 30000}));
                 dispatch(checkoutProduct(products))
                 handleNextStep();
@@ -67,7 +68,7 @@ export default function CheckoutCart() {
         <FormikProvider value={formik}>
             <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={9}>
                         <Card sx={{mb: 3}}>
                             <CardHeader
                                 title={
@@ -105,7 +106,7 @@ export default function CheckoutCart() {
                         </Button>
                     </Grid>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={3}>
                         <CheckoutSummary
                             total={totalPrice + 30000}
                             enableDiscount

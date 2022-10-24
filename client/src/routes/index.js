@@ -205,6 +205,12 @@ export default function Router() {
                         path: '/',
                         element: <KhuyenMai/>
                     }]
+                }, {
+                    path: 'hoadon',
+                    children: [{
+                        path: '/',
+                        element: <Hoadon/>
+                    }]
                 }
             ],
         },
@@ -324,9 +330,12 @@ const PhieuNhapDetail = Loadable(
     lazy(() => import('../pages/dashboard/PhieuNhapDetail')),
 );
 
-//----------------d-----------------Giam gia--------------------------------------
+//---------------------------------Giam gia--------------------------------------
 const KhuyenMai = Loadable(lazy(() => import('../pages/dashboard/KhuyenMai')));
 //-------------------------------------------------------------------------------
+
+//---------------------------------Hoa don--------------------------------------
+const Hoadon = Loadable(lazy(() => import('../pages/dashboard/HoaDon')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));

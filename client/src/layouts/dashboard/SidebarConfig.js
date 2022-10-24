@@ -20,7 +20,8 @@ const ICONS = {
     ngonngu: getIcon('ic_translate'),
     book: getIcon('ic_book'),
     phieunhap: getIcon('ic_addbook'),
-    giamgia: getIcon('ic_discount')
+    giamgia: getIcon('ic_discount'),
+    order: getIcon('ic_order')
 };
 
 const sidebarConfig = [
@@ -48,7 +49,13 @@ const sidebarConfig = [
                 title: 'Nhập hàng',
                 path: PATH_DASHBOARD.phieunhap.root,
                 icon: ICONS.phieunhap,
-            },{
+            },
+            {
+                title: 'Hóa đơn',
+                path: PATH_DASHBOARD.hoadon.root,
+                icon: ICONS.order
+            },
+            {
                 title: 'Khuyến mãi',
                 path: PATH_DASHBOARD.khuyenmai.root,
                 icon: ICONS.giamgia,

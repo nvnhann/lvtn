@@ -10,6 +10,7 @@ import {useState} from "react";
 
 import UserNewForm from "../../components/_dashboard/user/UserNewForm";
 import ChangePasswordForm from "../../components/authentication/change-password/ChangePasswordForm";
+import Order from "./Order";
 //----------------------------------------------------------------------------------------------
 const RootStyle = styled(Page)(({theme}) => ({
     paddingTop: theme.spacing(8),
@@ -51,7 +52,11 @@ export default function Profile() {
     }, {
         value: 'Đổi mật khẩu',
         icon: <Icon icon="ic:sharp-change-circle" width={20} height={20}/>,
-        component: <ChangePasswordForm />
+        component: <ChangePasswordForm/>
+    }, {
+        value: 'Đơn hàng',
+        icon: <Icon icon="icon-park-outline:transaction-order" width={20} height={20}/>,
+        component: <Order/>
     }]
     return (
         <RootStyle title='Profile'>

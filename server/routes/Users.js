@@ -1,6 +1,7 @@
 const sql = require("../db");
 const bcrypt = require("bcryptjs");
 const {sendEmail} = require("../lib/sendMail");
+const query = require('../lib/query');
 
 module.exports = function (app) {
     app.get("/users", async (req, res) => {
@@ -85,19 +86,22 @@ module.exports = function (app) {
         });
     });
 
+    app.get('/users/shipper', async (req, res) => {
+        return res.status(200).send(await query(sql, 'SELECT * FROM users WHERE role_id = 4'));
+    })
+
     app.put("/user/:id/edit", async (req, res) => {
         const {id} = req.params;
         const data = req.body;
         const qr = "UPDATE `users` SET ? WHERE `users`.`id` = ?;";
-        await sql.query(qr, [data, id], (err, _) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            }
-            return res.status(200).send("Cập nhật thành công");
-        });
-        console.log(sql);
+        await query(sql, qr, [data, id]);
+        let _user = await query(sql, "select users.*, q_ten  as role from users left join quyen on users.role_id = quyen.q_id WHERE id = ?", id);
+        console.log(_user[0])
+        res.cookie("user", JSON.stringify(_user[0]));
+        return res.status(200).send("Cập nhật thành công");
+
     });
+
     app.post("/user/create", async (req, res) => {
         let data = req.body;
         let send_pwd = data.credential;

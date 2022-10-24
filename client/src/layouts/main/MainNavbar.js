@@ -9,10 +9,11 @@ import Logo from '../../components/Logo';
 //
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import IconCart from "../../components/IconCart";
 import {cartItemCount} from "../../redux/slices/cart";
 import {PATH_PAGE} from "../../routes/paths";
+import {onGotoStep} from "../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -47,8 +48,9 @@ const ToolbarShadowStyle = styled('div')(({theme}) => ({
 
 export default function MainNavbar() {
     const isOffset = useOffSetTop(100);
-    const isLogined = !!useSelector((state) => state.user.current?.email);
+    const isLogined = !!useSelector((state) => state.user.current?.id);
     const cartCount = useSelector(cartItemCount);
+    const dispatch = useDispatch();
 
     return (
         <AppBar sx={{boxShadow: 0, bgcolor: 'transparent'}}>
@@ -77,7 +79,7 @@ export default function MainNavbar() {
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
                     <Searchbar/>
-                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart}>
+                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart} onClick={()=>dispatch(onGotoStep(0))}>
                         <Badge showZero badgeContent={cartCount} color="error" max={99}>
                             <IconCart/>
                         </Badge>
