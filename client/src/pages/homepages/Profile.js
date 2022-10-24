@@ -11,6 +11,7 @@ import {useState} from "react";
 import UserNewForm from "../../components/_dashboard/user/UserNewForm";
 import ChangePasswordForm from "../../components/authentication/change-password/ChangePasswordForm";
 import Order from "./Order";
+import OrderShipping from "./OrderShipping";
 //----------------------------------------------------------------------------------------------
 const RootStyle = styled(Page)(({theme}) => ({
     paddingTop: theme.spacing(8),
@@ -39,13 +40,14 @@ const TabsWrapperStyle = styled('div')(({theme}) => ({
 export default function Profile() {
     const {themeStretch} = useSettings();
     const user = useSelector(state => state.user.current);
+    const isShipper = user.role === 'SHIPPER';
     const [currentTab, setCurrentTab] = useState('Thông tin tài khoản');
 
     const handleChangeTab = (event, newValue) => {
         setCurrentTab(newValue);
     };
 
-    const PROFILE_TABS = [{
+    let PROFILE_TABS = [{
         value: 'Thông tin tài khoản',
         icon: <Icon icon="bxs:user-rectangle" width={20} height={20}/>,
         component: <UserNewForm currentUser={user} isEdit={true} id={user?.id} isProfile={true}/>
@@ -57,7 +59,15 @@ export default function Profile() {
         value: 'Đơn hàng',
         icon: <Icon icon="icon-park-outline:transaction-order" width={20} height={20}/>,
         component: <Order/>
-    }]
+    }];
+
+    if (isShipper) PROFILE_TABS.push({
+        value: 'Đơn hàng vận chuyển',
+        icon: <Icon icon="icon-park-outline:transaction-order" width={20} height={20}/>,
+        component: <OrderShipping/>
+    })
+
+
     return (
         <RootStyle title='Profile'>
             <Container maxWidth={themeStretch ? false : 'lg'}>
