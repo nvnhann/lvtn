@@ -188,13 +188,15 @@ export default function HoaDon() {
                                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>
                                                         <TableCell>
                                                             {hd_trangthai === 0 &&
-                                                                <Typography color='lightseagreen'>Chờ xác
-                                                                    nhận</Typography>}
+                                                                <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                                            {hd_trangthai === 1 &&
+                                                                <Typography color='hotpink'>Đã xác nhận</Typography>}
+
                                                             {hd_trangthai === 3 &&
                                                                 <Typography color='error'>Đã hủy</Typography>}
                                                         </TableCell>
                                                         <TableCell align="right">
-                                                            <HoaDonMoreMenu hoadon={row} status={hd_trangthai}/>
+                                                            <HoaDonMoreMenu hoadon={row} status={hd_trangthai} setLoad={setLoad}/>
                                                         </TableCell>
                                                     </TableRow>
                                                 );
@@ -217,7 +219,6 @@ export default function HoaDon() {
                                 </Table>
                             </TableContainer>
                         </Scrollbar>
-
                     </Card>
                 </Container>
             </Page>

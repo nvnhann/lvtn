@@ -43,7 +43,7 @@ module.exports = function (app) {
 
     app.get('/hoadon/:id', async (req, res) => {
         const {id} = req.params;
-        let _hoadon = await query(db, "SELECT * FROM hoa_don WHERE hoa_don.hd_idkh = ?", id);
+        let _hoadon = await query(db, "SELECT * FROM hoa_don WHERE hoa_don.hd_idkh = ? ORDER BY hd_id DESC", id);
 
         if (_hoadon.length) {
             let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
@@ -64,7 +64,14 @@ module.exports = function (app) {
     app.put('/hoadon/:id', async (req, res) => {
         const {id} = req.params;
         const data = req.body;
+
+        if(data.tt_trangthai === 1){
+            await query(db, "UPDATE hoa_don SET hd_idnv = ? WHERE hd_id = ?", [data.hd_idnv, id]);
+            delete  data.hd_idnv;
+        }
+
         const _qr = "UPDATE trang_thai SET ? WHERE tt_idhd = ?";
+
         await query(db, _qr, [data, id]);
         return res.status(200).send("Cap nhat thanh cong");
     })

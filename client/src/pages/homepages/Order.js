@@ -131,7 +131,7 @@ export default function Order() {
                                     hd_sdt,
                                     hd_email,
                                     hd_tongtien,
-                                    hd_tienvanchuyen,
+                                    hd_tienvc,
                                     hd_hinhthucthanhtoan,
                                     hd_ngaytao,
                                     hd_diachi,
@@ -142,22 +142,24 @@ export default function Order() {
                                     <TableRow>
                                         <TableCell>#{hd_id}</TableCell>
                                         <TableCell>{hd_tenkh}</TableCell>
-                                        <TableCell sx={{width: '7rem'}}>{fCurrency(hd_tongtien)}</TableCell>
-                                        <TableCell>{!!hd_tienvanchuyen ? hd_tienvanchuyen : '0đ'}</TableCell>
+                                        <TableCell
+                                            sx={{width: '7rem'}}>{!!hd_tienvc ? fCurrency(hd_tongtien + hd_tienvc) : fCurrency(hd_tongtien)}</TableCell>
+                                        <TableCell>{!!hd_tienvc ? fCurrency(hd_tienvc) : '0đ'}</TableCell>
                                         <TableCell>{hd_hinhthucthanhtoan}</TableCell>
                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>
                                         <TableCell>
-                                            {hd_trangthai === 0 &&
-                                                <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                            {hd_trangthai === 0 && <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                            {hd_trangthai === 1 && <Typography color='lightgreen'>Đã xác nhận</Typography>}
                                             {hd_trangthai === 3 && <Typography color='error'>Đã hủy</Typography>}
                                         </TableCell>
                                         <TableCell align='right'>
-                                            {hd_trangthai === 0 && <Button onClick={() => {
-                                                setIdhd(hd_id);
-                                                handleClickOpen()
-                                            }}>
-                                                Hủy
-                                            </Button>}
+                                            {(hd_trangthai === 0 && hd_hinhthucthanhtoan === 'offline') &&
+                                                <Button onClick={() => {
+                                                    setIdhd(hd_id);
+                                                    handleClickOpen()
+                                                }}>
+                                                    Hủy
+                                                </Button>}
                                             <IconButton onClick={() => {
                                                 setDetail(e);
                                                 console.log(e)

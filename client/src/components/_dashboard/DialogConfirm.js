@@ -11,9 +11,10 @@ import {
     Slide,
     TextField,
 } from '@material-ui/core';
-import {getData} from "../../_helper/httpProvider";
+import {getData, putData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
 import {useFormik} from "formik";
+import {useSnackbar} from "notistack5";
 
 // ----------------------------------------------------------------------
 
@@ -32,17 +33,18 @@ const Transition = forwardRef((props, ref) => (
 
 // ----------------------------------------------------------------------
 
-export default function DialogConfirm({open, handleClose, message, excFunc, title, maxWidth, status}) {
+export default function DialogConfirm({open, handleClose, message, excFunc, title, maxWidth, status, idhd, setLoad}) {
     const [shipper, sertShipper] = useState();
+    const {enqueueSnackbar} = useSnackbar()
 
-    useEffect(()=>{
-        (async ()=>{
-           if(status === 0){
-               const _shipper = await getData(API_BASE_URL + '/users/shipper');
-               sertShipper(_shipper.data);
-           }
+    useEffect(() => {
+        (async () => {
+            if (status === 0) {
+                const _shipper = await getData(API_BASE_URL + '/users/shipper');
+                sertShipper(_shipper.data);
+            }
         })()
-    },[]);
+    }, []);
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -58,8 +60,17 @@ export default function DialogConfirm({open, handleClose, message, excFunc, titl
         handleClose();
     };
 
-    const XacNhanDon = async () =>{
-        
+    const XacNhanDon = async () => {
+        try {
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 1, hd_idnv: values.idnv.id})
+            if (setLoad) setLoad(e => e + 1);
+            enqueueSnackbar('Xác nhận đơn hàng thành công', {
+                variant: 'success',
+            });
+            handleClose()
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     return (
@@ -96,8 +107,8 @@ export default function DialogConfirm({open, handleClose, message, excFunc, titl
                                 )}
                                 getOptionLabel={(option) => option.fullname || ''}
                             />
-                            <Button sx={{width: '14rem'}} onClick={()=>{
-                                console.log(values)
+                            <Button sx={{width: '14rem'}} onClick={() => {
+                                XacNhanDon()
                             }}>Xác nhận đơn hàng</Button>
                         </>
                     )}

@@ -21,10 +21,12 @@ const MENU_OPTIONS = [
         label: 'Thông tin tài khoản',
         icon: personFill,
         linkTo: PATH_PAGE.profile,
+        role: ''
     },{
         label: 'Quản lý',
         icon: "eos-icons:cluster-management",
         linkTo: PATH_DASHBOARD.root,
+        role: 'ADMIN'
     },
 ];
 
@@ -36,6 +38,7 @@ export default function AccountPopover() {
     const [open, setOpen] = useState(false);
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.current);
+    const isAdmin = user?.role === 'ADMIN';
 
     const handleOpen = () => {
         setOpen(true);
@@ -95,17 +98,35 @@ export default function AccountPopover() {
 
                 <Divider sx={{my: 1}}/>
 
-                {MENU_OPTIONS.map((option) => (
+                <MenuItem
+                    to={PATH_PAGE.profile}
+                    component={RouterLink}
+                    onClick={handleClose}
+                    sx={{typography: 'body2', py: 1, px: 2.5}}
+                >
+                    <Box
+                        component={Icon}
+                        icon={personFill}
+                        sx={{
+                            mr: 2,
+                            width: 24,
+                            height: 24,
+                        }}
+                    />
+
+                    Thông tin tài khoản
+                </MenuItem>
+
+                {isAdmin && (
                     <MenuItem
-                        key={option.label}
-                        to={option.linkTo}
+                        to={PATH_DASHBOARD.root}
                         component={RouterLink}
                         onClick={handleClose}
                         sx={{typography: 'body2', py: 1, px: 2.5}}
                     >
                         <Box
                             component={Icon}
-                            icon={option.icon}
+                            icon='eos-icons:cluster-management'
                             sx={{
                                 mr: 2,
                                 width: 24,
@@ -113,9 +134,9 @@ export default function AccountPopover() {
                             }}
                         />
 
-                        {option.label}
+                        Quản lý
                     </MenuItem>
-                ))}
+                )}
 
                 <Box sx={{p: 2, pt: 1.5}}>
                     <Button

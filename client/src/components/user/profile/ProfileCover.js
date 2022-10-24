@@ -79,7 +79,7 @@ export default function ProfileCover({myProfile}) {
                     <Typography sx={{opacity: 0.72}}>{myProfile?.position || 'Đọc giả'}</Typography>
                 </Box>
             </InfoStyle>
-            <CoverImgStyle alt="profile cover" src={myProfile?.cover || 'https://cdn.quasar.dev/img/avatar4.jpg'}/>
+            <CoverImgStyle alt="profile cover" src={myProfile?.cover || '/static/avt.jpg'}/>
         </RootStyle>
     );
 }

@@ -38,7 +38,7 @@ HoaDonMoreMenu.propTypes = {
     hoadon: PropTypes.object,
 };
 
-export default function HoaDonMoreMenu({hoadon, status}) {
+export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
     const ref = useRef(null);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -92,6 +92,8 @@ export default function HoaDonMoreMenu({hoadon, status}) {
                 title='Chi tiết hóa đơn'
                 maxWidth="md"
                 status={status}
+                idhd={hoadon.hd_id}
+                setLoad={setLoad}
                 message={
                     <>
                         <Stack direction="row" justifyContent="space-between">
