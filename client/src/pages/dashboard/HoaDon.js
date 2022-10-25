@@ -31,7 +31,7 @@ const TABLE_HEAD = [
     {id: 'ho_ten', label: 'Họ tên', alignRight: false},
     {id: 'sdt', label: 'Số điện thoại', alignRight: false},
     {id: 'tong_don', label: 'Tổng đơn', alignRight: false},
-    {id: 'hinh_thuc_thanh_toan', label: 'Hình thức thanh toán', alignRight: false},
+    {id: 'hinh_thuc_thanh_toan', label: 'HTTT', alignRight: false},
     {id: 'ngay_tao', label: 'Ngày tạo', alignRight: false},
     {id: 'trang_thai', label: 'Trạng thái', alignRight: false},
     {id: ''},

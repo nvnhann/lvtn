@@ -5,6 +5,7 @@ import moreVerticalFill from '@iconify/icons-eva/more-vertical-fill';
 // material
 import {
     Box,
+    Card,
     IconButton,
     ListItemIcon,
     ListItemText,
@@ -33,6 +34,14 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
     marginRight: theme.spacing(2),
     borderRadius: theme.shape.borderRadiusSm
 }));
+
+const ThumbImgStyleOrder = styled('img')(({theme}) => ({
+    width: 300,
+    height: 400,
+    objectFit: 'cover',
+    margin: '0 auto',
+    borderRadius: theme.shape.borderRadiusSm
+}));
 // ------------------------------------------------------------------------------------------
 
 HoaDonMoreMenu.propTypes = {
@@ -40,6 +49,7 @@ HoaDonMoreMenu.propTypes = {
 };
 
 export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
+    console.log(hoadon)
     const ref = useRef(null);
     const id = useSelector(state => state.user.current?.id);
 
@@ -99,91 +109,101 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
                 idnv={id}
                 message={
                     <>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Họ và tên
-                            </Typography>
-                            <Typography variant="body2">{hoadon.hd_tenkh}</Typography>
-                        </Stack>
+                        <Card sx={{my: 2, p: 2}}>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                    Họ và tên
+                                </Typography>
+                                <Typography variant="body2">{hoadon.hd_tenkh}</Typography>
+                            </Stack>
 
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Số điện thoại
-                            </Typography>
-                            <Typography variant="body2">{hoadon.hd_sdt}</Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Email
-                            </Typography>
-                            <Typography variant="body2">{hoadon.hd_email}</Typography>
-                        </Stack>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                    Số điện thoại
+                                </Typography>
+                                <Typography variant="body2">{hoadon.hd_sdt}</Typography>
+                            </Stack>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                    Email
+                                </Typography>
+                                <Typography variant="body2">{hoadon.hd_email}</Typography>
+                            </Stack>
 
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Địa chỉ
-                            </Typography>
-                            <Typography variant="body2">{hoadon.hd_diachi}</Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Tổng đơn
-                            </Typography>
-                            <Typography variant="body2">{fCurrency(hoadon.hd_tongtien)}</Typography>
-                        </Stack>
-                        <Scrollbar>
-                            <TableContainer sx={{minWidth: 720, mt: 2}}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Sách</TableCell>
-                                            <TableCell align="left">Giá</TableCell>
-                                            <TableCell align="center">Số lượng</TableCell>
-                                            <TableCell align="center">Tổng giá</TableCell>
-                                            <TableCell align="right"/>
-                                        </TableRow>
-                                    </TableHead>
-
-                                    <TableBody>
-                                        {hoadon.cthd?.map((e, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell>
-                                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                        <ThumbImgStyle alt="product image"
-                                                                       src={URL_PUBLIC_IMAGES + e.ha_hinh}/>
-                                                        <Box>
-                                                            <Typography noWrap variant="subtitle2"
-                                                                        sx={{maxWidth: 240, mb: 0.5}}>
-                                                                {e.sp_ten}
-                                                            </Typography>
-                                                        </Box>
-                                                    </Box>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        sx={{
-                                                            color: 'text.disabled',
-                                                            textDecoration: 'line-through'
-                                                        }}
-                                                    >
-                                                        {!!e.cthd_giakm && fCurrency(e.cthd_giaban)}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {!!e.cthd_giakm ? fCurrency(e.cthd_giakm) : fCurrency(e.cthd_giaban)}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell align='center'>{e.cthd_soluong}</TableCell>
-                                                <TableCell align='center'>
-                                                    {fCurrency((e.cthd_giakm ? e.cthd_giakm : e.cthd_giaban) * e.cthd_soluong)}
-                                                </TableCell>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                    Địa chỉ
+                                </Typography>
+                                <Typography variant="body2">{hoadon.hd_diachi}</Typography>
+                            </Stack>
+                            <Stack direction="row" justifyContent="space-between">
+                                <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                    Tổng đơn
+                                </Typography>
+                                <Typography variant="body2">{fCurrency(hoadon.hd_tongtien)}</Typography>
+                            </Stack>
+                        </Card>
+                        <Card>
+                            <Scrollbar>
+                                <TableContainer sx={{minWidth: 720, mt: 2}}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Sách</TableCell>
+                                                <TableCell align="left">Giá</TableCell>
+                                                <TableCell align="center">Số lượng</TableCell>
+                                                <TableCell align="center">Tổng giá</TableCell>
+                                                <TableCell align="right"/>
                                             </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Scrollbar>
+                                        </TableHead>
+
+                                        <TableBody>
+                                            {hoadon.cthd?.map((e, idx) => (
+                                                <TableRow key={idx}>
+                                                    <TableCell>
+                                                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                                            <ThumbImgStyle alt="product image"
+                                                                           src={URL_PUBLIC_IMAGES + e.ha_hinh}/>
+                                                            <Box>
+                                                                <Typography noWrap variant="subtitle2"
+                                                                            sx={{maxWidth: 240, mb: 0.5}}>
+                                                                    {e.sp_ten}
+                                                                </Typography>
+                                                            </Box>
+                                                        </Box>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography
+                                                            component="span"
+                                                            variant="body1"
+                                                            sx={{
+                                                                color: 'text.disabled',
+                                                                textDecoration: 'line-through'
+                                                            }}
+                                                        >
+                                                            {!!e.cthd_giakm && fCurrency(e.cthd_giaban)}
+                                                        </Typography>
+                                                        <Typography>
+                                                            {!!e.cthd_giakm ? fCurrency(e.cthd_giakm) : fCurrency(e.cthd_giaban)}
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell align='center'>{e.cthd_soluong}</TableCell>
+                                                    <TableCell align='center'>
+                                                        {fCurrency((e.cthd_giakm ? e.cthd_giakm : e.cthd_giaban) * e.cthd_soluong)}
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Scrollbar>
+                        </Card>
+                        {hoadon.trangthai[hoadon.trangthai.length - 1].tt_trangthai === 3 &&
+                            <Card sx={{my: 2, p: 2}}>
+                                <Typography variant='h3' align='center'>Ảnh giao hàng</Typography>
+                                <ThumbImgStyleOrder alt="product image"
+                                                    src={URL_PUBLIC_IMAGES + hoadon.trangthai[hoadon.trangthai.length - 1].tt_note}/>
+                            </Card>}
                     </>
                 }
             />

@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, "public/hoadon");
+        cb(null, "public/images");
     },
     filename: function (req, file, cb) {
         let ext = file.originalname.substring(
@@ -41,7 +41,7 @@ module.exports = function (app) {
     });
 
     app.get('/hoadon', async (req, res) => {
-        let _hoadon = await query(db, "SELECT * FROM hoa_don");
+        let _hoadon = await query(db, "SELECT * FROM hoa_don ORDER BY hd_id DESC");
 
         if (_hoadon.length) {
             let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
@@ -117,7 +117,9 @@ module.exports = function (app) {
             delete data.hd_idnv;
         }
 
-        const _qr = "UPDATE trang_thai SET ? WHERE tt_idhd = ?";
+        data.tt_idhd = id;
+
+        const _qr = "INSERT INTO trang_thai SET ?";
 
         await query(db, _qr, [data, id]);
         return res.status(200).send("Cap nhat thanh cong");
