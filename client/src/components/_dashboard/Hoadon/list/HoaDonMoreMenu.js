@@ -24,6 +24,7 @@ import Scrollbar from "../../../Scrollbar";
 import {URL_PUBLIC_IMAGES} from "../../../../config/configUrl";
 import DialogConfirm from "../../DialogConfirm";
 import {styled} from "@material-ui/core/styles";
+import {useSelector} from "react-redux";
 // ------------------------------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({theme}) => ({
     width: 64,
@@ -40,6 +41,7 @@ HoaDonMoreMenu.propTypes = {
 
 export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
     const ref = useRef(null);
+    const id = useSelector(state => state.user.current?.id);
 
     const [isOpen, setIsOpen] = useState(false);
     const [openDetail, setOpenDetail] = useState(false);
@@ -94,6 +96,7 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
                 status={status}
                 idhd={hoadon.hd_id}
                 setLoad={setLoad}
+                idnv={id}
                 message={
                     <>
                         <Stack direction="row" justifyContent="space-between">

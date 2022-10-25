@@ -33,9 +33,22 @@ const Transition = forwardRef((props, ref) => (
 
 // ----------------------------------------------------------------------
 
-export default function DialogConfirm({open, handleClose, message, excFunc, title, maxWidth, status, idhd, setLoad}) {
+export default function DialogConfirm({
+                                          open,
+                                          handleClose,
+                                          message,
+                                          excFunc,
+                                          title,
+                                          maxWidth,
+                                          status,
+                                          idhd,
+                                          setLoad,
+                                          idnv,
+                                          showAction = true
+                                      }) {
     const [shipper, sertShipper] = useState();
-    const {enqueueSnackbar} = useSnackbar()
+    const {enqueueSnackbar} = useSnackbar();
+
 
     useEffect(() => {
         (async () => {
@@ -62,7 +75,7 @@ export default function DialogConfirm({open, handleClose, message, excFunc, titl
 
     const XacNhanDon = async () => {
         try {
-            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 1, hd_idnv: values.idnv.id})
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 1, hd_idnv: values.idnv.id, tt_idnv: idnv})
             if (setLoad) setLoad(e => e + 1);
             enqueueSnackbar('Xác nhận đơn hàng thành công', {
                 variant: 'success',
@@ -87,7 +100,7 @@ export default function DialogConfirm({open, handleClose, message, excFunc, titl
             >
                 <DialogTitle id="alert-dialog-slide-title">{!!title ? title : 'Thông báo'}</DialogTitle>
                 <DialogContent>{message}</DialogContent>
-                <DialogActions>
+                {showAction && <DialogActions>
 
                     {status === 0 && (
                         <>
@@ -124,7 +137,7 @@ export default function DialogConfirm({open, handleClose, message, excFunc, titl
                     >
                         Đồng ý
                     </Button>}
-                </DialogActions>
+                </DialogActions>}
             </Dialog>
         </div>
     );

@@ -137,7 +137,8 @@ export default function Order() {
                                     hd_diachi,
                                     trangthai
                                 } = e;
-                                const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai
+                                const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai;
+                                let hd_ngaytt = trangthai[trangthai.length - 1].tt_ngaycapnhat
                                 return (
                                     <TableRow>
                                         <TableCell>#{hd_id}</TableCell>
@@ -148,9 +149,21 @@ export default function Order() {
                                         <TableCell>{hd_hinhthucthanhtoan}</TableCell>
                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>
                                         <TableCell>
-                                            {hd_trangthai === 0 && <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
-                                            {hd_trangthai === 1 && <Typography color='lightgreen'>Đã xác nhận</Typography>}
-                                            {hd_trangthai === 3 && <Typography color='error'>Đã hủy</Typography>}
+                                            {hd_trangthai === 0 &&
+                                                <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                            {hd_trangthai === 1 &&
+                                                <>
+                                                    <Typography color='lightgreen'>Đã xác nhận</Typography>
+                                                    <Typography variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                </>}
+                                            {hd_trangthai === 2 &&
+                                                <Typography color='blueviolet'>Đã lấy hàng</Typography>}
+                                            {hd_trangthai === 3 &&
+                                                <>
+                                                    <Typography color='hotpink'>Đã giao hàng </Typography>
+                                                    <Typography variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                </>}
+                                            {hd_trangthai === 4 && <Typography color='error'>Đã hủy</Typography>}
                                         </TableCell>
                                         <TableCell align='right'>
                                             {(hd_trangthai === 0 && hd_hinhthucthanhtoan === 'offline') &&

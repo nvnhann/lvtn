@@ -161,7 +161,8 @@ export default function HoaDon() {
                                                     trangthai
                                                 } = row;
 
-                                                const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai
+                                                const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai;
+                                                let hd_ngaytt = trangthai[trangthai.length - 1].tt_ngaycapnhat
                                                 const isItemSelected = selected.indexOf(hd_id) !== -1;
 
                                                 return (
@@ -188,15 +189,30 @@ export default function HoaDon() {
                                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>
                                                         <TableCell>
                                                             {hd_trangthai === 0 &&
-                                                                <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                                                <Typography color='lightseagreen'>Chờ xác
+                                                                    nhận</Typography>}
                                                             {hd_trangthai === 1 &&
-                                                                <Typography color='hotpink'>Đã xác nhận</Typography>}
-
+                                                                <>
+                                                                    <Typography color='lightgreen'>Đã xác
+                                                                        nhận</Typography>
+                                                                    <Typography
+                                                                        variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                                </>}
+                                                            {hd_trangthai === 2 &&
+                                                                <Typography color='blueviolet'>Đã lấy hàng</Typography>}
                                                             {hd_trangthai === 3 &&
+                                                                <>
+                                                                    <Typography color='hotpink'>Đã giao
+                                                                        hàng </Typography>
+                                                                    <Typography
+                                                                        variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                                </>}
+                                                            {hd_trangthai === 4 &&
                                                                 <Typography color='error'>Đã hủy</Typography>}
                                                         </TableCell>
                                                         <TableCell align="right">
-                                                            <HoaDonMoreMenu hoadon={row} status={hd_trangthai} setLoad={setLoad}/>
+                                                            <HoaDonMoreMenu hoadon={row} status={hd_trangthai}
+                                                                            setLoad={setLoad}/>
                                                         </TableCell>
                                                     </TableRow>
                                                 );

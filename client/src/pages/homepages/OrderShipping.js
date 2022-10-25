@@ -2,7 +2,8 @@ import {
     Box,
     Button,
     Card,
-    IconButton,
+    DialogActions,
+    FormHelperText, IconButton,
     OutlinedInput,
     Stack,
     Table,
@@ -11,11 +12,10 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField,
     Typography
 } from "@material-ui/core";
 import {styled} from "@material-ui/core/styles";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {API_BASE_URL, URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import {useSelector} from "react-redux";
 import {getData, putData} from "../../_helper/httpProvider";
@@ -23,8 +23,13 @@ import {formatDateTime} from "../../_helper/formatDate";
 import {fCurrency} from "../../_helper/formatCurrentCy";
 import DialogConfirm from "../../components/_dashboard/DialogConfirm";
 import {useSnackbar} from "notistack5";
-import {Icon} from '@iconify/react';
 import Scrollbar from "../../components/Scrollbar";
+import * as Yup from 'yup';
+import {Form, FormikProvider, useFormik} from "formik";
+import {UploadSingleFile} from "../../components/upload";
+import {Icon} from '@iconify/react';
+
+
 //-----------------------------------------------------------------------------
 const SearchStyle = styled(OutlinedInput)(({theme}) => ({
     width: 600,
@@ -46,6 +51,12 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
     marginRight: theme.spacing(2),
     borderRadius: theme.shape.borderRadiusSm
 }));
+
+const LabelStyle = styled(Typography)(({theme}) => ({
+    ...theme.typography.subtitle2,
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(1)
+}));
 //-----------------------------------------------------------------------------
 export default function OrderShipping() {
     const [hoadon, setHoadon] = useState([]);
@@ -53,9 +64,11 @@ export default function OrderShipping() {
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [idhd, setIdhd] = useState(null);
     const [open, setOpen] = useState(false);
+    const [openOrder, setOpenOrder] = useState(false);
     const [openDetail, setOpenDetail] = useState(false);
     const [load, setLoad] = useState(0);
     const [detail, setDetail] = useState({});
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -63,6 +76,14 @@ export default function OrderShipping() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleClickOpenOrder = () => {
+        setOpenOrder(true);
+    };
+
+    const handleCloseOrder = () => {
+        setOpenOrder(false);
     };
 
     const handleClickOpenDetail = () => {
@@ -73,22 +94,67 @@ export default function OrderShipping() {
         setOpenDetail(false);
     };
 
+    const NewSchema = Yup.object().shape({
+        cover: Yup.mixed().required('Vui lòng chọn hình ảnh')
+    });
 
+    const formik = useFormik({
+        initialValues: {
+            cover: null,
+            idhd: null
+        },
+        validationSchema: NewSchema,
+        onSubmit: async (values, {setSubmitting, resetForm}) => {
+            try {
+                console.log(values.cover.file)
+                const formDt = new FormData();
+                formDt.append('hoadon', values.cover.file);
+                formDt.append('_data', JSON.stringify({
+                    tt_trangthai: 3,
+                    tt_idnv: id
+                }))
+                await putData(API_BASE_URL + `/hoadon/${values.idhd}`, formDt, {
+                    'content-type': 'multipart/form-data',
+                });
+                setLoad(e => e + 1);
+                resetForm()
+                handleCloseOrder()
+                enqueueSnackbar('Giao hàng thành công', {variant: 'success'});
+            } catch (error) {
+                console.error(error);
+                setSubmitting(false);
+            }
+        }
+    });
+    const {errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps} = formik;
+
+    const handleDrop = useCallback(
+        (acceptedFiles) => {
+            const file = acceptedFiles[0];
+            if (file) {
+                setFieldValue('cover', {
+                    file: file,
+                    preview: URL.createObjectURL(file)
+                });
+            }
+        },
+        [setFieldValue]
+    );
     useEffect(() => {
         (async () => {
-            const _hoadon = await getData(API_BASE_URL + `/hoadon/${id}`);
+            const _hoadon = await getData(API_BASE_URL + `/hoadonnv/${id}`);
             setHoadon(_hoadon.data);
-        })()
+        })();
     }, [id, load]);
 
     const changeOrder = async () => {
         try {
             console.log(idhd)
             if (!idhd) return;
-            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 3});
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 2, tt_idnv: id});
             setLoad(e => e + 1)
             enqueueSnackbar(
-                'Hủy đơn hàng thành công!',
+                'Lấy hàng thành công!',
                 {
                     variant: 'success',
                 },
@@ -116,7 +182,7 @@ export default function OrderShipping() {
                                 <TableCell align="left">Họ tên</TableCell>
                                 <TableCell align="left">Tổng đơn</TableCell>
                                 <TableCell align="left">Tiền vận chuyển</TableCell>
-                                <TableCell align="left">Hình thức thanh toán</TableCell>
+                                <TableCell align="left">HTTT</TableCell>
                                 <TableCell align="left">Ngày tạo</TableCell>
                                 <TableCell align="left">Trạng thái</TableCell>
                                 <TableCell/>
@@ -138,6 +204,7 @@ export default function OrderShipping() {
                                     trangthai
                                 } = e;
                                 const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai
+                                let hd_ngaytt = trangthai[trangthai.length - 1].tt_ngaycapnhat
                                 return (
                                     <TableRow>
                                         <TableCell>#{hd_id}</TableCell>
@@ -148,147 +215,212 @@ export default function OrderShipping() {
                                         <TableCell>{hd_hinhthucthanhtoan}</TableCell>
                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>
                                         <TableCell>
-                                            {hd_trangthai === 0 && <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
-                                            {hd_trangthai === 1 && <Typography color='lightgreen'>Đã xác nhận</Typography>}
-                                            {hd_trangthai === 3 && <Typography color='error'>Đã hủy</Typography>}
+                                            {hd_trangthai === 0 &&
+                                                <Typography color='lightseagreen'>Chờ xác nhận</Typography>}
+                                            {hd_trangthai === 1 &&
+                                                <>
+                                                    <Typography color='lightgreen'>Đã xác nhận</Typography>
+                                                    <Typography variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                </>}
+                                            {hd_trangthai === 2 &&
+                                                <Typography color='blueviolet'>Đã lấy hàng</Typography>}
+                                            {hd_trangthai === 3 &&
+                                                <>
+                                                <Typography color='hotpink'>Đã giao hàng </Typography>
+                                                <Typography variant='subtitle2'> {formatDateTime(hd_ngaytt)}</Typography>
+                                                </>}
+                                            {hd_trangthai === 4 && <Typography color='error'>Đã hủy</Typography>}
                                         </TableCell>
-                                        <TableCell align='right'>
-                                            {(hd_trangthai === 0 && hd_hinhthucthanhtoan === 'offline') &&
+                                                <TableCell align='right'>
+                                            {(hd_trangthai === 1) &&
                                                 <Button onClick={() => {
-                                                    setIdhd(hd_id);
-                                                    handleClickOpen()
-                                                }}>
-                                                    Hủy
+                                                setIdhd(hd_id);
+                                                handleClickOpen()
+                                            }}>
+                                                Lấy hàng
                                                 </Button>}
-                                            <IconButton onClick={() => {
+                                            {(hd_trangthai === 2) &&
+                                                <Button color='info' onClick={() => {
+                                                setIdhd(hd_id);
+                                                setFieldValue('idhd', hd_id);
+                                                handleClickOpenOrder()
+                                            }}>
+                                                Giao hàng
+                                                </Button>}
+                                                <IconButton onClick={() => {
                                                 setDetail(e);
-                                                console.log(e)
                                                 handleClickOpenDetail();
                                             }}>
                                                 <Icon icon="el:eye-open"/>
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                )
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Card>
-            <DialogConfirm
-                open={open}
-                handleClose={handleClose}
-                message={
-                    <>
-                        <Typography color="error" variant="h4" align="center">
-                            Bạn chắc chắn muốn hủy đơn hàng?
-                        </Typography>
-                        <TextField
-                            label="Lý do hủy"
-                            fullWidth
-                            multiline
-                            rows={3}
-                        />
-                    </>
-                }
-                excFunc={changeOrder}
-            />
-
-            <DialogConfirm
-                open={openDetail}
-                handleClose={handleCloseDetail}
-                title='Chi tiết hóa đơn'
-                maxWidth="md"
-                message={
-                    <>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Họ và tên
-                            </Typography>
-                            <Typography variant="body2">{detail.hd_tenkh}</Typography>
-                        </Stack>
-
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Số điện thoại
-                            </Typography>
-                            <Typography variant="body2">{detail.hd_sdt}</Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Email
-                            </Typography>
-                            <Typography variant="body2">{detail.hd_email}</Typography>
-                        </Stack>
-
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Địa chỉ
-                            </Typography>
-                            <Typography variant="body2">{detail.hd_diachi}</Typography>
-                        </Stack>
-                        <Stack direction="row" justifyContent="space-between">
-                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                Tổng đơn
-                            </Typography>
-                            <Typography variant="body2">{fCurrency(detail.hd_tongtien)}</Typography>
-                        </Stack>
-                        <Scrollbar>
-                            <TableContainer sx={{minWidth: 720, mt: 2}}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Sách</TableCell>
-                                            <TableCell align="left">Giá</TableCell>
-                                            <TableCell align="center">Số lượng</TableCell>
-                                            <TableCell align="center">Tổng giá</TableCell>
-                                            <TableCell align="right"/>
-                                        </TableRow>
-                                    </TableHead>
-
-                                    <TableBody>
-                                        {detail.cthd?.map((e, idx) => (
-                                            <TableRow key={idx}>
-                                                <TableCell>
-                                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                                        <ThumbImgStyle alt="product image"
-                                                                       src={URL_PUBLIC_IMAGES + e.ha_hinh}/>
-                                                        <Box>
-                                                            <Typography noWrap variant="subtitle2"
-                                                                        sx={{maxWidth: 240, mb: 0.5}}>
-                                                                {e.sp_ten}
-                                                            </Typography>
-                                                        </Box>
-                                                    </Box>
+                                                </IconButton>
                                                 </TableCell>
-                                                <TableCell>
-                                                    <Typography
-                                                        component="span"
-                                                        variant="body1"
-                                                        sx={{
-                                                            color: 'text.disabled',
-                                                            textDecoration: 'line-through'
-                                                        }}
-                                                    >
-                                                        {!!e.cthd_giakm && fCurrency(e.cthd_giaban)}
-                                                    </Typography>
-                                                    <Typography>
-                                                        {!!e.cthd_giakm ? fCurrency(e.cthd_giakm) : fCurrency(e.cthd_giaban)}
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell align='center'>{e.cthd_soluong}</TableCell>
-                                                <TableCell align='center'>
-                                                    {fCurrency((e.cthd_giakm ? e.cthd_giakm : e.cthd_giaban) * e.cthd_soluong)}
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
+                                                </TableRow>
+                                                )
+                                            })}
+                                        </TableBody>
+                                    </Table>
                             </TableContainer>
-                        </Scrollbar>
-                    </>
-                }
-            />
-        </>
-    )
-}
+                            </Card>
+                                <DialogConfirm
+                                    open={open}
+                                    handleClose={handleClose}
+                                    message={
+                                        <>
+                                            <Typography color="error" variant="h4" align="center">
+                                                Bạn đã lấy hàng đầy đủ?
+                                            </Typography>
+                                        </>
+                                    }
+                                    excFunc={changeOrder}
+                                />
+
+
+                                <DialogConfirm
+                                    open={openOrder}
+                                    handleClose={handleCloseOrder}
+                                    showAction={false}
+                                    message={
+                                        <>
+                                            <FormikProvider value={formik}>
+                                                <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                                                    <Typography color="error" variant="h4" align="center">
+                                                        Bạn đã giao hàng thành công?
+                                                    </Typography>
+                                                    <LabelStyle>Hình ảnh</LabelStyle>
+                                                    <UploadSingleFile
+                                                        maxSize={3145728}
+                                                        accept="image/*"
+                                                        file={values.cover}
+                                                        onDrop={handleDrop}
+                                                        error={Boolean(touched.cover && errors.cover)}
+                                                    />
+                                                    {touched.cover && errors.cover && (
+                                                        <FormHelperText error sx={{px: 2}}>
+                                                            {touched.cover && errors.cover}
+                                                        </FormHelperText>
+                                                    )}
+
+                                                    <DialogActions>
+                                                        <Button color="inherit" onClick={handleCloseOrder}>
+                                                            Đóng
+                                                        </Button>
+                                                        <Button variant="contained" type='submit'>
+                                                            Đồng ý
+                                                        </Button>
+                                                    </DialogActions>
+                                                </Form>
+                                            </FormikProvider>
+                                        </>
+                                    }
+                                />
+
+                                <DialogConfirm
+                                    open={openDetail}
+                                    handleClose={handleCloseDetail}
+                                    title='Chi tiết hóa đơn'
+                                    maxWidth="md"
+                                    message={
+                                        <>
+                                            <Stack direction="row" justifyContent="space-between">
+                                                <Typography variant="subtitle2" sx
+                                                            enableEdit={{color: 'text.secondary'}}>
+                                                    Họ và tên
+                                                </Typography>
+                                                <Typography variant="body2">{detail.hd_tenkh}</Typography>
+                                            </Stack>
+
+                                            <Stack direction="row" justifyContent="space-between">
+                                                <Typography variant="subtitle2" sx
+                                                            enableEdit={{color: 'text.secondary'}}>
+                                                    Số điện thoại
+                                                </Typography>
+                                                <Typography variant="body2">{detail.hd_sdt}</Typography>
+                                            </Stack>
+                                            <Stack direction="row" justifyContent="space-between">
+                                                <Typography variant="subtitle2" sx
+                                                            enableEdit={{color: 'text.secondary'}}>
+                                                    Email
+                                                </Typography>
+                                                <Typography variant="body2">{detail.hd_email}</Typography>
+                                            </Stack>
+
+                                            <Stack direction="row" justifyContent="space-between">
+                                                <Typography variant="subtitle2" sx
+                                                            enableEdit={{color: 'text.secondary'}}>
+                                                    Địa chỉ
+                                                </Typography>
+                                                <Typography variant="body2">{detail.hd_diachi}</Typography>
+                                            </Stack>
+                                            <Stack direction="row" justifyContent="space-between">
+                                                <Typography variant="subtitle2" sx
+                                                            enableEdit={{color: 'text.secondary'}}>
+                                                    Tổng đơn
+                                                </Typography>
+                                                <Typography variant="body2">{fCurrency(detail.hd_tongtien)}</Typography>
+                                            </Stack>
+                                            <Scrollbar>
+                                                <TableContainer sx={{minWidth: 720, mt: 2}}>
+                                                    <Table>
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell>Sách</TableCell>
+                                                                <TableCell align="left">Giá</TableCell>
+                                                                <TableCell align="center">Số lượng</TableCell>
+                                                                <TableCell align="center">Tổng giá</TableCell>
+                                                                <TableCell align="right"/>
+                                                            </TableRow>
+                                                        </TableHead>
+
+                                                        <TableBody>
+                                                            {detail.cthd?.map((e, idx) => (
+                                                                <TableRow key={idx}>
+                                                                    <TableCell>
+                                                                        <Box sx={{
+                                                                            display: 'flex',
+                                                                            alignItems: 'center'
+                                                                        }}>
+                                                                            <ThumbImgStyle alt="product image"
+                                                                                           src={URL_PUBLIC_IMAGES + e.ha_hinh}/>
+                                                                            <Box>
+                                                                                <Typography noWrap variant="subtitle2"
+                                                                                            sx={{
+                                                                                                maxWidth: 240,
+                                                                                                mb: 0.5
+                                                                                            }}>
+                                                                                    {e.sp_ten}
+                                                                                </Typography>
+                                                                            </Box>
+                                                                        </Box>
+                                                                    </TableCell>
+                                                                    <TableCell>
+                                                                        <Typography
+                                                                            component="span"
+                                                                            variant="body1"
+                                                                            sx={{
+                                                                                color: 'text.disabled',
+                                                                                textDecoration: 'line-through'
+                                                                            }}
+                                                                        >
+                                                                            {!!e.cthd_giakm && fCurrency(e.cthd_giaban)}
+                                                                        </Typography>
+                                                                        <Typography>
+                                                                            {!!e.cthd_giakm ? fCurrency(e.cthd_giakm) : fCurrency(e.cthd_giaban)}
+                                                                        </Typography>
+                                                                    </TableCell>
+                                                                    <TableCell
+                                                                        align='center'>{e.cthd_soluong}</TableCell>
+                                                                    <TableCell align='center'>
+                                                                        {fCurrency((e.cthd_giakm ? e.cthd_giakm : e.cthd_giaban) * e.cthd_soluong)}
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                            </Scrollbar>
+                                        </>
+                                    }
+                                />
+                            </>
+                            )
+                            }

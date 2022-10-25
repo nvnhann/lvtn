@@ -95,16 +95,7 @@ export default function UploadSingleFile({error, file, sx, ...other}) {
 
                 <Box sx={{p: 3, ml: {md: 2}}}>
                     <Typography gutterBottom variant="h5">
-                        Drop or Select file
-                    </Typography>
-
-                    <Typography variant="body2" sx={{color: 'text.secondary'}}>
-                        Drop files here or click&nbsp;
-                        <Typography variant="body2" component="span"
-                                    sx={{color: 'primary.main', textDecoration: 'underline'}}>
-                            browse
-                        </Typography>
-                        &nbsp;thorough your machine
+                        Vui lòng chọn hình ảnh
                     </Typography>
                 </Box>
 
