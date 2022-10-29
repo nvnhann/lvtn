@@ -5,13 +5,18 @@ import minusFill from '@iconify/icons-eva/minus-fill';
 import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 // material
 import {styled} from '@material-ui/core/styles';
-import {Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from '@material-ui/core';
+import {Box, Checkbox, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@material-ui/core';
 import {URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import {MIconButton} from "../@material-extend";
 import {fCurrency} from "../../_helper/formatCurrentCy";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {removeFromCart, setQuantity} from "../../redux/slices/cart";
-// utils
+import {Link, Link as RouterLink} from 'react-router-dom';
+import {PATH_PAGE} from "../../routes/paths";
+import {useState} from "react";
+import CheckoutListHead from "./CheckoutListHead";
+import CheckoutListToolbar from "./CheckoutListToolbar";
+import {checkoutOneProduct, setQuantityProductCheckout} from "../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -26,39 +31,36 @@ const IncrementerStyle = styled('div')(({theme}) => ({
 }));
 
 const ThumbImgStyle = styled('img')(({theme}) => ({
-    width: 64,
-    height: 64,
-    objectFit: 'cover',
-    marginRight: theme.spacing(2),
-    borderRadius: theme.shape.borderRadiusSm
+    width: 64, height: 64, objectFit: 'cover', marginRight: theme.spacing(2), borderRadius: theme.shape.borderRadiusSm
 }));
 
 // ----------------------------------------------------------------------
 
 Incrementer.propTypes = {
-    available: PropTypes.number,
-    quantity: PropTypes.number,
-    onIncrease: PropTypes.func,
-    onDecrease: PropTypes.func
+    available: PropTypes.number, quantity: PropTypes.number, onIncrease: PropTypes.func, onDecrease: PropTypes.func
 };
 
+const TABLE_HEAD = [{id: 'sach', label: 'Sách', alignRight: false}, {
+    id: 'gia',
+    label: 'Giá',
+    alignRight: false
+}, {id: 'sl', label: 'Số lượng', alignRight: false}, {id: 'tong_gia', label: 'Tổng giá', alignRight: false}, {id: ''},];
+
 function Incrementer({available, quantity, onIncrease, onDecrease}) {
-    return (
-        <Box sx={{width: 96, textAlign: 'right'}}>
-            <IncrementerStyle>
-                <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1}>
-                    <Icon icon={minusFill} width={16} height={16}/>
-                </MIconButton>
-                {quantity}
-                <MIconButton size="small" color="inherit" onClick={onIncrease} disabled={quantity >= available}>
-                    <Icon icon={plusFill} width={16} height={16}/>
-                </MIconButton>
-            </IncrementerStyle>
-            <Typography variant="caption" sx={{color: 'text.secondary'}}>
-                Có sẵn: {available}
-            </Typography>
-        </Box>
-    );
+    return (<Box sx={{width: 96, textAlign: 'right'}}>
+        <IncrementerStyle>
+            <MIconButton size="small" color="inherit" onClick={onDecrease} disabled={quantity <= 1}>
+                <Icon icon={minusFill} width={16} height={16}/>
+            </MIconButton>
+            {quantity}
+            <MIconButton size="small" color="inherit" onClick={onIncrease} disabled={quantity >= available}>
+                <Icon icon={plusFill} width={16} height={16}/>
+            </MIconButton>
+        </IncrementerStyle>
+        <Typography variant="caption" sx={{color: 'text.secondary'}}>
+            Có sẵn: {available}
+        </Typography>
+    </Box>);
 }
 
 ProductList.propTypes = {
@@ -67,88 +69,130 @@ ProductList.propTypes = {
 
 export default function ProductList({products}) {
     const dispatch = useDispatch();
-    return (
+    const cart = useSelector(state => state.cart.cartItem);
+    const checkoutProduct = useSelector(state => state.product.checkout.product);
+    const [selected, setSelected] = useState(checkoutProduct.length > 0 ? checkoutProduct.map(e => e.id_sp) : []);
+
+    const handleClick = (event, name) => {
+        const selectedIndex = selected.indexOf(name);
+        let newSelected = [];
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, name);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1),);
+        }
+        dispatch(checkoutOneProduct(cart.filter(e => e.id_sp === name)[0]))
+        setSelected(newSelected);
+    };
+
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+            const newSelecteds = products.map((n) => n.sp_id);
+            setSelected(newSelecteds);
+            dispatch(checkoutProduct(cart))
+            return;
+        }
+        setSelected([]);
+    };
+
+    return (<>
+        <CheckoutListToolbar
+            selected={selected}
+            setSelected={setSelected}
+            rowCount={products.length}
+        />
         <TableContainer sx={{minWidth: 720}}>
             <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Sách</TableCell>
-                        <TableCell align="left">Giá</TableCell>
-                        <TableCell align="left">Số lượng</TableCell>
-                        <TableCell align="right">Tổng giá</TableCell>
-                        <TableCell align="right"/>
-                    </TableRow>
-                </TableHead>
-
+                <CheckoutListHead
+                    headLabel={TABLE_HEAD}
+                    rowCount={products.length}
+                    numSelected={selected.length}
+                    onSelectAllClick={handleSelectAllClick}
+                />
                 <TableBody>
                     {products.map((product) => {
                         const {
-                            sp_id,
-                            sp_ten,
-                            ctpn_gia,
-                            sp_hinhanh,
-                            sp_soluong,
-                            ctpn_soluong,
-                            sp_giakhuyenmai
+                            sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_soluong, ctpn_soluong, sp_giakhuyenmai
                         } = product;
-                        return (
-                            <TableRow key={sp_id}>
-                                <TableCell>
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <ThumbImgStyle alt="product image"
-                                                       src={URL_PUBLIC_IMAGES + sp_hinhanh[sp_hinhanh.length - 1].ha_hinh}/>
-                                        <Box>
-                                            <Typography noWrap variant="subtitle2" sx={{maxWidth: 240, mb: 0.5}}>
+
+                        const isItemSelected = selected.indexOf(sp_id) !== -1;
+                        const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
+
+                        return (<TableRow key={sp_id}>
+                            <TableCell padding="checkbox">
+                                <Checkbox
+                                    checked={isItemSelected}
+                                    onChange={(event) => handleClick(event, sp_id)}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                    <ThumbImgStyle alt="product image"
+                                                   src={URL_PUBLIC_IMAGES + sp_hinhanh[sp_hinhanh.length - 1].ha_hinh}/>
+                                    <Box>
+                                        <Link to={linkTo} color="inherit" component={RouterLink}>
+                                            <Typography noWrap variant="subtitle2"
+                                                        sx={{maxWidth: 240, mb: 0.5}}>
                                                 {sp_ten}
                                             </Typography>
-                                        </Box>
+                                        </Link>
                                     </Box>
-                                </TableCell>
+                                </Box>
+                            </TableCell>
+                            <TableCell align="left">
+                                <Typography
+                                    component="span"
+                                    variant="body1"
+                                    sx={{
+                                        color: 'text.disabled', textDecoration: 'line-through'
+                                    }}
+                                >
+                                    {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                                </Typography>
+                                <Typography>
+                                    {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                                </Typography>
+                            </TableCell>
 
-                                <TableCell align="left">
-                                    <Typography
-                                        component="span"
-                                        variant="body1"
-                                        sx={{
-                                            color: 'text.disabled',
-                                            textDecoration: 'line-through'
-                                        }}
-                                    >
-                                        {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
-                                    </Typography>
-                                    <Typography>
-                                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
-                                    </Typography>
-                                </TableCell>
+                            <TableCell align="left">
+                                <Incrementer
+                                    quantity={sp_soluong}
+                                    available={ctpn_soluong}
+                                    onDecrease={() => {
+                                        dispatch(setQuantity({
+                                            id_sp: sp_id, so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
+                                        }));
+                                        dispatch(setQuantityProductCheckout({
+                                            id_sp: sp_id, so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
+                                        }));
+                                    }}
+                                    onIncrease={() => {
+                                        dispatch(setQuantity({
+                                            id_sp: sp_id, so_luong: sp_soluong + 1
+                                        }));
+                                        dispatch(setQuantityProductCheckout({
+                                            id_sp: sp_id, so_luong: sp_soluong + 1
+                                        }));
+                                    }}
+                                />
+                            </TableCell>
 
-                                <TableCell align="left">
-                                    <Incrementer
-                                        quantity={sp_soluong}
-                                        available={ctpn_soluong}
-                                        onDecrease={() => dispatch(setQuantity({
-                                            id_sp: sp_id,
-                                            so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
-                                        }))}
-                                        onIncrease={() => dispatch(setQuantity({
-                                            id_sp: sp_id,
-                                            so_luong: sp_soluong + 1
-                                        }))}
-                                    />
-                                </TableCell>
+                            <TableCell
+                                align="right">{fCurrency((sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia) * sp_soluong)}</TableCell>
 
-                                <TableCell
-                                    align="right">{fCurrency((sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia) * sp_soluong)}</TableCell>
-
-                                <TableCell align="right">
-                                    <MIconButton onClick={() => dispatch(removeFromCart(sp_id))}>
-                                        <Icon icon={trash2Fill} width={20} height={20}/>
-                                    </MIconButton>
-                                </TableCell>
-                            </TableRow>
-                        );
+                            <TableCell align="right">
+                                <MIconButton onClick={() => dispatch(removeFromCart(sp_id))}>
+                                    <Icon icon={trash2Fill} width={20} height={20}/>
+                                </MIconButton>
+                            </TableCell>
+                        </TableRow>);
                     })}
                 </TableBody>
             </Table>
         </TableContainer>
-    );
+    </>);
 }

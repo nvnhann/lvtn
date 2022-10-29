@@ -1,4 +1,5 @@
 const sql = require("../db");
+const query = require("../lib/query");
 
 module.exports = function (app) {
     app.get("/danhmuc", async (req, res) => {
@@ -17,7 +18,6 @@ module.exports = function (app) {
 
     app.post("/danhmuc/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE danh_muc SET active = ? where dm_id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -31,7 +31,6 @@ module.exports = function (app) {
 
     app.get("/danhmuc/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM danh_muc where dm_id = ?";
         await sql.query(qr, id, (err, data) => {
@@ -81,4 +80,13 @@ module.exports = function (app) {
             return res.status(201).send("Xóa thành công!");
         }
     });
+
+    app.get('/api/danhmuc', async (req, res) => {
+        let qr = "SELECT * FROM danh_muc WHERE active = 1";
+        let _danh_muc = await query(sql, qr);
+        await Promise.all(_danh_muc.map(async (_dm, idx) => {
+            _danh_muc[idx].the_loai = await query(sql, "SELECT * FROM the_loai WHERE active = 1 AND tl_iddm = ?", _dm.dm_id);
+        }))
+        return res.status(200).send(_danh_muc)
+    })
 };

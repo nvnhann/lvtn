@@ -132,7 +132,6 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
         values,
         setFieldValue,
     } = formik;
-    console.log(errors, values);
     const handleSubmitPN = async () => {
         if (listBooks.length === 0) {
             enqueueSnackbar('Chưa có sản phẩm!', {
@@ -153,7 +152,6 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
             0,
         );
         _values.sanpham = listBooks;
-        console.log(current)
         try {
             if (isEdit) {
                 await putData(API_BASE_URL + '/phieunhap/' + current[0]?.pn_id, _values);

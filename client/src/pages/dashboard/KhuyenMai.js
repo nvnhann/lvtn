@@ -37,7 +37,7 @@ import {formatDate} from "../../_helper/formatDate";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    {id: 'id', label: 'Mã sản phẩm', alignRight: false},
+    {id: 'id', label: 'Sách', alignRight: false},
     {id: 'têntl', label: 'Tên thể loại', alignRight: false},
     {id: 'tên', label: 'Tên sản phẩm', alignRight: false},
     {id: 'phan_tram', label: 'Phần trăm giảm', alignRight: false},

@@ -1,6 +1,6 @@
 import {Box, Button, Card, FormControlLabel, Grid, Radio, RadioGroup, styled, Typography} from "@material-ui/core";
 import CheckoutAddressInfor from "./CheckoutAddressInfor";
-import {onBackStep, onGotoStep} from "../../redux/slices/product";
+import {cartItemTotal, checkoutProduct, onBackStep, onGotoStep} from "../../redux/slices/product";
 import {useDispatch, useSelector} from "react-redux";
 import CheckoutSummary from "./CheckoutSummary";
 import {Icon} from "@iconify/react";
@@ -12,6 +12,10 @@ import {postData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
 import {PayPalButton} from "react-paypal-button-v2";
 import {useSnackbar} from "notistack5";
+import {removeFromCart} from "../../redux/slices/cart";
+import {useNavigate} from "react-router-dom";
+import {PATH_PAGE} from "../../routes/paths";
+import {useEffect, useState} from "react";
 
 
 //-----------------------------------------------------------------------------------------------
@@ -45,7 +49,22 @@ const DELIVERY_OPTIONS = [
 export default function CheckoutPayment() {
     const {enqueueSnackbar} = useSnackbar();
     const dispatch = useDispatch();
-    let {totalPrice, shipping, address, product} = useSelector(state => state.product.checkout);
+    const navigate = useNavigate();
+    let {address} = useSelector(state => state.product.checkout);
+    const totalPrice = useSelector(cartItemTotal);
+
+    const _prodt = useSelector(state => state.product.checkout.product);
+    const [product, setProduct] = useState([]);
+
+    useEffect(() => {
+        (async () => {
+            if (_prodt.length === 0) return;
+            const _products = await postData(API_BASE_URL + '/shopcart', {cart: _prodt});
+            setProduct(_products.data);
+            _prodt.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].ctpn_soluong ? _products.data[idx].ctpn_soluong : e.so_luong)
+
+        })()
+    }, [_prodt]);
 
     const handleBackStep = () => {
         dispatch(onBackStep());
@@ -73,12 +92,18 @@ export default function CheckoutPayment() {
             _values.hd_sdt = address.dc_sdt;
             _values.hd_email = address.dc_email;
             _values.hd_tongtien = totalPrice;
-            _values.hd_tienvc = 0;
-            _values.hd_hinhthucthanhtoan='online';
+            _values.hd_tienvc = totalPrice >= 500000 ? 0 : 30000;
+            _values.hd_hinhthucthanhtoan = 'online';
             _values.hd_diachi = address.dc_diachi;
             _values.product = product;
             await postData(API_BASE_URL + '/hoadon', _values);
+            product.map(e => {
+                return dispatch(removeFromCart(e.sp_id));
+            });
+            console.log(product)
+            dispatch(checkoutProduct([]));
             enqueueSnackbar('Thanh toán thành công', {variant: 'success', autoHideDuration: 2000});
+            navigate(PATH_PAGE.profile)
         } catch (err) {
             enqueueSnackbar('Lỗi tạo hóa đơn', {variant: 'error', autoHideDuration: 2000});
         }
@@ -99,10 +124,18 @@ export default function CheckoutPayment() {
                 _values.hd_sdt = address.dc_sdt;
                 _values.hd_email = address.dc_email;
                 _values.hd_tongtien = totalPrice;
-                _values.hd_tienvc = shipping;
+                _values.hd_tienvc = totalPrice >= 500000 ? 0 : 30000;
                 _values.hd_diachi = address.dc_diachi;
                 _values.product = product;
+                console.log(_values)
                 await postData(API_BASE_URL + '/hoadon', _values);
+                enqueueSnackbar('Thanh toán thành công', {variant: 'success', autoHideDuration: 2000});
+                product.map(e => {
+                    return dispatch(removeFromCart(e.sp_id));
+                });
+                dispatch(checkoutProduct([]));
+
+                navigate(PATH_PAGE.profile)
             } catch (error) {
                 console.error(error);
                 setSubmitting(false);
@@ -181,10 +214,10 @@ export default function CheckoutPayment() {
                         <Grid item xs={12} md={4}>
                             <CheckoutAddressInfor onBackStep={handleBackStep}/>
                             <CheckoutSummary
-                                total={values.delivery === 0 ? totalPrice + 30000 : totalPrice}
+                                total={totalPrice >= 500000 ? totalPrice : totalPrice + 30000}
                                 enableDiscount
                                 subtotal={totalPrice}
-                                shipping={values.delivery === 0 ? 30000 : 0 }
+                                shipping={totalPrice >= 500000 ? 0 : 30000}
                                 onEdit={() => handleGotoStep(0)}
                                 enableEdit={true}
                             />

@@ -61,7 +61,7 @@ const LabelStyle = styled(Typography)(({theme}) => ({
 export default function OrderShipping() {
     const [hoadon, setHoadon] = useState([]);
     const id = useSelector(state => state.user.current?.id)
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
     const [idhd, setIdhd] = useState(null);
     const [open, setOpen] = useState(false);
     const [openOrder, setOpenOrder] = useState(false);
@@ -106,7 +106,6 @@ export default function OrderShipping() {
         validationSchema: NewSchema,
         onSubmit: async (values, {setSubmitting, resetForm}) => {
             try {
-                console.log(values.cover.file)
                 const formDt = new FormData();
                 formDt.append('hoadon', values.cover.file);
                 formDt.append('_data', JSON.stringify({
@@ -126,7 +125,7 @@ export default function OrderShipping() {
             }
         }
     });
-    const {errors, values, touched, handleSubmit, isSubmitting, setFieldValue, getFieldProps} = formik;
+    const {errors, values, touched, handleSubmit, setFieldValue} = formik;
 
     const handleDrop = useCallback(
         (acceptedFiles) => {
@@ -149,7 +148,6 @@ export default function OrderShipping() {
 
     const changeOrder = async () => {
         try {
-            console.log(idhd)
             if (!idhd) return;
             await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 2, tt_idnv: id});
             setLoad(e => e + 1)
@@ -194,13 +192,10 @@ export default function OrderShipping() {
                                 let {
                                     hd_id,
                                     hd_tenkh,
-                                    hd_sdt,
-                                    hd_email,
                                     hd_tongtien,
                                     hd_tienvc,
                                     hd_hinhthucthanhtoan,
                                     hd_ngaytao,
-                                    hd_diachi,
                                     trangthai
                                 } = e;
                                 const hd_trangthai = trangthai[trangthai.length - 1].tt_trangthai

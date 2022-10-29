@@ -163,7 +163,6 @@ export default function UserNewForm({isEdit, currentUser, id, isProfile}) {
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reset]);
-    console.log(errors);
     return (
         <FormikProvider value={formik}>
             <Form noValidate autoComplete="off" onSubmit={handleSubmit}>

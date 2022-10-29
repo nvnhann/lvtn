@@ -57,7 +57,7 @@ export default function DialogConfirm({
                 sertShipper(_shipper.data);
             }
         })()
-    }, []);
+    }, [status]);
 
     const formik = useFormik({
         enableReinitialize: true,

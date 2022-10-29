@@ -49,7 +49,6 @@ HoaDonMoreMenu.propTypes = {
 };
 
 export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
-    console.log(hoadon)
     const ref = useRef(null);
     const id = useSelector(state => state.user.current?.id);
 

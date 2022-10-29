@@ -41,7 +41,7 @@ export default function Profile() {
     const {themeStretch} = useSettings();
     const user = useSelector(state => state.user.current);
     const isShipper = user.role === 'SHIPPER';
-    const [currentTab, setCurrentTab] = useState('Thông tin tài khoản');
+    const [currentTab, setCurrentTab] = useState(isShipper ? 'Đơn hàng vận chuyển' : 'Đơn hàng');
 
     const handleChangeTab = (event, newValue) => {
         setCurrentTab(newValue);

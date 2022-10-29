@@ -17,7 +17,6 @@ module.exports = function (app) {
 
     app.post("/theloai/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE the_loai SET active = ? where tl_id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -31,7 +30,6 @@ module.exports = function (app) {
 
     app.get("/theloai/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM the_loai where tl_id = ?";
         await sql.query(qr, id, (err, data) => {

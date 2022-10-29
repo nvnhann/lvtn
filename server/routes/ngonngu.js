@@ -17,7 +17,6 @@ module.exports = function (app) {
 
     app.post("/ngonngu/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE ngon_ngu SET active = ? where nn_id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -31,7 +30,6 @@ module.exports = function (app) {
 
     app.get("/ngonngu/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM ngon_ngu where nn_id = ?";
         await sql.query(qr, id, (err, data) => {

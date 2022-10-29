@@ -65,7 +65,6 @@ export default function DanhMucList() {
                     API_BASE_URL + `/danhmuc?search=${filterName}`,
                 );
                 setDatas(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }
@@ -124,7 +123,6 @@ export default function DanhMucList() {
     const isRoleNotFound = datas.length === 0;
 
     const changeActiveRole = async (id, active) => {
-        console.log(id, active);
         try {
             const res = await postData(API_BASE_URL + '/danhmuc/active', {
                 id: id,

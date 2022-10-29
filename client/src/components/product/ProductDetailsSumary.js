@@ -8,9 +8,13 @@ import {styled} from '@material-ui/core/styles';
 import {Box, Button, Divider, FormHelperText, Stack, Typography} from '@material-ui/core';
 import {MIconButton} from "../@material-extend";
 import {addToCart} from "../../redux/slices/cart";
-import {useDispatch} from "react-redux";
-import {onGotoStep} from "../../redux/slices/product";
+import {useDispatch, useSelector} from "react-redux";
 import {fCurrency} from "../../_helper/formatCurrentCy";
+import closeFill from "@iconify/icons-eva/close-fill";
+import {useSnackbar} from "notistack5";
+import {checkoutOneProduct, checkoutProduct, onGotoStep} from "../../redux/slices/product";
+import {useNavigate} from "react-router-dom";
+import {PATH_PAGE} from "../../routes/paths";
 // redux
 
 // ----------------------------------------------------------------------
@@ -76,11 +80,12 @@ const Incrementer = (props) => {
 export default function ProductDetailsSumary(props) {
     const {product} = props;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {cartItem} = useSelector(state => state.cart);
     const {
         sp_id,
-        sp_masp,
         sp_ten,
-        sp_mota,
         sp_chieudai,
         sp_chieurong,
         ctpn_gia,
@@ -92,11 +97,7 @@ export default function ProductDetailsSumary(props) {
         nn_ten,
         ctpn_soluong
     } = product;
-
-
-    const handleBuyNow = () => {
-        dispatch(onGotoStep(0));
-    };
+    const CartItemQuantity = cartItem.filter(e => e.id_sp === sp_id)[0];
 
     const formik = useFormik({
         enableReinitialize: true,
@@ -114,10 +115,18 @@ export default function ProductDetailsSumary(props) {
     });
 
 
-    const {values, touched, errors, getFieldProps, handleSubmit} = formik;
+    const {values, touched, errors, handleSubmit} = formik;
     const isMaxQuantity = values.quantity >= ctpn_soluong;
 
     const handleAddCart = () => {
+        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > ctpn_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
+            variant: 'error',
+            action: (key) => (
+                <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                    <Icon icon={closeFill}/>
+                </MIconButton>
+            ),
+        });
         dispatch(addToCart({
             id_sp: sp_id,
             so_luong: values.quantity,
@@ -243,7 +252,17 @@ export default function ProductDetailsSumary(props) {
                         >
                             Thêm giỏ hàng
                         </Button>
-                        <Button fullWidth size="large" type="submit" variant="contained">
+                        <Button onClick={() => {
+                            dispatch(checkoutProduct([]));
+                            dispatch(checkoutOneProduct({
+                                id_sp: sp_id,
+                                so_luong: values.quantity,
+                                sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+                            }));
+                            dispatch(onGotoStep(1));
+                            handleAddCart();
+                            navigate(PATH_PAGE.shopcart)
+                        }} fullWidth size="large" type="submit" variant="contained">
                             Mua ngay
                         </Button>
                     </Stack>

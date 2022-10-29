@@ -75,7 +75,7 @@ export default function MainNavbar() {
                         <Logo/>
                     </RouterLink>
                     <Typography variant="h4" sx={{ml: 2, color: 'text.primary'}}>
-                        HYPE
+                        HYBE
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
                     <Searchbar/>

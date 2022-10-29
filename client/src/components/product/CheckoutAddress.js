@@ -1,7 +1,7 @@
 import {Box, Button, Card, Grid, Typography} from "@material-ui/core";
 import CheckoutSummary from "./CheckoutSummary";
 import {useDispatch, useSelector} from "react-redux";
-import {chooseAddress, onBackStep, onNextStep} from "../../redux/slices/product";
+import {cartItemTotal, chooseAddress, onBackStep, onNextStep} from "../../redux/slices/product";
 import {Icon} from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
@@ -83,7 +83,7 @@ export default function CheckoutAddress() {
     const [addresses, setAddresses] = useState();
     const [open, setOpen] = useState(false);
     const isLogined = !!useSelector(state => state.user.current?.id);
-    const {totalPrice} = useSelector(state => state.product.checkout);
+    const totalPrice = useSelector(cartItemTotal);
     const {id} = useSelector(state => state.user.current);
     const dispatch = useDispatch();
     const [load, setLoad] = useState(0);
@@ -149,10 +149,10 @@ export default function CheckoutAddress() {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <CheckoutSummary
-                        total={totalPrice + 30000}
+                        total={totalPrice >= 500000 ? totalPrice : totalPrice + 30000}
                         enableDiscount
                         subtotal={totalPrice}
-                        shipping={30000}
+                        shipping={totalPrice >= 500000 ? 0 : 30000}
                     />
                 </Grid>
             </Grid>

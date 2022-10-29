@@ -16,22 +16,6 @@ import {logout} from "../../redux/slices/user";
 
 // ----------------------------------------------------------------------
 
-const MENU_OPTIONS = [
-    {
-        label: 'Thông tin tài khoản',
-        icon: personFill,
-        linkTo: PATH_PAGE.profile,
-        role: ''
-    },{
-        label: 'Quản lý',
-        icon: "eos-icons:cluster-management",
-        linkTo: PATH_DASHBOARD.root,
-        role: 'ADMIN'
-    },
-];
-
-// ----------------------------------------------------------------------
-
 export default function AccountPopover() {
     const anchorRef = useRef(null);
     const navigate = useNavigate();

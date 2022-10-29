@@ -66,7 +66,6 @@ export default function CungCapList() {
                     API_BASE_URL + `/nhacungcap?search=${filterName}`,
                 );
                 setDatas(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }
@@ -125,7 +124,6 @@ export default function CungCapList() {
     const isRoleNotFound = datas.length === 0;
 
     const changeActiveRole = async (id, active) => {
-        console.log(id, active);
         try {
             const res = await postData(API_BASE_URL + '/nhacungcap/active', {
                 id: id,

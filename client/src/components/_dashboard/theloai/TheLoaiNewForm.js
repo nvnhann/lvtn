@@ -46,7 +46,6 @@ export default function TheLoaiNewForm({isEdit, current, setEdit, setLoad}) {
         (async () => {
             const res = await getData(API_BASE_URL + '/danhmuc');
             setDanhmucList(res.data);
-            console.log(res.data);
         })();
     }, []);
 

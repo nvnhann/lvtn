@@ -2,13 +2,11 @@ import {Icon} from '@iconify/react';
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {Form, FormikProvider, useFormik} from 'formik';
 import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
-// material
-import {Button, Card, CardHeader, Grid, Typography} from '@material-ui/core';
-// redux
+import {Button, Card, Grid} from '@material-ui/core';
 import CheckoutProductList from './CheckoutProductList';
 import {useDispatch, useSelector} from "react-redux";
-import {checkout, checkoutProduct, onNextStep} from "../../redux/slices/product";
-import {cartItemCount, cartItemTotal} from "../../redux/slices/cart";
+import {cartItemTotal, checkout, onNextStep} from "../../redux/slices/product";
+import {cartItemCount} from "../../redux/slices/cart";
 import Scrollbar from "../Scrollbar";
 import EmptyContent from "../EmptyContent";
 import {PATH_PAGE} from "../../routes/paths";
@@ -21,13 +19,17 @@ import CheckoutSummary from "./CheckoutSummary";
 
 export default function CheckoutCart() {
     const dispatch = useDispatch();
-    const cart = useSelector((state) => state.cart.cartItem);
-    const totalItems = useSelector(cartItemCount);
-    const isEmptyCart = cart.length === 0;
-    const isLogined = !!useSelector(state => state.user.current?.id);
-    const [products, setProducts] = useState([]);
     const navigate = useNavigate();
+
+    const cart = useSelector((state) => state.cart.cartItem);
+    const checkoutProduct = useSelector(state => state.product.checkout.product);
+    const totalItems = useSelector(cartItemCount);
+    const isLogined = !!useSelector(state => state.user.current?.id);
     const totalPrice = useSelector(cartItemTotal);
+
+    const isEmptyCart = cart.length === 0;
+
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -43,7 +45,6 @@ export default function CheckoutCart() {
     };
 
     const handleApplyDiscount = (value) => {
-        console.log(value);
     };
 
     const formik = useFormik({
@@ -54,7 +55,6 @@ export default function CheckoutCart() {
                 setSubmitting(true);
                 if (!isLogined) navigate('/auth/login')
                 dispatch(checkout({totalPrice: totalPrice, shipping: 30000}));
-                dispatch(checkoutProduct(products))
                 handleNextStep();
             } catch (error) {
                 console.error(error);
@@ -64,24 +64,13 @@ export default function CheckoutCart() {
     });
 
     const {handleSubmit} = formik;
+
     return (
         <FormikProvider value={formik}>
             <Form autoComplete="off" noValidate onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={9}>
                         <Card sx={{mb: 3}}>
-                            <CardHeader
-                                title={
-                                    <Typography variant="h6">
-                                        Giỏ hàng
-                                        <Typography component="span" sx={{color: 'text.secondary'}}>
-                                            &nbsp;({totalItems} sản phẩm)
-                                        </Typography>
-                                    </Typography>
-                                }
-                                sx={{mb: 3}}
-                            />
-
                             {!isEmptyCart ? (
                                 <Scrollbar>
                                     <CheckoutProductList
@@ -108,14 +97,14 @@ export default function CheckoutCart() {
 
                     <Grid item xs={12} md={3}>
                         <CheckoutSummary
-                            total={totalPrice + 30000}
+                            total={totalPrice >= 500000 ? totalPrice : totalPrice + 30000}
                             enableDiscount
                             subtotal={totalPrice}
                             onApplyDiscount={handleApplyDiscount}
-                            shipping={30000}
+                            shipping={totalPrice >= 500000 ? 0 : 30000}
                         />
                         <Button fullWidth size="large" type="submit" variant="contained"
-                                disabled={cart.length === 0}>
+                                disabled={checkoutProduct.length === 0}>
                             Thanh toán
                         </Button>
                     </Grid>

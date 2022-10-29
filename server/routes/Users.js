@@ -38,7 +38,6 @@ module.exports = function (app) {
 
     app.post("/user/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE users SET active = ? where id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -96,7 +95,6 @@ module.exports = function (app) {
         const qr = "UPDATE `users` SET ? WHERE `users`.`id` = ?;";
         await query(sql, qr, [data, id]);
         let _user = await query(sql, "select users.*, q_ten  as role from users left join quyen on users.role_id = quyen.q_id WHERE id = ?", id);
-        console.log(_user[0])
         res.cookie("user", JSON.stringify(_user[0]));
         return res.status(200).send("Cập nhật thành công");
 

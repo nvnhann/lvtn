@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 // utils
 import axios from '../../utils/axios';
 import Cookies from 'js-cookie';
+import {randomIntFromInterval} from "../../_helper/helper";
 
 // ----------------------------------------------------------------------
 
@@ -22,6 +23,7 @@ const initialState = {
     notifications: null,
     current: Cookies.get('user') ? JSON.parse(Cookies.get('user')) : null,
     token: Cookies.get('token') || null,
+    cover: `/static/avatar_${randomIntFromInterval(1, 20)}.jpg`
 };
 
 const slice = createSlice({

@@ -47,7 +47,6 @@ module.exports = function (app) {
 
     app.post("/khuyenmai/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE khuyen_mai SET active = ? where km_id = ?";
         sql.query(qr, [active, id], (err, _) => {

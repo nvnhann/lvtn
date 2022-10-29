@@ -9,7 +9,6 @@ module.exports = function (app) {
               ncc_email like '%${req.query.search}%' or
               ncc_diachi like '%${req.query.search}%'`;
         }
-        console.log(qr)
         sql.query(qr, (err, data) => {
             if (err) {
                 console.log(err);
@@ -21,12 +20,10 @@ module.exports = function (app) {
 
     app.post("/nhacungcap/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE nha_cung_cap SET active = ? where ncc_id = ?";
         sql.query(qr, [active, id], (err, _) => {
             if (err) {
-                console.log(err);
                 return res.status(500).send(err);
             }
             return res.status(200).send("Cập nhật thành công");
@@ -35,7 +32,6 @@ module.exports = function (app) {
 
     app.get("/nhacungcap/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM nha_cung_cap where ncc_id = ?";
         await sql.query(qr, id, (err, data) => {

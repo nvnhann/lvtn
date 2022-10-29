@@ -65,7 +65,6 @@ export default function TheLoaiList() {
                     API_BASE_URL + `/theloai?search=${filterName}`,
                 );
                 setDatas(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }

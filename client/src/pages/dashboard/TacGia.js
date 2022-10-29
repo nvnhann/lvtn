@@ -65,7 +65,6 @@ export default function TacGiaList() {
                     API_BASE_URL + `/tacgia?search=${filterName}`,
                 );
                 setDatas(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }
@@ -124,7 +123,6 @@ export default function TacGiaList() {
     const isRoleNotFound = datas.length === 0;
 
     const changeActiveRole = async (id, active) => {
-        console.log(id, active);
         try {
             const res = await postData(API_BASE_URL + '/tacgia/active', {
                 id: id,

@@ -65,7 +65,6 @@ export default function RoleList() {
             try {
                 const res = await getData(API_BASE_URL + `/role?search=${filterName}`);
                 setRoles(res.data);
-                console.log(res.data);
             } catch (e) {
                 console.log(e);
             }
@@ -124,7 +123,6 @@ export default function RoleList() {
     const isRoleNotFound = roles.length === 0;
 
     const changeActiveRole = async (id, active) => {
-        console.log(id, active);
         try {
             const res = await postData(API_BASE_URL + '/role/active', {
                 id: id,

@@ -69,8 +69,6 @@ export default function RoleNewForm({isEdit, currentRole, id}) {
         },
     });
     const {errors, touched, handleSubmit, getFieldProps} = formik;
-
-    console.log(errors);
     return (
         <FormikProvider value={formik}>
             <Form noValidate autoComplete="off" onSubmit={handleSubmit}>

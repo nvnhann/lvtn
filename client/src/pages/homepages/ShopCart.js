@@ -111,14 +111,12 @@ export default function ShopCart() {
                         </Stepper>
                     </Grid>
                 </Grid>
-                {!isComplete ? (
+                {!isComplete && (
                     <>
                         {activeStep === 0 && <CheckoutCart/>}
                         {activeStep === 1 && <CheckoutAddress/>}
                         {activeStep === 2 && <CheckoutPayment/>}
                     </>
-                ) : (
-                    <div>aaa</div>
                 )}
             </Container>
         </RootStyle>

@@ -25,7 +25,6 @@ export default function ProductDetail() {
         (async () => {
             const _product = await getData(API_BASE_URL + `/api/books/${id}`);
             setProduct(_product.data[0]);
-            console.log(_product.data)
         })()
     }, [id]);
     return (

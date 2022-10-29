@@ -43,6 +43,3 @@ export const cartItemCount = createSelector(cartItemSeclector, (cartItem) =>
     cartItem.reduce((count, item) => count + item.so_luong, 0)
 );
 
-export const cartItemTotal = createSelector(cartItemSeclector, (cartItem) =>
-    cartItem.reduce((total, item) => total + item.sp_gia * item.so_luong, 0)
-);

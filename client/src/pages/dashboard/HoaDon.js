@@ -8,13 +8,13 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    TablePagination,
     TableRow,
     Typography
 } from "@material-ui/core";
 import Page from "../../components/Page";
 import useSettings from "../../hooks/useSettings";
 import {useEffect, useState} from "react";
-import {useSnackbar} from "notistack5";
 import HoaDonListToolbar from "../../components/_dashboard/Hoadon/list/HoaDonListToolbar";
 import {getData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
@@ -39,8 +39,6 @@ const TABLE_HEAD = [
 //------------------------------------------------------------------------------------------------------------
 export default function HoaDon() {
     const {themeStretch} = useSettings();
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
@@ -152,12 +150,9 @@ export default function HoaDon() {
                                                     hd_id,
                                                     hd_tenkh,
                                                     hd_sdt,
-                                                    hd_email,
                                                     hd_tongtien,
-                                                    hd_tienvanchuyen,
                                                     hd_hinhthucthanhtoan,
                                                     hd_ngaytao,
-                                                    hd_diachi,
                                                     trangthai
                                                 } = row;
 
@@ -235,6 +230,15 @@ export default function HoaDon() {
                                 </Table>
                             </TableContainer>
                         </Scrollbar>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={_datas.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
                     </Card>
                 </Container>
             </Page>

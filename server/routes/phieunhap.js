@@ -7,7 +7,6 @@ module.exports = function (app) {
         let _sanpham = req.body.sanpham;
         let _phieunhap = req.body;
         delete _phieunhap.sanpham;
-        console.log(_sanpham);
         const qr_phieunhap = "INSERT INTO phieu_nhap SET ?";
         await db.query(qr_phieunhap, _phieunhap, async (err, _rs_pn) => {
             if (err) {

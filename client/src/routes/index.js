@@ -239,7 +239,7 @@ export default function Router() {
                 element: isLogined ? <Profile/> : <Navigate to='/'/>
             }, {
                 path: 'product',
-                element: <ProductList/>
+                element: <ProductFilter/>
             }, {
                 path: 'shopcart',
                 element: <ShopCart/>
@@ -310,6 +310,7 @@ const NgonNguList = Loadable(lazy(() => import('../pages/dashboard/NgonNgu')));
 //--------------------------Sách-------------------------------------------
 const BookList = Loadable(lazy(() => import('../pages/dashboard/Book')));
 const ProductList = Loadable(lazy(() => import('../pages/homepages/ShopProduct')));
+const ProductFilter = Loadable(lazy(() => import('../pages/homepages/ProductFilter')));
 const ProductDetail = Loadable(lazy(() => import('../pages/homepages/ProductDetail')));
 const ShopCart = Loadable(lazy(() => import('../pages/homepages/ShopCart')));
 const BookCreate = Loadable(

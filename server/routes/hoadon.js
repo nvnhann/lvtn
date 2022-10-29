@@ -61,6 +61,7 @@ module.exports = function (app) {
 
     app.get('/hoadonnv/:id', async (req, res) => {
         const {id} = req.params;
+
         let _hoadon = await query(db, "SELECT * FROM hoa_don WHERE hoa_don.hd_idnv = ? ORDER BY hd_id DESC", id);
 
         if (_hoadon.length) {
@@ -72,6 +73,7 @@ module.exports = function (app) {
 
             await Promise.all(await _hoadon.map(async (e, idx) => {
                 _hoadon[idx].cthd = await query(db, _cthd, e.hd_id);
+                let qr = ''
                 _hoadon[idx].trangthai = await query(db, "SELECT * FROM trang_thai WHERE tt_idhd = ?", e.hd_id);
             }));
         }
@@ -81,7 +83,78 @@ module.exports = function (app) {
 
     app.get('/hoadon/:id', async (req, res) => {
         const {id} = req.params;
-        let _hoadon = await query(db, "SELECT * FROM hoa_don WHERE hoa_don.hd_idkh = ? ORDER BY hd_id DESC", id);
+        const {trangthai, search} = req.query;
+
+        let qr = "SELECT * FROM hoa_don WHERE hoa_don.hd_idkh = ? ORDER BY hd_id DESC";
+
+        if (trangthai !== '') {
+            qr = `SELECT  * 
+                    FROM hoa_don
+                    LEFT JOIN trang_thai ON trang_thai.tt_idhd = hoa_don.hd_id,
+                    (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                    FROM trang_thai
+                    GROUP BY tt_idhd) tt
+                    WHERE 
+                        hoa_don.hd_idkh = ? AND 
+                        trang_thai.tt_trangthai = ${trangthai} AND 
+                        tt.tt_idhd = hoa_don.hd_id AND 
+                        tt.num_tt = ${trangthai}
+                    ORDER BY hd_id DESC`;
+            if(!!search){
+                qr = `SELECT hoa_don.*
+                    FROM hoa_don
+                    LEFT JOIN trang_thai ON trang_thai.tt_idhd = hoa_don.hd_id
+                    LEFT JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.cthd_idhd = hoa_don.hd_id
+                    LEFT JOIN san_pham ON san_pham.sp_id = chi_tiet_hoa_don.cthd_idsp,
+                    (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                    FROM trang_thai
+                    GROUP BY tt_idhd) tt
+                    WHERE 
+                        hoa_don.hd_idkh = ? AND 
+                        trang_thai.tt_trangthai = ${trangthai} AND 
+                        tt.tt_idhd = hoa_don.hd_id AND 
+                        tt.num_tt = ${trangthai} AND 
+                       ( 
+                           hoa_don.hd_id LIKE '%${search}%' OR
+                           hoa_don.hd_tenkh LIKE '%${search}%' OR
+                           hoa_don.hd_diachi LIKE '%${search}%' OR
+                           hoa_don.hd_sdt LIKE '%${search}%' OR 
+                           hoa_don.hd_email LIKE '%${search}%' OR
+                           hoa_don.hd_ngaytao LIKE '%${search}%' OR
+                           hoa_don.hd_hinhthucthanhtoan LIKE '%${search}%' OR
+                           san_pham.sp_masp LIKE '%${search}%' OR
+                           san_pham.sp_ten LIKE '%${search}%' OR 
+                           trang_thai.tt_ngaycapnhat LIKE '%${search}%'
+                       )
+                    GROUP BY hoa_don.hd_id
+                    ORDER BY hd_id DESC`;
+            }
+        } else{
+            if(!!search){
+                qr = `SELECT hoa_don.*
+                    FROM hoa_don
+                    LEFT JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.cthd_idhd = hoa_don.hd_id
+                    LEFT JOIN san_pham ON san_pham.sp_id = chi_tiet_hoa_don.cthd_idsp
+                    WHERE 
+                        hoa_don.hd_idkh = ? AND
+                       ( 
+                           hoa_don.hd_id LIKE '%${search}%' OR
+                           hoa_don.hd_tenkh LIKE '%${search}%' OR
+                           hoa_don.hd_diachi LIKE '%${search}%' OR
+                           hoa_don.hd_sdt LIKE '%${search}%' OR 
+                           hoa_don.hd_email LIKE '%${search}%' OR
+                           hoa_don.hd_ngaytao LIKE '%${search}%' OR
+                           hoa_don.hd_hinhthucthanhtoan LIKE '%${search}%' OR
+                           san_pham.sp_masp LIKE '%${search}%' OR
+                           san_pham.sp_ten LIKE '%${search}%'
+                       )
+                   GROUP BY hoa_don.hd_id
+                   ORDER BY hoa_don.hd_id DESC`
+            }
+        }
+
+
+        let _hoadon = await query(db, qr, id);
 
         if (_hoadon.length) {
             let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
@@ -92,7 +165,8 @@ module.exports = function (app) {
 
             await Promise.all(await _hoadon.map(async (e, idx) => {
                 _hoadon[idx].cthd = await query(db, _cthd, e.hd_id);
-                _hoadon[idx].trangthai = await query(db, "SELECT * FROM trang_thai WHERE tt_idhd = ?", e.hd_id);
+                let qr = 'SELECT * FROM trang_thai WHERE tt_idhd = ? ';
+                _hoadon[idx].trangthai = await query(db, qr, e.hd_id);
             }));
         }
 
@@ -104,7 +178,6 @@ module.exports = function (app) {
         let data = {};
         if (req.file) {
             let {_data} = req.body;
-            console.log(_data)
             data = JSON.parse(_data);
             data.tt_note = req.file.filename;
         } else {

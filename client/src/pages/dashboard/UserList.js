@@ -123,7 +123,6 @@ export default function UserList() {
     const isUserNotFound = users.length === 0;
 
     const changeActiveUser = async (id, active) => {
-        console.log(id, active);
         try {
             const res = await postData(API_BASE_URL + '/user/active', {
                 id: id,

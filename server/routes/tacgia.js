@@ -15,9 +15,25 @@ module.exports = function (app) {
         });
     });
 
+    app.get("/api/tacgia", async (req, res) => {
+        let limit = 120;
+        const {pageURL} = req.query;
+        if (pageURL) {
+            limit = limit * pageURL
+        }
+        let qr = "SELECT * FROM tac_gia WHERE active = 1 ORDER BY tg_ten  LIMIT ?";
+        sql.query(qr, limit, (err, data) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+            return res.status(200).send(data);
+        });
+    });
+
+
     app.post("/tacgia/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE tac_gia SET active = ? where tg_id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -31,7 +47,6 @@ module.exports = function (app) {
 
     app.get("/tacgia/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM tac_gia where tg_id = ?";
         await sql.query(qr, id, (err, data) => {

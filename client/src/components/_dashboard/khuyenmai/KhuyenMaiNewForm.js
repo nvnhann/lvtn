@@ -64,7 +64,6 @@ export default function KhuyenMaiNewForm({isEdit, current, setEdit, setLoad}) {
             _values.km_ngayketthuc = formatDate(values.ngay_km[1]) !== '1970-01-01' ? formatDate(values.ngay_km[1]) : null;
             _values.km_idsp = values.sp_idsp?.sp_id;
             _values.km_idtl = values.sp_idtl?.tl_id;
-            console.log(_values)
             try {
                 if (isEdit) {
                     await putData(API_BASE_URL + '/khuyenmai/' + current?.km_id, _values)

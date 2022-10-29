@@ -127,7 +127,6 @@ module.exports = function (app) {
     app.put("/book/:id", upload.array("sp_hinhanh", 10), async (req, res) => {
         const id = req.params.id;
         upload.array("sp_hinhanh", 10);
-        console.log(req.files);
         let {data} = req.body;
         data = JSON.parse(data);
         if (req.files.length > 0) {
@@ -146,11 +145,9 @@ module.exports = function (app) {
                 "SELECT * FROM hinh_anh WHERE ha_idsp = ?",
                 id
             );
-            console.log(results.length, data.sp_hinhanh);
             if (results.length !== data.sp_hinhanh.length) {
                 await query(db, "DELETE FROM hinh_anh WHERE ha_idsp = ?", id);
                 let values = [];
-                console.log(data.sp_hinhanh);
                 data.sp_hinhanh.map((e) => {
                     values.push([e.replace("http://localhost:4000/public/", ""), id]);
                 });
@@ -243,6 +240,83 @@ module.exports = function (app) {
         return res.status(200).send(_books);
     });
 
+    app.get('/api/filterbook', async (req, res) => {
+        const {search, type, priceType, priceRange, idtl, iddm, idtg} = req.query;
+        let qr_book = `SELECT sp.*, pn.*, ctpn.*,tg.*, tl.*,km.km_phantramgiam,(
+            CASE 
+            WHEN km.active = 0 then 0
+            WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+            WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+                 ELSE ROUND((ctpn.ctpn_gia - ctpn.ctpn_gia * (km.km_phantramgiam / 100)),0)
+            END
+        ) as sp_giakhuyenmai
+             FROM san_pham sp 
+                LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
+                LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id
+                LEFT JOIN the_loai tl ON tl.tl_id = sp.sp_idtl
+                LEFT JOIN danh_muc dm ON dm.dm_id = tl.tl_iddm
+                LEFT JOIN tac_gia tg ON tg.tg_id = sp.sp_idtg
+                LEFT JOIN nha_xuat_ban nxb ON nxb.nxb_id = sp.sp_idnxb
+                LEFT JOIN nha_cung_cap ncc ON ncc.ncc_id = pn.pn_idncc
+                LEFT JOIN ngon_ngu nn ON nn.nn_id = sp.sp_idnn
+                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id,
+                    ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
+                        FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
+                        GROUP BY  ctpn.ctpn_idsp) date_min
+                        WHERE 
+                            ctpn.ctpn_soluong > 0 AND 
+                            sp.sp_id = date_min.ctpn_idsp AND 
+                            pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND
+                            sp.active = 1 AND ncc.active = 1 AND nxb.active = 1 AND tg.active = 1 AND dm.active = 1 AND tl.active = 1 `;
+        if (!!idtl) {
+            qr_book += `AND tl_id = ${idtl} `
+        }
+        if (!!idtg) {
+            qr_book += `AND tg_id = ${idtg} `
+        }
+        if (!!iddm) {
+            qr_book += `AND dm_id = ${iddm} `
+        }
+        if (!!search) {
+            qr_book += ` AND ( sp_masp like '%${search}%' OR sp_ten like '%${search}%' OR tg_ten like '%${search}%' OR tl_ten like '%${search}%') `;
+        }
+
+        if (!!priceRange) qr_book += `AND ctpn_gia >= ${priceRange} `;
+
+        if (!!priceType) qr_book += 'ORDER BY ctpn_gia ';
+
+        if (!!priceType && priceType === 'Giá cao đến thấp') {
+            qr_book += ' DESC'
+        } else if (!!priceType && priceType === 'Giá thấp đến cao') {
+            qr_book += ' ASC'
+        }
+
+        if (!!type) {
+            if (!!priceType) qr_book += ',sp_id ';
+            else {
+                qr_book += 'ORDER BY sp_id ';
+            }
+        }
+        if (!!type && type === 'Mới nhất') {
+            qr_book += ' DESC'
+        } else if (!!type && type === 'Cũ nhất') {
+            qr_book += ' ASC'
+        }
+        console.log(qr_book)
+        let _books = await query(db, qr_book);
+        await Promise.all(
+            _books.map(async (book, idx) => {
+                _hinhanh = await query(
+                    db,
+                    "SELECT * FROM hinh_anh WHERE ha_idsp = ?",
+                    book.sp_id
+                );
+                _books[idx].sp_hinhanh = _hinhanh;
+            })
+        );
+        return res.status(200).send(_books);
+    })
+
     app.get('/api/books/:id', async (req, res) => {
         const {id} = req.params;
         const {pageURL} = req.query;
@@ -286,7 +360,7 @@ module.exports = function (app) {
                     book.sp_id
                 );
 
-                _books[idx].sp_hinhanh = _hinhanh.map(e => 'http://localhost:4000/public/'+ e.ha_hinh);
+                _books[idx].sp_hinhanh = _hinhanh.map(e => 'http://localhost:4000/public/' + e.ha_hinh);
             })
         );
         return res.status(200).send(_books);

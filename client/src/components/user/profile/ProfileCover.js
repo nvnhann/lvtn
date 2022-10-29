@@ -53,6 +53,7 @@ ProfileCover.propTypes = {
 
 export default function ProfileCover({myProfile}) {
     const fullname = useSelector(state => state.user.current.fullname)
+    const cover = useSelector((state) => state.user.cover);
 
     return (
         <RootStyle>
@@ -79,7 +80,7 @@ export default function ProfileCover({myProfile}) {
                     <Typography sx={{opacity: 0.72}}>{myProfile?.position || 'Đọc giả'}</Typography>
                 </Box>
             </InfoStyle>
-            <CoverImgStyle alt="profile cover" src={myProfile?.cover || '/static/avt.jpg'}/>
+            <CoverImgStyle alt="profile cover" src={cover || '/static/avt.jpg'}/>
         </RootStyle>
     );
 }

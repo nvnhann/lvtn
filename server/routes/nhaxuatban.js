@@ -9,7 +9,6 @@ module.exports = function (app) {
               nxb_email like '%${req.query.search}%' or
               nxb_diachi like '%${req.query.search}%'`;
         }
-        console.log(qr)
         sql.query(qr, (err, data) => {
             if (err) {
                 console.log(err);
@@ -21,7 +20,6 @@ module.exports = function (app) {
 
     app.post("/nhaxuatban/active", async (req, res) => {
         const {id, active} = req.body;
-        console.log(req.body);
         if (!id) return res.status(404).send("No content");
         const qr = "UPDATE nha_xuat_ban SET active = ? where nxb_id = ?";
         sql.query(qr, [active, id], (err, _) => {
@@ -35,7 +33,6 @@ module.exports = function (app) {
 
     app.get("/nhaxuatban/:id", async (req, res) => {
         const {id} = req.params;
-        console.log(req.params);
         if (!id) return res.status(404).send(null);
         const qr = " SELECT * FROM nha_xuat_ban where nxb_id = ?";
         await sql.query(qr, id, (err, data) => {
