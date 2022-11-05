@@ -76,5 +76,8 @@ export const PATH_DASHBOARD = {
     },
     hoadon: {
         root: path(ROOTS_DASHBOARD, '/hoadon')
+    },
+    store: {
+        root: path(ROOTS_DASHBOARD, '/store')
     }
 };

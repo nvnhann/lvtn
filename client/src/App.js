@@ -11,10 +11,18 @@ import GoogleAnalytics from './components/GoogleAnalytics';
 import NotistackProvider from './components/NotistackProvider';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 import ThemeLocalization from './components/ThemeLocalization';
+import {useEffect} from "react";
+import {getStore} from "./redux/slices/store";
+import {useDispatch} from "react-redux";
 
 // ----------------------------------------------------------------------
 
 export default function App() {
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(getStore());
+    },[dispatch]);
+
     return (
         <ThemeConfig>
             <ThemePrimaryColor>

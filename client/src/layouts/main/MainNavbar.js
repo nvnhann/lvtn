@@ -51,6 +51,7 @@ export default function MainNavbar() {
     const isLogined = !!useSelector((state) => state.user.current?.id);
     const cartCount = useSelector(cartItemCount);
     const dispatch = useDispatch();
+    const store = useSelector(state => state.store.store);
 
     return (
         <AppBar sx={{boxShadow: 0, bgcolor: 'transparent'}}>
@@ -75,11 +76,11 @@ export default function MainNavbar() {
                         <Logo/>
                     </RouterLink>
                     <Typography variant="h4" sx={{ml: 2, color: 'text.primary'}}>
-                        HYBE
+                        {store.ch_ten}
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
                     <Searchbar/>
-                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart} onClick={()=>dispatch(onGotoStep(0))}>
+                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart} onClick={() => dispatch(onGotoStep(0))}>
                         <Badge showZero badgeContent={cartCount} color="error" max={99}>
                             <IconCart/>
                         </Badge>

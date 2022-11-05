@@ -13,83 +13,87 @@ const getIcon = (name) => (
 );
 
 const ICONS = {
-    user: getIcon('ic_user'),
-    role: getIcon('ic_role'),
-    tacgia: getIcon('ic_new'),
-    danhmuc: getIcon('ic_category'),
-    ngonngu: getIcon('ic_translate'),
-    book: getIcon('ic_book'),
-    phieunhap: getIcon('ic_addbook'),
-    giamgia: getIcon('ic_discount'),
-    order: getIcon('ic_order')
+    user        : getIcon('ic_user'),
+    role        : getIcon('ic_role'),
+    tacgia      : getIcon('ic_new'),
+    danhmuc     : getIcon('ic_category'),
+    ngonngu     : getIcon('ic_translate'),
+    book        : getIcon('ic_book'),
+    phieunhap   : getIcon('ic_addbook'),
+    giamgia     : getIcon('ic_discount'),
+    order       : getIcon('ic_order'),
+    store       : getIcon('ic_store')
 };
 
 const sidebarConfig = [
-    // MANAGEMENT
     // ----------------------------------------------------------------------
     {
         items: [
-            // MANAGEMENT : USER
             {
-                title: 'user',
-                path: PATH_DASHBOARD.user.list,
-                icon: ICONS.user,
+                title   : 'Cửa hàng',
+                path    : PATH_DASHBOARD.store.root,
+                icon    : ICONS.store
             },
             {
-                title: 'Quyền',
-                path: PATH_DASHBOARD.role.root,
-                icon: ICONS.role,
+                title   : 'user',
+                path    : PATH_DASHBOARD.user.list,
+                icon    : ICONS.user,
             },
             {
-                title: 'Sách',
-                path: PATH_DASHBOARD.book.root,
-                icon: ICONS.book,
+                title   : 'Quyền',
+                path    : PATH_DASHBOARD.role.root,
+                icon    : ICONS.role,
             },
             {
-                title: 'Nhập hàng',
-                path: PATH_DASHBOARD.phieunhap.root,
-                icon: ICONS.phieunhap,
+                title   : 'Sách',
+                path    : PATH_DASHBOARD.book.root,
+                icon    : ICONS.book,
             },
             {
-                title: 'Hóa đơn',
-                path: PATH_DASHBOARD.hoadon.root,
-                icon: ICONS.order
+                title   : 'Nhập hàng',
+                path    : PATH_DASHBOARD.phieunhap.root,
+                icon    :  ICONS.phieunhap,
             },
             {
-                title: 'Khuyến mãi',
-                path: PATH_DASHBOARD.khuyenmai.root,
-                icon: ICONS.giamgia,
+                title   : 'Hóa đơn',
+                path    : PATH_DASHBOARD.hoadon.root,
+                icon    : ICONS.order
             },
             {
-                title: 'Nhà xuất bản',
-                path: PATH_DASHBOARD.nhaxuatban.root,
-                icon: ICONS.tacgia,
+                title   : 'Khuyến mãi',
+                path    : PATH_DASHBOARD.khuyenmai.root,
+                icon    : ICONS.giamgia,
             },
             {
-                title: 'Nhà cung cấp',
-                path: PATH_DASHBOARD.nhacungcap.root,
-                icon: ICONS.tacgia,
+                title   : 'Nhà xuất bản',
+                path    : PATH_DASHBOARD.nhaxuatban.root,
+                icon    : ICONS.tacgia,
             },
             {
-                title: 'Tác giả',
-                path: PATH_DASHBOARD.tacgia.root,
-                icon: ICONS.user,
+                title   : 'Nhà cung cấp',
+                path    : PATH_DASHBOARD.nhacungcap.root,
+                icon    : ICONS.tacgia,
+            },
+            {
+                title   : 'Tác giả',
+                path    : PATH_DASHBOARD.tacgia.root,
+                icon    : ICONS.user,
             },
 
             {
-                title: 'Danh mục',
-                path: PATH_DASHBOARD.danhmuc.root,
-                icon: ICONS.danhmuc,
+                title   : 'Danh mục',
+                path    : PATH_DASHBOARD.danhmuc.root,
+                icon    : ICONS.danhmuc,
             },
             {
-                title: 'Thể loại',
-                path: PATH_DASHBOARD.theloai.root,
-                icon: ICONS.danhmuc,
+                title   : 'Thể loại',
+                path    : PATH_DASHBOARD.theloai.root,
+                icon    : ICONS.danhmuc,
             },
             {
-                title: 'Ngôn ngữ',
-                path: PATH_DASHBOARD.ngonngu.root,
-                icon: ICONS.ngonngu,
+                title   : 'Ngôn ngữ',
+                path    : PATH_DASHBOARD.ngonngu.root,
+                icon    : ICONS.ngonngu,
             },
         ],
     },

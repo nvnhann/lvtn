@@ -9,7 +9,6 @@ import LoadingScreen from '../components/LoadingScreen';
 import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
-
 const Loadable = (Component) => (props) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const {pathname} = useLocation();
@@ -211,6 +210,9 @@ export default function Router() {
                         path: '/',
                         element: <Hoadon/>
                     }]
+                }, {
+                    path: '/store',
+                    element: <Store/>
                 }
             ],
         },
@@ -340,3 +342,4 @@ const Hoadon = Loadable(lazy(() => import('../pages/dashboard/HoaDon')));
 
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
+const Store = Loadable(lazy(() => import('../pages/dashboard/Store')));

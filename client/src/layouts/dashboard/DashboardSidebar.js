@@ -93,6 +93,8 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
     const {pathname} = useLocation();
     const user = useSelector((state) => state.user.current);
+    const store = useSelector(state => state.store.store);
+
     const {
         isCollapse,
         collapseClick,
@@ -139,7 +141,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
                     <Box component={RouterLink} to="/" sx={{display: 'inline-flex'}}>
                         <Logo/>
                     </Box>
-                    <Typography variant="h5">HYBE</Typography>
+                    <Typography variant="h5">{store.ch_ten}</Typography>
 
                     <MHidden width="lgDown">
                         {!isCollapse && (
