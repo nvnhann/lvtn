@@ -8,6 +8,9 @@ import {
     Link,
     OutlinedInput,
     Stack,
+    Step,
+    StepButton,
+    Stepper,
     Table,
     TableBody,
     TableCell,
@@ -75,6 +78,7 @@ const TrangThaiList = [
 ]
 //-----------------------------------------------------------------------------
 
+const steps = ["Chờ xác nhận", "Đã xác nhận", "Đã lấy hàng", "Đã giao", "Đã hủy"];
 
 export default function Order() {
     const id = useSelector(state => state.user.current?.id)
@@ -88,6 +92,8 @@ export default function Order() {
     const [detail, setDetail] = useState({});
     const [trangthai, setTrangthai] = useState('');
     const [search, setSearch] = useState('');
+    const [activeStep, setActiveStep] = useState(0);
+    const [completed, setCompleted] = useState({});
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -105,13 +111,54 @@ export default function Order() {
         setOpenDetail(false);
     };
 
+    const totalSteps = () => {
+        return steps.length;
+    };
+
+    const isLastStep = () => {
+        return activeStep === totalSteps() - 1;
+    };
+
+    const completedSteps = () => {
+        return Object.keys(completed).length;
+    };
+
+    const allStepsCompleted = () => {
+        return completedSteps() === totalSteps();
+    };
+
+    const handleNext = () => {
+        const newActiveStep =
+            isLastStep() && !allStepsCompleted()
+                ? // It's the last step, but not all steps have been completed,
+                  // find the first step that has been completed
+                steps.findIndex((step, i) => !(i in completed))
+                : activeStep + 1;
+        setActiveStep(newActiveStep);
+    };
+
+    const handleStep = (step) => () => {
+        setActiveStep(step);
+    };
+
+    const handleComplete = () => {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+        setCompleted({});
+    };
 
     useEffect(() => {
         (async () => {
-            const _hoadon = await getData(API_BASE_URL + `/hoadon/${id}?trangthai=${trangthai?.id >= 0 ? trangthai.id : ''}&&search=${search}`);
+            const _hoadon = await getData(API_BASE_URL + `/hoadon/${id}?trangthai=${activeStep}&&search=${search}`);
             setHoadon(_hoadon.data);
         })()
-    }, [id, load, trangthai, search]);
+    }, [id, load,activeStep, search]);
 
     const changeOrder = async () => {
         try {
@@ -143,24 +190,18 @@ export default function Order() {
                             fullWidth
                         />
                     </Grid>
-                    <Grid item xs={12} md={5}>
-                        <Autocomplete
-                            sx={{mt: 2, mr: 2}}
-                            freeSolo
-                            value={trangthai}
-                            onChange={(event, newValue) => {
-                                setTrangthai(newValue);
-                            }}
-                            options={TrangThaiList?.map((option) => ({
-                                id: option.id,
-                                ten: option.ten,
-                            }))}
-                            renderInput={(params) => (
-                                <TextField label="Trạng thái" {...params} />
-                            )}
-                            getOptionLabel={(option) => option.ten || ''}
-                        />
-
+                    <Grid item xs={12}>
+                        <Stack direction='row' justifyContent='center'>
+                            <Stepper nonLinear activeStep={activeStep} sx={{m: 2}}>
+                                {steps.map((label, index) => (
+                                    <Step key={label} completed={completed[index]}>
+                                        <StepButton color="inherit" onClick={handleStep(index)}>
+                                            {label}
+                                        </StepButton>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Stack>
                     </Grid>
                 </Grid>
 

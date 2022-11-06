@@ -116,7 +116,7 @@ export default function ProductList({products}) {
                 <TableBody>
                     {products.map((product) => {
                         const {
-                            sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_soluong, ctpn_soluong, sp_giakhuyenmai
+                            sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_soluong, ctpn_soluong, sp_giakhuyenmai, gia_ban, gb_soluong
                         } = product;
 
                         const isItemSelected = selected.indexOf(sp_id) !== -1;
@@ -151,17 +151,17 @@ export default function ProductList({products}) {
                                         color: 'text.disabled', textDecoration: 'line-through'
                                     }}
                                 >
-                                    {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                                    {!!sp_giakhuyenmai && fCurrency(gia_ban)}
                                 </Typography>
                                 <Typography>
-                                    {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                                    {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                                 </Typography>
                             </TableCell>
 
                             <TableCell align="left">
                                 <Incrementer
                                     quantity={sp_soluong}
-                                    available={ctpn_soluong}
+                                    available={gb_soluong}
                                     onDecrease={() => {
                                         dispatch(setQuantity({
                                             id_sp: sp_id, so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
@@ -182,7 +182,7 @@ export default function ProductList({products}) {
                             </TableCell>
 
                             <TableCell
-                                align="right">{fCurrency((sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia) * sp_soluong)}</TableCell>
+                                align="right">{fCurrency((sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban) * sp_soluong)}</TableCell>
 
                             <TableCell align="right">
                                 <MIconButton onClick={() => dispatch(removeFromCart(sp_id))}>

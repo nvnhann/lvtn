@@ -95,7 +95,9 @@ export default function ProductDetailsSumary(props) {
         ncc_ten,
         tg_ten,
         nn_ten,
-        ctpn_soluong
+        ctpn_soluong,
+        gb_soluong,
+        gia_ban
     } = product;
     const CartItemQuantity = cartItem.filter(e => e.id_sp === sp_id)[0];
 
@@ -116,10 +118,10 @@ export default function ProductDetailsSumary(props) {
 
 
     const {values, touched, errors, handleSubmit} = formik;
-    const isMaxQuantity = values.quantity >= ctpn_soluong;
+    const isMaxQuantity = values.quantity >= gb_soluong;
 
     const handleAddCart = () => {
-        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > ctpn_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
+        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > gb_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
             variant: 'error',
             action: (key) => (
                 <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -130,7 +132,7 @@ export default function ProductDetailsSumary(props) {
         dispatch(addToCart({
             id_sp: sp_id,
             so_luong: values.quantity,
-            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
         }));
     };
 
@@ -151,10 +153,10 @@ export default function ProductDetailsSumary(props) {
                                 textDecoration: 'line-through'
                             }}
                         >
-                            {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                            {!!sp_giakhuyenmai && fCurrency(gia_ban)}
                         </Typography>
                         &nbsp;
-                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                     </Typography>
 
                     <Divider sx={{borderStyle: 'dashed'}}/>
@@ -219,7 +221,7 @@ export default function ProductDetailsSumary(props) {
                                 Số lượng
                             </Typography>
                             <div>
-                                <Incrementer name="quantity" available={ctpn_soluong}/>
+                                <Incrementer name="quantity" available={gb_soluong}/>
                                 <Typography
                                     variant="caption"
                                     sx={{
@@ -229,7 +231,7 @@ export default function ProductDetailsSumary(props) {
                                         color: 'text.secondary'
                                     }}
                                 >
-                                    Có sẵn: {ctpn_soluong}
+                                    Có sẵn: {gb_soluong}
                                 </Typography>
 
                                 <FormHelperText error>{touched.soluong && errors.soluong}</FormHelperText>
@@ -257,7 +259,7 @@ export default function ProductDetailsSumary(props) {
                             dispatch(checkoutOneProduct({
                                 id_sp: sp_id,
                                 so_luong: values.quantity,
-                                sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+                                sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
                             }));
                             dispatch(onGotoStep(1));
                             handleAddCart();

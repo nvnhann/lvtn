@@ -28,23 +28,19 @@ export default function CheckoutCart() {
     const totalPrice = useSelector(cartItemTotal);
 
     const isEmptyCart = cart.length === 0;
-
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         (async () => {
             if (cart.length === 0) return;
             const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
-            cart.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].ctpn_soluong ? _products.data[idx].ctpn_soluong : e.so_luong)
+            cart.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].gb_soluong ? _products.data[idx].gb_soluong : e.so_luong)
             setProducts(_products.data);
         })()
     }, [totalItems, cart]);
 
     const handleNextStep = () => {
         dispatch(onNextStep());
-    };
-
-    const handleApplyDiscount = (value) => {
     };
 
     const formik = useFormik({
@@ -100,7 +96,6 @@ export default function CheckoutCart() {
                             total={totalPrice >= 500000 ? totalPrice : totalPrice + 30000}
                             enableDiscount
                             subtotal={totalPrice}
-                            onApplyDiscount={handleApplyDiscount}
                             shipping={totalPrice >= 500000 ? 0 : 30000}
                         />
                         <Button fullWidth size="large" type="submit" variant="contained"

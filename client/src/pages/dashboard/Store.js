@@ -1,7 +1,7 @@
 import Page from "../../components/Page";
 import {Button, Card, Container, Grid, Stack, TextField, Typography} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import * as Yup from 'yup';
 import {Form, FormikProvider, useFormik} from "formik";
 import {MIconButton} from "../../components/@material-extend";
@@ -11,22 +11,14 @@ import {useSnackbar} from "notistack5";
 import {putData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
 import {getStore} from "../../redux/slices/store";
-import {UploadMultiFile} from "../../components/upload";
-import {styled} from "@material-ui/core/styles";
 
-const LabelStyle = styled(Typography)(({theme}) => ({
-    ...theme.typography.subtitle2,
-    color: theme.palette.text.secondary,
-    marginBottom: theme.spacing(1),
-}));
-
+//----------------------------------------------------------------------------------
 export default function Store() {
     const store = useSelector(state => state.store.store);
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [isEdit, setEdit] = useState(false);
     const Schema = Yup.object().shape({
-        banner: Yup.array(),
         ch_ten: Yup.string().required('Vui lòng nhập tên cửa hàng'),
         ch_sdt: Yup.string().required('Vui lòng nhập số điện thoại'),
         ch_email: Yup.string().required('Vui lòng nhập email'),
@@ -42,7 +34,6 @@ export default function Store() {
             ch_email: store.ch_email,
             ch_diachi: store.ch_diachi,
             ch_loinhuanbanhang: store.ch_loinhuanbanhang,
-            banner: []
         },
         validationSchema: Schema,
         onSubmit: async values => {
@@ -62,13 +53,7 @@ export default function Store() {
                 }
                 // console.log(values)
 
-               await putData(API_BASE_URL + `/store/${store.id}`, {
-                   ch_ten: values.ch_ten,
-                   ch_sdt: values.ch_sdt,
-                   ch_email: values.ch_email,
-                   ch_diachi: values.ch_diachi,
-                   ch_loinhuanbanhang: values.ch_loinhuanbanhang,
-               });
+                await putData(API_BASE_URL + `/store/${store.id}`, formDt);
                 dispatch(getStore());
                 setEdit(false);
                 enqueueSnackbar('Cập nhật thành công!', {
@@ -85,30 +70,8 @@ export default function Store() {
         }
     });
 
-    const {handleSubmit, getFieldProps, touched, errors, values, setFieldValue} = formik;
+    const {handleSubmit, getFieldProps, touched, errors} = formik;
 
-    const handleDrop = useCallback(
-        (acceptedFiles) => {
-            setFieldValue(
-                'banner',
-                acceptedFiles.map((file) =>
-                    Object.assign(file, {
-                        preview: URL.createObjectURL(file),
-                    }),
-                ),
-            );
-        },
-        [setFieldValue],
-    );
-
-    const handleRemoveAll = () => {
-        setFieldValue('banner', []);
-    };
-
-    const handleRemove = (file) => {
-        const filteredItems = values.banner.filter((_file) => _file !== file);
-        setFieldValue('banner', filteredItems);
-    };
     return <>
         <Page title="Store | HYPE">
             <Container>
@@ -116,7 +79,7 @@ export default function Store() {
                 <FormikProvider value={formik}>
                     <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={4}>
+                            <Grid item xs={6}>
                                 <Card sx={{padding: 4}}>
 
                                     <Stack direction="row" justifyContent="space-between">
@@ -160,7 +123,9 @@ export default function Store() {
                                         </Button>}
                                     </Stack>
                                 </Card>
+                            </Grid>
 
+                            <Grid item xs={6}>
                                 {isEdit && <Card sx={{p: 4, mt: 2}}>
 
                                     <TextField
@@ -220,23 +185,6 @@ export default function Store() {
                                     </Stack>
 
                                 </Card>}
-                            </Grid>
-
-                            <Grid item xs={8}>
-                                <LabelStyle>Banner</LabelStyle>
-                                <UploadMultiFile
-                                    showPreview
-                                    maxSize={3145728}
-                                    accept="image/*"
-                                    files={values.banner}
-                                    onDrop={handleDrop}
-                                    onRemove={handleRemove}
-                                    onRemoveAll={handleRemoveAll}
-                                    error={Boolean(touched.banner && errors.banner)}
-                                />
-                                <Stack direction='row' justifyContent='end'>
-                                    <Button sx={{mt: 2}} variant='contained' type='submit'>Lưu</Button>
-                                </Stack>
                             </Grid>
 
 

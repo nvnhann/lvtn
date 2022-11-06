@@ -12,6 +12,7 @@ import UserNewForm from "../../components/_dashboard/user/UserNewForm";
 import ChangePasswordForm from "../../components/authentication/change-password/ChangePasswordForm";
 import Order from "./Order";
 import OrderShipping from "./OrderShipping";
+import Comment from "./Comment";
 //----------------------------------------------------------------------------------------------
 const RootStyle = styled(Page)(({theme}) => ({
     paddingTop: theme.spacing(8),
@@ -59,6 +60,10 @@ export default function Profile() {
         value: 'Đơn hàng',
         icon: <Icon icon="icon-park-outline:transaction-order" width={20} height={20}/>,
         component: <Order/>
+    },{
+        value: 'Đánh giá sản phẩm',
+        icon: <Icon icon="ic:round-rate-review" width={20} height={20} />,
+        component: <Comment />
     }];
 
     if (isShipper) PROFILE_TABS.push({

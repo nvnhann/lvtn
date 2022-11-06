@@ -35,7 +35,7 @@ ProductCard.propTypes = {
 };
 
 export default function ProductCard({product}) {
-    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id, ctpn_soluong} = product;
+    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id, ctpn_soluong, gia_ban, gb_soluong} = product;
     const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
@@ -79,14 +79,14 @@ export default function ProductCard({product}) {
                                 textDecoration: 'line-through'
                             }}
                         >
-                            {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                            {!!sp_giakhuyenmai && fCurrency(gia_ban)}
                         </Typography>
                         &nbsp;
-                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                        {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                     </Typography>
                     <IconButton onClick={() => {
                         
-                        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > ctpn_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
+                        if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > gb_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
                             variant: 'error',
                             action: (key) => (
                                 <MIconButton size="small" onClick={() => closeSnackbar(key)}>
@@ -98,7 +98,7 @@ export default function ProductCard({product}) {
                         dispatch(addToCart({
                             id_sp: sp_id,
                             so_luong: 1,
-                            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : ctpn_gia
+                            sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
                         }));
 
                         enqueueSnackbar('Đã thêm sách vào giỏ hàng!', {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 05, 2022 at 02:58 AM
+-- Generation Time: Nov 06, 2022 at 08:23 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -43,6 +43,17 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `banner`
+--
+
+CREATE TABLE `banner` (
+  `id` int(11) NOT NULL,
+  `b_hinh` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `binh_luan`
 --
 
@@ -51,9 +62,9 @@ CREATE TABLE `binh_luan` (
   `bl_noidung` text NOT NULL,
   `bl_danhgia` int(11) DEFAULT NULL,
   `bl_thoigian` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `bl_trangthai` int(11) DEFAULT NULL,
-  `kh_id` int(11) NOT NULL,
-  `sp_id` int(11) NOT NULL
+  `bl_trangthai` tinyint(1) DEFAULT 1,
+  `bl_idkh` int(11) NOT NULL,
+  `bl_idsp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -70,34 +81,6 @@ CREATE TABLE `chi_tiet_hoa_don` (
   `cthd_giakm` float DEFAULT NULL,
   `cthd_soluong` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `chi_tiet_hoa_don`
---
-
-INSERT INTO `chi_tiet_hoa_don` (`cthd_id`, `cthd_giaban`, `cthd_idhd`, `cthd_idsp`, `cthd_giakm`, `cthd_soluong`) VALUES
-(10, 64000, 6, 23, 57600, 1),
-(11, 85000, 6, 35, 76500, 1),
-(12, 78000, 6, 36, 70200, 1),
-(13, 80000, 6, 37, 72000, 1),
-(14, 45000, 6, 39, 40500, 1),
-(15, 64000, 7, 23, 57600, 1),
-(16, 85000, 7, 35, 76500, 1),
-(17, 78000, 7, 36, 70200, 1),
-(18, 80000, 7, 37, 72000, 1),
-(19, 45000, 7, 39, 40500, 1),
-(20, 65000, 8, 28, NULL, 2),
-(21, 65000, 9, 28, NULL, 2),
-(22, 65000, 10, 28, NULL, 2),
-(23, 78000, 14, 36, 0, 2),
-(24, 80000, 14, 37, 0, 2),
-(25, 45000, 15, 39, 0, 1),
-(26, 50000, 15, 40, 0, 1),
-(27, 80000, 16, 37, 0, 2),
-(28, 45000, 16, 39, 0, 1),
-(29, 78000, 17, 36, 0, 2),
-(30, 50000, 17, 40, 0, 1),
-(31, 50000, 18, 25, NULL, 10);
 
 -- --------------------------------------------------------
 
@@ -485,6 +468,315 @@ INSERT INTO `dia_chi` (`dc_id`, `dc_tenkh`, `dc_sdt`, `dc_diachi`, `dc_email`, `
 (7, 'Nguyen Van A', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 0, 0),
 (8, 'Nguyen Van Nhan', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 0, 1),
 (9, 'Nguyen van a', '0794351150', 'Can Tho', 'nvnhan.dev@gmail.com', 111, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gia_ban`
+--
+
+CREATE TABLE `gia_ban` (
+  `gb_id` int(11) NOT NULL,
+  `gb_idsp` int(11) DEFAULT NULL,
+  `gb_gia` float DEFAULT NULL,
+  `gb_soluong` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `gia_ban`
+--
+
+INSERT INTO `gia_ban` (`gb_id`, `gb_idsp`, `gb_gia`, `gb_soluong`) VALUES
+(1, 21, 77000, 25),
+(2, 22, 110000, 50),
+(3, 23, 64000, 19),
+(4, 24, 60000, 25),
+(5, 25, 50000, 10),
+(6, 26, 45000, 25),
+(7, 27, 55000, 25),
+(8, 28, 65000, 50),
+(9, 29, 62000, 60),
+(10, 30, 42000, 20),
+(11, 31, 33000, 100),
+(12, 32, 35000, 10),
+(13, 33, 75000, 50),
+(14, 34, 55000, 50),
+(15, 35, 85000, 29),
+(16, 36, 78000, 120),
+(17, 37, 80000, 40),
+(18, 38, 85000, 100),
+(19, 39, 45000, 30),
+(20, 40, 50000, 40),
+(21, 41, 45000, 20),
+(22, 42, 62000, 30),
+(23, 43, 25000, 10),
+(24, 44, 68000, 30),
+(25, 45, 66000, 50),
+(26, 46, 56000, 100),
+(27, 47, 36000, 100),
+(28, 48, 86000, 100),
+(29, 49, 75000, 50),
+(30, 50, 55000, 50),
+(31, 51, 45000, 100),
+(32, 52, 55000, 100),
+(33, 53, 65000, 50),
+(34, 54, 72000, 50),
+(35, 55, 78000, 60),
+(36, 56, 60000, 50),
+(37, 57, 30000, 70),
+(38, 58, 39000, 80),
+(39, 59, 44000, 100),
+(40, 60, 69000, 100),
+(41, 61, 30000, 25),
+(42, 62, 40000, 50),
+(43, 63, 40000, 50),
+(44, 64, 40000, 50),
+(45, 65, 40000, 50),
+(46, 66, 80000, 100),
+(47, 67, 20000, 100),
+(48, 68, 36000, 90),
+(49, 69, 66000, 150),
+(50, 70, 0, NULL),
+(51, 71, 26000, 35),
+(52, 72, 76000, 80),
+(53, 73, 48000, 40),
+(54, 74, 29000, 50),
+(55, 75, 79000, 100),
+(56, 76, 59000, 100),
+(57, 77, 69000, 200),
+(58, 78, 39000, 20),
+(59, 79, 50000, 50),
+(60, 80, 35000, 30),
+(61, 81, 85000, 60),
+(62, 82, 32000, 30),
+(63, 83, 38000, 40),
+(64, 84, 18000, 20),
+(65, 85, 58000, 60),
+(66, 86, 80000, 65),
+(67, 87, 52000, 40),
+(68, 88, 65000, 50),
+(69, 89, 75000, 50),
+(70, 90, 35000, 10),
+(71, 91, 46000, 60),
+(72, 92, 36000, 40),
+(73, 93, 77000, 50),
+(74, 94, 47000, 20),
+(75, 95, 55000, 50),
+(76, 96, 65000, 50),
+(77, 97, 35000, 30),
+(78, 98, 55000, 60),
+(79, 99, 45000, 50),
+(80, 100, 37000, 30),
+(81, 101, 58000, 40),
+(82, 102, 36000, 30),
+(83, 103, 77000, 50),
+(84, 104, 38000, 20),
+(85, 105, 32000, 40),
+(86, 106, 45000, 50),
+(87, 107, 55000, 40),
+(88, 108, 35000, 40),
+(89, 109, 35000, 40),
+(90, 110, 35000, 40),
+(91, 111, 35000, 40),
+(92, 112, 82000, 40),
+(93, 113, 62000, 30),
+(94, 114, 30000, 30),
+(95, 115, 90000, 30),
+(96, 116, NULL, NULL),
+(97, 117, NULL, NULL),
+(98, 118, 40000, 30),
+(99, 119, 120000, 30),
+(100, 120, 60000, 30),
+(101, 121, 63000, 30),
+(102, 122, 55000, 30),
+(103, 123, 65000, 50),
+(104, 124, 78000, 50),
+(105, 125, 46000, 50),
+(106, 126, 71000, 50),
+(107, 127, 180000, 50),
+(108, 128, 84000, 50),
+(109, 129, 54000, 30),
+(110, 130, 35000, 40),
+(111, 131, 25000, 40),
+(112, 132, 65000, 40),
+(113, 133, 55000, 40),
+(114, 134, 65000, 40),
+(115, 135, 65000, 40),
+(116, 136, 34000, 20),
+(117, 137, 75000, 40),
+(118, 138, 65000, 40),
+(119, 139, 65000, 40),
+(120, 140, 43000, 50),
+(121, 141, 35000, 50),
+(122, 142, 75000, 50),
+(123, 143, 35000, 70),
+(124, 144, 75000, 80),
+(125, 145, 35000, 30),
+(126, 146, 55000, 20),
+(127, 147, 85000, 70),
+(128, 148, 25000, 200),
+(129, 149, 35000, 100),
+(130, 150, 75000, 60),
+(131, 151, 40000, 50),
+(132, 152, 90000, 50),
+(133, 153, 100000, 40),
+(134, 154, 60000, 70),
+(135, 155, 80000, 70),
+(136, 156, 60000, 100),
+(137, 157, 120000, 50),
+(138, 158, 77000, 50),
+(139, 159, 67000, 50),
+(140, 160, 56000, 50),
+(141, 161, 75000, 50),
+(142, 162, 75000, 50),
+(143, 163, 75000, 50),
+(144, 164, 75000, 50),
+(145, 165, 75000, 50),
+(146, 166, 75000, 50),
+(147, 167, 75000, 50),
+(148, 168, 75000, 50),
+(149, 169, 75000, 50),
+(150, 170, 75000, 50),
+(151, 171, 55000, 50),
+(152, 172, 59000, 50),
+(153, 173, 49000, 50),
+(154, 174, 129000, 50),
+(155, 175, 149000, 50),
+(156, 176, 69000, 50),
+(157, 177, 49000, 50),
+(158, 178, 45000, 60),
+(159, 179, 75000, 60),
+(160, 180, 95000, 80),
+(161, 181, 135000, 50),
+(162, 182, 65000, 50),
+(163, 183, 200000, 50),
+(164, 184, 122000, 140),
+(165, 185, 142000, 100),
+(166, 186, 76000, 70),
+(167, 187, 130000, 150),
+(168, 188, 100000, 100),
+(169, 189, 120000, 100),
+(170, 190, 80000, 80),
+(171, 191, 90000, 80),
+(172, 192, 60000, 80),
+(173, 193, 70000, 50),
+(174, 194, 95000, 100),
+(175, 195, 65000, 100),
+(176, 196, 75000, 50),
+(177, 197, 55000, 30),
+(178, 198, 63000, 40),
+(179, 199, 68000, 100),
+(180, 200, 60000, 100),
+(181, 201, 65000, 300),
+(182, 202, 45000, 200),
+(183, 203, 75000, 80),
+(184, 204, 55000, 150),
+(185, 205, 65000, 50),
+(186, 206, 45000, 50),
+(187, 207, 78000, 120),
+(188, 208, 68000, 250),
+(189, 209, 60000, 150),
+(190, 210, 40000, 100),
+(191, 211, 64000, 400),
+(192, 212, 67000, 100),
+(193, 213, 52000, 140),
+(194, 214, 84000, 100),
+(195, 215, 88000, 100),
+(196, 216, 46000, 40),
+(197, 217, 70000, 50),
+(198, 218, 37000, 200),
+(199, 219, 77000, 100),
+(200, 220, 72000, 100),
+(201, 221, 45000, 200),
+(202, 222, 65000, 100),
+(203, 223, 60000, 100),
+(204, 224, 40000, 100),
+(205, 225, 60000, 60),
+(206, 226, 54000, 60),
+(207, 227, 45000, 50),
+(208, 228, 75000, 40),
+(209, 229, 65000, 40),
+(210, 230, 58000, 40),
+(211, 231, 158000, 100),
+(212, 232, 89000, 90),
+(213, 233, 99000, 100),
+(214, 234, 129000, 200),
+(215, 235, 89000, 100),
+(216, 236, 88000, 80),
+(217, 237, 80000, 300),
+(218, 238, 150000, 80),
+(219, 239, 95000, 150),
+(220, 240, 75000, 100),
+(221, 241, 65000, 70),
+(222, 242, 75000, 110),
+(223, 243, 55000, 100),
+(224, 244, 50000, 400),
+(225, 245, 60000, 100),
+(226, 246, 70000, 200),
+(227, 247, 65000, 100),
+(228, 248, 53000, 15),
+(229, 249, 57000, 150),
+(230, 250, 50000, 100),
+(231, 251, 40000, 100),
+(232, 252, 45000, 100),
+(233, 253, 75000, 100),
+(234, 254, 55000, 50),
+(235, 255, 75000, 50),
+(236, 256, 44000, 50),
+(237, 257, 64000, 200),
+(238, 258, 40000, 100),
+(239, 259, 60000, 100),
+(240, 260, 50000, 100),
+(241, 261, 35000, 100),
+(242, 262, 65000, 100),
+(243, 263, 35000, 50),
+(244, 264, 55000, 50),
+(245, 265, 85000, 60),
+(246, 266, 65000, 50),
+(247, 267, 35000, 50),
+(248, 268, 77000, 100),
+(249, 269, 47000, 100),
+(250, 270, 36000, 60),
+(251, 271, 40000, 100),
+(252, 272, 60000, 45),
+(253, 273, NULL, NULL),
+(254, 274, 80000, 40),
+(255, 275, 60000, 50),
+(256, 276, 65000, 30),
+(257, 277, 57000, 100),
+(258, 278, 74000, 100),
+(259, 279, 60000, 50),
+(260, 280, 40000, 60),
+(261, 281, 70000, 60),
+(262, 282, 20000, 40),
+(263, 283, 40000, 40),
+(264, 284, 40000, 40),
+(265, 285, 45000, 50),
+(266, 286, 25000, 50),
+(267, 287, 55000, 50),
+(268, 288, 45000, 100),
+(269, 289, 40000, 100),
+(270, 290, 70000, 100),
+(271, 291, 50000, 100),
+(272, 292, 60000, 50),
+(273, 293, 70000, 100),
+(274, 294, 58000, 100),
+(275, 295, 76000, 100),
+(276, 296, 46000, 300),
+(277, 297, 63000, 100),
+(278, 298, 65000, 100),
+(279, 299, 25000, 200),
+(280, 300, 35000, 200),
+(281, 301, 35000, 100),
+(282, 302, 85000, 100),
+(283, 303, 45000, 100),
+(284, 304, 35000, 100),
+(285, 305, 35000, 100),
+(286, 306, 35000, 100),
+(287, 307, 35000, 100),
+(288, 308, 40000, 100),
+(289, 309, 50000, 100),
+(290, 310, 60000, 50);
 
 -- --------------------------------------------------------
 
@@ -1199,21 +1491,6 @@ CREATE TABLE `hoa_don` (
   `hd_idnv` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `hoa_don`
---
-
-INSERT INTO `hoa_don` (`hd_id`, `hd_tenkh`, `hd_diachi`, `hd_sdt`, `hd_email`, `hd_tongtien`, `hd_ngaytao`, `hd_tienvc`, `hd_hinhthucthanhtoan`, `hd_idkh`, `hd_idnv`) VALUES
-(7, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 316800, '2022-10-21 06:53:59', 0, 'online', 111, 115),
-(8, 'Nguyen van a', 'Can Tho', '0794351150', 'nvnhan.dev@gmail.com', 130000, '2022-10-21 09:51:20', 0, 'online', 111, 115),
-(9, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 130000, '2022-10-24 06:25:39', 30000, 'offline', 111, 115),
-(10, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 130000, '2022-10-24 06:25:45', 30000, 'offline', 111, 115),
-(14, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 316000, '2022-10-26 04:19:04', 30000, 'offline', 111, NULL),
-(15, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 95000, '2022-10-26 04:20:28', 30000, 'offline', 111, NULL),
-(16, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 205000, '2022-10-26 04:21:06', 30000, 'offline', 111, NULL),
-(17, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 206000, '2022-10-26 04:21:59', 30000, 'offline', 111, NULL),
-(18, 'Nguyễn Văn Nhẫn', '55 cách mạng tháng tám, cái khế, ninh kiều cần thơ', '0794351150', 'nvnhan.dev@gmail.com', 500000, '2022-10-27 07:10:50', 0, 'offline', 111, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -1253,7 +1530,7 @@ CREATE TABLE `khuyen_mai` (
 --
 
 INSERT INTO `khuyen_mai` (`km_id`, `km_phantramgiam`, `km_ngaybatdau`, `km_ngayketthuc`, `km_idsp`, `active`) VALUES
-(255, 10, NULL, '2022-10-25', 23, 1),
+(255, 10, NULL, '2022-11-29', 23, 1),
 (256, 10, NULL, '2022-10-25', 35, 1),
 (257, 10, NULL, '2022-10-25', 36, 1),
 (258, 10, NULL, '2022-10-25', 37, 1),
@@ -1800,6 +2077,39 @@ INSERT INTO `san_pham` (`sp_id`, `sp_masp`, `sp_ten`, `sp_mota`, `active`, `sp_c
 (309, '8936071674753', 'Bách Khoa Khủng Long Toàn Tập', '<p class=\"ql-align-justify\">Bách Khoa Khủng Long Toàn Tập</p><p class=\"ql-align-justify\">Đây là cuốn sách không thể thiếu dành cho những người yêu khủng long – một tài liệu hướng dẫn nhận diện 355 loài khủng long và động vật cùng thời, do chuyên gia chấp bút, và được minh họa theo kiến thức khoa học mới nhất.</p><p class=\"ql-align-justify\">Phần giới thiệu tổng quan giải thích quá trình biến đổi về địa lí của Trái Đất và sự phát triển của động, thực vật trên thế giới, đặc biệt tập trung vào Thời đại Khủng long, cách đây 245 triệu năm. Phần này còn giải thích cách phân loại khủng long và trình bày quá trình phát triển của chúng từ những động vật ăn thịt nhỏ nhất có kích thước bằng con cáo đến những con khủng long to lớn nhất với khối lượng khổng lồ và nhiều loại vũ khí phức tạp trên cơ thể.</p><p class=\"ql-align-justify\">Các tranh giải phẫu minh họa bộ xương và cấu tạo trong của những nhóm khủng long khác nhau và giải thích cơ cấu hoạt động của chúng trong môi trường. Một bài phân tích hóa thạch đưa ra các giả thuyết về thức ăn của khủng long, các dấu chân hóa thạch giải thích về đời sống xã hội của chúng, và việc phát hiện trứng khủng long cung cấp thêm hiểu biết về việc khủng long hình thành bầy đàn như thế nào. Sách còn mô tả các sinh cảnh khác nhau nơi khủng long từng sinh sống, từ hoang mạc đền đầm phá, sông hồ, đầm lầy, núi cao và đồng bằng.</p><p class=\"ql-align-justify\">Phần chính của cuốn sách là một bách khoa thư về 355 loài khủng long và động vật thời tiền sử, được sắp xếp theo từng kỷ địa chất và các nhóm phân loại chính, với 900 minh họa, bản đồ, biểu đồ và ảnh chụp. Mỗi mục bao gồm phần mô tả đặc điểm nhận dạng chính của con vật, các yếu tố thích nghi hình thành nhờ tiến hóa và thông tin về bằng chứng hóa thạch của nó. Bên cạnh đó là một bản đồ thể hiện nơi tìm thấy hóa thạch trên thế giới ngày nay, và bảng thông tin tóm lược gồm vị trí phân loại, kích thước, thời kì và phương thức sống của con vật đó.</p><p class=\"ql-align-justify\">Cuốn sách này, với sự kết hợp độc đáo giữa nghiên cứu chuyên môn với hình ảnh phục dựng đẹp mắt, hẳn sẽ là nguồn hứng thú vô tận cho những người yêu thích khủng long. Sách dày 256 trang, khổ lớn, in màu toàn bộ, bìa cứng, có bìa áo.</p><p class=\"ql-align-justify\"><strong><em>Thông tin tác giả:</em></strong></p><p class=\"ql-align-justify\">Dougal Dixon sinh tại Scotland, là cây bút chuyên viết sách trong các lĩnh vực khoa học về Trái Đất, đã cho ra đời nhiều cuốn sách và bách khoa thư cho trẻ em, và có niềm hứng thú đặc biệt với khủng long. Ông cũng xuất hiện trong một số chương trình truyền hình và đảm nhiệm vai trò cố vấn và tạo hình ảnh động cho một video về khủng long. Năm 1987, Dougal Dixon có đóng góp cho việc khai quật một khu vực giàu hóa thạch khủng long trong đá tuổi Jura ở Durlston thuộc vùng bờ biển Dorset, Anh. Năm 2004, ông tham gia khai quật một con Stegosaurus tại Montana, Mỹ.</p><p class=\"ql-align-justify\">Dougal được trao tặng Giải thưởng Thành tựu nổi bật cho sự xuất sắc trong lĩnh vực Báo chí giáo dục của Hiệp hội Báo chí Giáo dục Mỹ năm 1993, Giải thưởng Helen Roney Sattler năm 1993, Giải thưởng Sách khoa học phổ thông xuất sắc của Hội đồng Sách thiếu nhi 1994, và Giải thưởng Sách giáo khoa bậc Tiểu học của tạp chí Times Educational Supplement năm 1996. Cùng năm đó, ông được bổ nhiệm làm ủy viên Hội Khủng long, Vương quốc Liên hiệp Anh và Bắc Ireland.</p><p><br></p>', 1, 30, 23, 32, 4, 156, 262),
 (310, '8935212348867', 'Science Encyclopedia - Bách Khoa Thư Về Khoa Học- Trái Đất Và Vũ Trụ', '<p class=\"ql-align-justify\">Các bạn hãy khám phá Trái Đất - nơi có những đại dương mênh mông, những lục địa đang chuyển động, sự tồn tại của các sinh vật sống và vũ trụ - khoảng không gian vô cùng tận ẩn chứa bao điều bí mật ở trong cuốn sách tuyệt vời này nhé! Những hình ảnh, bản đồ, sơ đồ được minh họa sống động, trực quan chắc chắn sẽ thu hút trí tưởng tượng phong phú của các bạn. Không chỉ vậy, cuốn sách còn là tài liệu ôn tập hữu ích với:</p><p class=\"ql-align-justify\">- Nhiều thí nghiệm, trò chơi và hoạt động được thiết kế để giúp cho việc tiếp cận kiến thức trở nên dễ dàng hơn.</p><p class=\"ql-align-justify\">- Một bảng thuật ngữ khoa học đi kèm định nghĩa đầy đủ và dễ hiểu, cùng một bảng chú dẫn toàn diện.</p><p class=\"ql-align-justify\">- Hàng trăm website đã qua lựa chọn và kiểm duyệt.</p><p class=\"ql-align-justify\">- Rất nhiều tranh ảnh có thể tải về miễn phí để sử dụng trong quá trình học tập.</p><p class=\"ql-align-justify\">Đây chính là cuốn sách bách khoa tra cứu thuận tiện và dễ dàng ghi nhớ dành cho những bộ óc mê khám phá!</p><p><br></p>', 1, 28, 21, 32, 4, 1, 40);
 
+--
+-- Triggers `san_pham`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_giaban` AFTER INSERT ON `san_pham` FOR EACH ROW BEGIN
+	INSERT into gia_ban(gb_idsp, gb_gia) VALUES(NEW.sp_id, 0);
+	UPDATE gia_ban SET gb_gia = (SELECT DISTINCT c.ctpn_gia FROM chi_tiet_phieu_nhap c 
+	LEFT JOIN san_pham s ON c.ctpn_idsp = s.sp_id LEFT JOIN phieu_nhap p on c.ctpn_idpn = p.pn_id,
+		( SELECT MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
+			FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
+													GROUP BY  ctpn.ctpn_idsp) date_min
+			WHERE s.sp_id = NEW.sp_id 
+			and c.ctpn_soluong > 0 
+			and p.pn_ngaylapphieu = date_min.ngay_lap_phieu) 
+	WHERE gia_ban.gb_idsp = NEW.sp_id;
+END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `setSalePrice` AFTER UPDATE ON `san_pham` FOR EACH ROW BEGIN
+	UPDATE gia_ban SET gb_gia = (SELECT DISTINCT c.ctpn_gia FROM chi_tiet_phieu_nhap c 
+	LEFT JOIN san_pham s ON c.ctpn_idsp = s.sp_id LEFT JOIN phieu_nhap p on c.ctpn_idpn = p.pn_id,
+		( SELECT MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
+			FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
+													GROUP BY  ctpn.ctpn_idsp) date_min
+			WHERE s.sp_id = OLD.sp_id 
+			and c.ctpn_soluong > 0 
+			and p.pn_ngaylapphieu = date_min.ngay_lap_phieu) 
+	WHERE gia_ban.gb_idsp = OLD.sp_id;
+END
+$$
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -2171,29 +2481,12 @@ CREATE TABLE `trang_thai` (
 --
 
 INSERT INTO `trang_thai` (`tt_id`, `tt_ngaycapnhat`, `tt_trangthai`, `tt_idnv`, `tt_idhd`, `tt_note`) VALUES
-(2, '2022-10-25 03:44:51', 0, NULL, 7, NULL),
-(3, '2022-10-25 03:45:12', 0, NULL, 8, NULL),
-(4, '2022-10-25 03:45:15', 0, NULL, 9, NULL),
-(5, '2022-10-25 01:50:53', 0, NULL, 10, NULL),
-(6, '2022-10-25 03:46:36', 1, 111, 10, NULL),
-(7, '2022-10-25 03:46:42', 1, 111, 9, NULL),
-(8, '2022-10-25 03:46:58', 1, 111, 8, NULL),
-(9, '2022-10-25 03:47:06', 1, 111, 7, NULL),
-(10, '2022-10-25 03:47:42', 2, 115, 10, NULL),
-(11, '2022-10-25 03:47:45', 2, 115, 9, NULL),
-(12, '2022-10-25 03:47:47', 2, 115, 8, NULL),
-(13, '2022-10-25 03:47:55', 3, 115, 10, 'hoadon-1666669675956.jpg'),
-(14, '2022-10-25 03:48:02', 3, 115, 9, 'hoadon-1666669682681.jpg'),
-(15, '2022-10-25 03:48:10', 3, 115, 8, 'hoadon-1666669690235.jpg'),
-(16, '2022-10-26 04:05:25', 0, NULL, 11, NULL),
-(17, '2022-10-26 04:06:44', 0, NULL, 12, NULL),
-(18, '2022-10-26 04:17:09', 0, NULL, 13, NULL),
-(19, '2022-10-26 04:19:04', 0, NULL, 14, NULL),
-(20, '2022-10-26 04:20:28', 0, NULL, 15, NULL),
-(21, '2022-10-26 04:21:06', 0, NULL, 16, NULL),
-(22, '2022-10-26 04:21:59', 0, NULL, 17, NULL),
-(23, '2022-10-27 07:10:50', 0, NULL, 18, NULL),
-(24, '2022-10-27 07:22:20', 4, NULL, 18, NULL);
+(27, '2022-11-05 17:44:50', 0, NULL, 21, NULL),
+(31, '2022-11-05 17:56:27', 4, NULL, 21, NULL),
+(32, '2022-11-05 18:19:33', 0, NULL, 22, NULL),
+(33, '2022-11-06 05:36:07', 1, 111, 22, NULL),
+(34, '2022-11-06 05:38:12', 2, 115, 22, NULL),
+(35, '2022-11-06 05:52:41', 3, 115, 22, 'hoadon-1667713961810.jpg');
 
 -- --------------------------------------------------------
 
@@ -2234,6 +2527,12 @@ INSERT INTO `users` (`id`, `user_id`, `email`, `fullname`, `credential`, `phone`
 --
 
 --
+-- Indexes for table `banner`
+--
+ALTER TABLE `banner`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `binh_luan`
 --
 ALTER TABLE `binh_luan`
@@ -2268,6 +2567,12 @@ ALTER TABLE `danh_muc`
 --
 ALTER TABLE `dia_chi`
   ADD PRIMARY KEY (`dc_id`);
+
+--
+-- Indexes for table `gia_ban`
+--
+ALTER TABLE `gia_ban`
+  ADD PRIMARY KEY (`gb_id`);
 
 --
 -- Indexes for table `hinh_anh`
@@ -2364,16 +2669,22 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `banner`
+--
+ALTER TABLE `banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `binh_luan`
 --
 ALTER TABLE `binh_luan`
-  MODIFY `bl_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `bl_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `chi_tiet_hoa_don`
 --
 ALTER TABLE `chi_tiet_hoa_don`
-  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `cthd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `chi_tiet_phieu_nhap`
@@ -2400,6 +2711,12 @@ ALTER TABLE `dia_chi`
   MODIFY `dc_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `gia_ban`
+--
+ALTER TABLE `gia_ban`
+  MODIFY `gb_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=291;
+
+--
 -- AUTO_INCREMENT for table `hinh_anh`
 --
 ALTER TABLE `hinh_anh`
@@ -2409,7 +2726,7 @@ ALTER TABLE `hinh_anh`
 -- AUTO_INCREMENT for table `hoa_don`
 --
 ALTER TABLE `hoa_don`
-  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `hd_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `khach_hang`
@@ -2481,7 +2798,7 @@ ALTER TABLE `the_loai`
 -- AUTO_INCREMENT for table `trang_thai`
 --
 ALTER TABLE `trang_thai`
-  MODIFY `tt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `tt_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `users`

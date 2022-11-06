@@ -35,8 +35,10 @@ module.exports = function (app) {
         let _qr_status = "INSERT INTO trang_thai SET ?";
         await query(db, _qr_status, _trangthaihoadon);
         let _ctht = [];
+        let _giabn = [];
         product.map(e => _ctht.push([_hoadon.insertId, e.ctpn_gia, e.sp_giakhuyenmai, e.sp_soluong, e.sp_id]));
-        await query(db, `INSERT INTO chi_tiet_hoa_don (cthd_idhd, cthd_giaban, cthd_giakm, cthd_soluong, cthd_idsp) VALUES ?`, [_ctht])
+        await query(db, `INSERT INTO chi_tiet_hoa_don (cthd_idhd, cthd_giaban, cthd_giakm, cthd_soluong, cthd_idsp) VALUES ?`, [_ctht]);
+        await Promise.all(product.map(async e => await query(db, "UPDATE gia_ban SET gb_soluong = gb_soluong - ? WHERE gb_idsp = ?", [e.sp_soluong, e.sp_id])))
         return res.status(200).send("Thêm thành công hóa đơn!")
     });
 
@@ -61,8 +63,34 @@ module.exports = function (app) {
 
     app.get('/hoadonnv/:id', async (req, res) => {
         const {id} = req.params;
+        const {trangthai, search} = req.query;
 
-        let _hoadon = await query(db, "SELECT * FROM hoa_don WHERE hoa_don.hd_idnv = ? ORDER BY hd_id DESC", id);
+        let _qr = `SELECT * 
+                                        FROM hoa_don ,
+                                        (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                                                            FROM trang_thai
+                                                            GROUP BY tt_idhd) tt
+                                        WHERE hoa_don.hd_idnv = ? AND hoa_don.hd_id = tt.tt_idhd AND tt.num_tt = ${trangthai}
+                                        ORDER BY hd_id DESC`;
+        if(!!search){
+            _qr = `SELECT * 
+                    FROM hoa_don ,
+                    (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                                        FROM trang_thai
+                                        GROUP BY tt_idhd) tt
+                    WHERE hoa_don.hd_idnv = ? AND hoa_don.hd_id = tt.tt_idhd AND tt.num_tt = ${trangthai} AND (
+                          hoa_don.hd_id LIKE '%${search}%' OR
+                           hoa_don.hd_tenkh LIKE '%${search}%' OR
+                           hoa_don.hd_diachi LIKE '%${search}%' OR
+                           hoa_don.hd_sdt LIKE '%${search}%' OR 
+                           hoa_don.hd_email LIKE '%${search}%' OR
+                           hoa_don.hd_ngaytao LIKE '%${search}%' OR
+                           hoa_don.hd_hinhthucthanhtoan LIKE '%${search}%'
+                    )
+                    ORDER BY hd_id DESC`;
+        }
+
+        let _hoadon = await query(db, _qr, id);
 
         if (_hoadon.length) {
             let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
@@ -100,7 +128,7 @@ module.exports = function (app) {
                         tt.tt_idhd = hoa_don.hd_id AND 
                         tt.num_tt = ${trangthai}
                     ORDER BY hd_id DESC`;
-            if(!!search){
+            if (!!search) {
                 qr = `SELECT hoa_don.*
                     FROM hoa_don
                     LEFT JOIN trang_thai ON trang_thai.tt_idhd = hoa_don.hd_id
@@ -129,8 +157,8 @@ module.exports = function (app) {
                     GROUP BY hoa_don.hd_id
                     ORDER BY hd_id DESC`;
             }
-        } else{
-            if(!!search){
+        } else {
+            if (!!search) {
                 qr = `SELECT hoa_don.*
                     FROM hoa_don
                     LEFT JOIN chi_tiet_hoa_don ON chi_tiet_hoa_don.cthd_idhd = hoa_don.hd_id
@@ -193,6 +221,12 @@ module.exports = function (app) {
         data.tt_idhd = id;
 
         const _qr = "INSERT INTO trang_thai SET ?";
+
+        if(data.tt_trangthai === 4){
+            console.log('âa')
+            let _listSP = await query(db, "SELECT cthd_idsp, cthd_soluong FROM `chi_tiet_hoa_don` WHERE cthd_idhd = ?", id);
+           await Promise.all( _listSP.map(async e => await query(db, "UPDATE gia_ban SET gb_soluong = gb_soluong + ? WHERE gb_idsp = ?", [e.cthd_soluong, e.cthd_idsp])))
+        }
 
         await query(db, _qr, [data, id]);
         return res.status(200).send("Cap nhat thanh cong");

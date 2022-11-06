@@ -199,15 +199,20 @@ module.exports = function (app) {
         if (pageURL) {
             limit = limit * pageURL
         }
-        const qr_book = `SELECT sp.*, pn.*, ctpn.*,km.km_phantramgiam,(
+        const qr_book = `SELECT 
+            sp.*, 
+            pn.*, 
+            ctpn.*, 
+            gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban,km.km_phantramgiam, gb.gb_soluong,
+        (
             CASE 
-            WHEN km.active = 0 then 0
-            WHEN DATE(NOW()) < km.km_ngaybatdau then 0
-            WHEN DATE(NOW()) > km.km_ngayketthuc then 0
-                 ELSE ROUND((ctpn.ctpn_gia - ctpn.ctpn_gia * (km.km_phantramgiam / 100)),0)
+                WHEN km.active = 0 then 0
+                WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+                WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+            ELSE ROUND(((gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) - (gb.gb_gia + gb.gb_gia * \t\tch.ch_loinhuanbanhang / 100) * (km.km_phantramgiam / 100)),0)            
             END
         ) as sp_giakhuyenmai
-             FROM san_pham sp 
+             FROM  cua_hang ch, san_pham sp
                 LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
                 LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id
                 LEFT JOIN the_loai tl ON tl.tl_id = sp.sp_idtl
@@ -216,16 +221,15 @@ module.exports = function (app) {
                 LEFT JOIN nha_xuat_ban nxb ON nxb.nxb_id = sp.sp_idnxb
                 LEFT JOIN nha_cung_cap ncc ON ncc.ncc_id = pn.pn_idncc
                 LEFT JOIN ngon_ngu nn ON nn.nn_id = sp.sp_idnn
-                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id,
-                    ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
-                        FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
-                        GROUP BY  ctpn.ctpn_idsp) date_min
-                        WHERE 
-                            ctpn.ctpn_soluong > 0 AND 
-                            sp.sp_id = date_min.ctpn_idsp AND 
-                            pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND
-                            sp.active = 1 AND ncc.active = 1 AND nxb.active = 1 AND tg.active = 1 AND dm.active = 1 AND tl.active = 1
-                            LIMIT ?`;
+                LEFT JOIN gia_ban gb ON gb.gb_idsp = sp.sp_id
+                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id
+             WHERE 
+                sp.active = 1 AND 
+                ncc.active = 1 AND 
+                nxb.active = 1 AND 
+                tg.active = 1 AND 
+                dm.active = 1 AND 
+                tl.active = 1 LIMIT ?`;
         let _books = await query(db, qr_book, limit);
         await Promise.all(
             _books.map(async (book, idx) => {
@@ -302,7 +306,6 @@ module.exports = function (app) {
         } else if (!!type && type === 'Cũ nhất') {
             qr_book += ' ASC'
         }
-        console.log(qr_book)
         let _books = await query(db, qr_book);
         await Promise.all(
             _books.map(async (book, idx) => {
@@ -319,20 +322,26 @@ module.exports = function (app) {
 
     app.get('/api/books/:id', async (req, res) => {
         const {id} = req.params;
-        const {pageURL} = req.query;
-        let limit = 32;
-        if (pageURL) {
-            limit = limit * pageURL
-        }
-        const qr_book = `SELECT sp.*, pn.*, ctpn.*,km.km_phantramgiam,(
-            CASE 
-            WHEN km.active = 0 then 0
-            WHEN DATE(NOW()) < km.km_ngaybatdau then 0
-            WHEN DATE(NOW()) > km.km_ngayketthuc then 0
-                 ELSE ROUND((ctpn.ctpn_gia - ctpn.ctpn_gia * (km.km_phantramgiam / 100)),0)
-            END
-        ) as sp_giakhuyenmai, tl.*, tg.*, nxb.*, ncc.*, nn.*
-             FROM san_pham sp 
+        const qr_book = `
+            SELECT
+                sp.*, 
+                pn.*, 
+                ctpn.*, 
+                tl.*, 
+                tg.*, 
+                nxb.*, 
+                ncc.*, 
+                nn.*,
+                gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban,km.km_phantramgiam, gb.gb_soluong,
+                (
+                    CASE 
+                        WHEN km.active = 0 then 0
+                        WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+                        WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+                    ELSE ROUND(((gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) - (gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) * (km.km_phantramgiam / 100)),0)            
+                    END
+                ) as sp_giakhuyenmai
+             FROM  cua_hang ch, san_pham sp
                 LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
                 LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id
                 LEFT JOIN the_loai tl ON tl.tl_id = sp.sp_idtl
@@ -341,17 +350,17 @@ module.exports = function (app) {
                 LEFT JOIN nha_xuat_ban nxb ON nxb.nxb_id = sp.sp_idnxb
                 LEFT JOIN nha_cung_cap ncc ON ncc.ncc_id = pn.pn_idncc
                 LEFT JOIN ngon_ngu nn ON nn.nn_id = sp.sp_idnn
-                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id,
-                    ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
-                        FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
-                        GROUP BY  ctpn.ctpn_idsp) date_min
-                        WHERE 
-                            ctpn.ctpn_soluong > 0 AND 
-                            sp.sp_id = date_min.ctpn_idsp AND 
-                            pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND
-                            sp.active = 1 AND ncc.active = 1 AND nxb.active = 1 AND tg.active = 1 AND dm.active = 1 AND tl.active = 1 AND sp.sp_id = ?
-                            LIMIT ?`;
-        let _books = await query(db, qr_book, [id, limit]);
+                LEFT JOIN gia_ban gb ON gb.gb_idsp = sp.sp_id
+                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id
+             WHERE 
+                sp.active = 1 AND 
+                ncc.active = 1 AND 
+                nxb.active = 1 AND 
+                tg.active = 1 AND 
+                dm.active = 1 AND 
+                tl.active = 1 AND 
+                sp.sp_id = ?`;
+        let _books = await query(db, qr_book, id);
         await Promise.all(
             _books.map(async (book, idx) => {
                 _hinhanh = await query(
@@ -370,15 +379,20 @@ module.exports = function (app) {
         const {cart} = req.body;
         if (cart.length === 0) return res.status(500).send("Cart empty")
         let qr = `
-            SELECT sp.*, pn.*, ctpn.*,km.km_phantramgiam,(
-                    CASE 
-                    WHEN km.active = 0 then 0
-                    WHEN DATE(NOW()) < km.km_ngaybatdau then 0
-                    WHEN DATE(NOW()) > km.km_ngayketthuc then 0
-                         ELSE ROUND((ctpn.ctpn_gia - ctpn.ctpn_gia * (km.km_phantramgiam / 100)),0)
-                    END
-                ) as sp_giakhuyenmai
-            FROM san_pham sp 
+            SELECT 
+            sp.*, 
+            pn.*, 
+            ctpn.*, 
+            gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban,km.km_phantramgiam, gb.gb_soluong,
+        (
+            CASE 
+                WHEN km.active = 0 then 0
+                WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+                WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+            ELSE ROUND(((gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) - (gb.gb_gia + gb.gb_gia * \t\tch.ch_loinhuanbanhang / 100) * (km.km_phantramgiam / 100)),0)            
+            END
+        ) as sp_giakhuyenmai
+             FROM  cua_hang ch, san_pham sp
                 LEFT JOIN chi_tiet_phieu_nhap ctpn ON sp.sp_id = ctpn.ctpn_idsp
                 LEFT JOIN phieu_nhap pn ON ctpn.ctpn_idpn = pn.pn_id
                 LEFT JOIN the_loai tl ON tl.tl_id = sp.sp_idtl
@@ -387,16 +401,17 @@ module.exports = function (app) {
                 LEFT JOIN nha_xuat_ban nxb ON nxb.nxb_id = sp.sp_idnxb
                 LEFT JOIN nha_cung_cap ncc ON ncc.ncc_id = pn.pn_idncc
                 LEFT JOIN ngon_ngu nn ON nn.nn_id = sp.sp_idnn
-                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id,
-                    ( SELECT ctpn.ctpn_idsp, MIN(pn.pn_ngaylapphieu) ngay_lap_phieu 
-                        FROM  chi_tiet_phieu_nhap ctpn LEFT JOIN phieu_nhap pn ON pn.pn_id = ctpn.ctpn_idpn
-                        GROUP BY  ctpn.ctpn_idsp) date_min
-            WHERE 
-                ctpn.ctpn_soluong > 0 AND 
-                sp.sp_id = date_min.ctpn_idsp AND 
-                pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND
-                sp.active = 1 AND ncc.active = 1 AND nxb.active = 1 AND tg.active = 1 AND dm.active = 1 AND tl.active = 1 AND
-                ctpn.ctpn_soluong > 0 AND sp.sp_id = date_min.ctpn_idsp AND pn.pn_ngaylapphieu = date_min.ngay_lap_phieu AND sp.sp_id IN (?);`;
+                LEFT JOIN gia_ban gb ON gb.gb_idsp = sp.sp_id
+                LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id
+             WHERE 
+                sp.active = 1 AND 
+                ncc.active = 1 AND 
+                nxb.active = 1 AND 
+                tg.active = 1 AND 
+                dm.active = 1 AND 
+                tl.active = 1 AND 
+                sp.sp_id IN (?);`;
+
         const _books = await query(db, qr, [cart.map(e => e.id_sp)]);
         await Promise.all(
             _books.map(async (book, idx) => {
