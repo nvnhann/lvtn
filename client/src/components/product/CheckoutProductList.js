@@ -16,7 +16,7 @@ import {PATH_PAGE} from "../../routes/paths";
 import {useState} from "react";
 import CheckoutListHead from "./CheckoutListHead";
 import CheckoutListToolbar from "./CheckoutListToolbar";
-import {checkoutOneProduct, checkoutProduct, setQuantityProductCheckout} from "../../redux/slices/product";
+import { checkoutProduct, setQuantityProductCheckout} from "../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ ProductList.propTypes = {
     products: PropTypes.array
 };
 
-export default function ProductList({products, setLoad}) {
+export default function ProductList({products}) {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart.cartItem);
     const checkoutProducts = useSelector(state => state.product.checkout.product);
@@ -85,7 +85,7 @@ export default function ProductList({products, setLoad}) {
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1),);
         }
-        dispatch(checkoutOneProduct(cart.filter(e => e.id_sp === name)[0]))
+        dispatch( checkoutProduct(cart.filter((e,idx) => e.id_sp === newSelected[idx])))
         setSelected(newSelected);
     };
 
@@ -170,7 +170,6 @@ export default function ProductList({products, setLoad}) {
                                         dispatch(setQuantityProductCheckout({
                                             id_sp: sp_id, so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
                                         }));
-                                        if(setLoad) setLoad(e=>e+1)
                                     }}
                                     onIncrease={() => {
                                         dispatch(setQuantity({
@@ -179,7 +178,6 @@ export default function ProductList({products, setLoad}) {
                                         dispatch(setQuantityProductCheckout({
                                             id_sp: sp_id, so_luong: sp_soluong + 1
                                         }));
-                                        if(setLoad) setLoad(e=>e+1)
                                     }}
                                 />
                             </TableCell>
