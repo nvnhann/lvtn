@@ -292,6 +292,8 @@ module.exports = function (app) {
 
         if (!!priceRange) qr_book += `AND ctpn_gia >= ${priceRange} `;
 
+        qr_book += " GROUP BY sp_id "
+
         if (!!priceType) qr_book += 'ORDER BY ctpn_gia ';
 
         if (!!priceType && priceType === 'Giá cao đến thấp') {
