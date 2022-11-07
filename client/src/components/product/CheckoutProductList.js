@@ -85,7 +85,11 @@ export default function ProductList({products}) {
         } else if (selectedIndex > 0) {
             newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1),);
         }
-        dispatch( checkoutProduct(cart.filter((e,idx) => e.id_sp === newSelected[idx])))
+        let arr = [];
+        newSelected.map(e1 => {
+           arr.push( cart.filter((e,idx) => e.id_sp === e1)[0])
+        })
+        dispatch( checkoutProduct(arr))
         setSelected(newSelected);
     };
 
