@@ -426,6 +426,7 @@ module.exports = function (app) {
                     book.sp_id
                 );
                 _books[idx].sp_hinhanh = _hinhanh;
+                _books[idx].sp_soluong = cart[idx].so_luong >   _books[idx].gb_soluong ?  _books[idx].gb_soluong : cart[idx].so_luong;
             })
         );
         return res.status(200).send(_books);

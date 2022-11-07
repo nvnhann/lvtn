@@ -29,15 +29,15 @@ export default function CheckoutCart() {
 
     const isEmptyCart = cart.length === 0;
     const [products, setProducts] = useState([]);
+    const [load, setLoad] = useState(0);
 
     useEffect(() => {
         (async () => {
             if (cart.length === 0) return;
-            const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
-            cart.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].gb_soluong ? _products.data[idx].gb_soluong : e.so_luong)
+            let _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
             setProducts(_products.data);
         })()
-    }, [totalItems, cart]);
+    }, [load, cart]);
 
     const handleNextStep = () => {
         dispatch(onNextStep());
@@ -70,6 +70,7 @@ export default function CheckoutCart() {
                             {!isEmptyCart ? (
                                 <Scrollbar>
                                     <CheckoutProductList
+                                        setLoad={setLoad}
                                         products={products}
                                     />
                                 </Scrollbar>

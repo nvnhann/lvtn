@@ -67,7 +67,7 @@ ProductList.propTypes = {
     products: PropTypes.array
 };
 
-export default function ProductList({products}) {
+export default function ProductList({products, setLoad}) {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart.cartItem);
     const checkoutProducts = useSelector(state => state.product.checkout.product);
@@ -170,6 +170,7 @@ export default function ProductList({products}) {
                                         dispatch(setQuantityProductCheckout({
                                             id_sp: sp_id, so_luong: sp_soluong < 2 ? 1 : sp_soluong - 1
                                         }));
+                                        if(setLoad) setLoad(e=>e+1)
                                     }}
                                     onIncrease={() => {
                                         dispatch(setQuantity({
@@ -178,6 +179,7 @@ export default function ProductList({products}) {
                                         dispatch(setQuantityProductCheckout({
                                             id_sp: sp_id, so_luong: sp_soluong + 1
                                         }));
+                                        if(setLoad) setLoad(e=>e+1)
                                     }}
                                 />
                             </TableCell>

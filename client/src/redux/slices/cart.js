@@ -11,25 +11,33 @@ const slice = createSlice({
         addToCart(state, action) {
             const newItem = action.payload;
             const index = state.cartItem.findIndex((x) => x.id_sp === newItem.id_sp);
+            let a =Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
             if (index >= 0) {
                 state.cartItem[index].so_luong += newItem.so_luong;
+                a[index].so_luong += newItem.so_luong;
             } else {
                 state.cartItem.push(newItem);
+                a.push(newItem);
             }
-            Cookies.set('cart', JSON.stringify(state.cartItem));
+            Cookies.set('cart', JSON.stringify(a));
         },
         setQuantity(state, action) {
             const {id_sp, so_luong} = action.payload;
             const index = state.cartItem.findIndex((x) => x.id_sp === id_sp);
+            let a = JSON.parse(Cookies.get('cart'));
             if (index >= 0) {
                 state.cartItem[index].so_luong = so_luong;
+                a[index] = so_luong
             }
-            Cookies.set('cart', JSON.stringify(state.cartItem));
+            console.log(a)
+            Cookies.set('cart', JSON.stringify(a));
         },
         removeFromCart(state, action) {
             const idRemove = action.payload;
+            let a = JSON.parse(Cookies.get('cart'));
             state.cartItem = state.cartItem.filter((x) => x.id_sp !== idRemove);
-            Cookies.set('cart', JSON.stringify(state.cartItem));
+            a = a.filter((x) => x.id_sp !== idRemove);
+            Cookies.set('cart', JSON.stringify(a));
         },
     }
 });
