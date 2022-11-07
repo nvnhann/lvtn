@@ -16,7 +16,7 @@ import {PATH_PAGE} from "../../routes/paths";
 import {useState} from "react";
 import CheckoutListHead from "./CheckoutListHead";
 import CheckoutListToolbar from "./CheckoutListToolbar";
-import {checkoutOneProduct, setQuantityProductCheckout} from "../../redux/slices/product";
+import {checkoutOneProduct, checkoutProduct, setQuantityProductCheckout} from "../../redux/slices/product";
 
 // ----------------------------------------------------------------------
 
@@ -70,8 +70,8 @@ ProductList.propTypes = {
 export default function ProductList({products}) {
     const dispatch = useDispatch();
     const cart = useSelector(state => state.cart.cartItem);
-    const checkoutProduct = useSelector(state => state.product.checkout.product);
-    const [selected, setSelected] = useState(checkoutProduct.length > 0 ? checkoutProduct.map(e => e.id_sp) : []);
+    const checkoutProducts = useSelector(state => state.product.checkout.product);
+    const [selected, setSelected] = useState(checkoutProducts.length > 0 ? checkoutProducts.map(e => e.id_sp) : []);
 
     const handleClick = (event, name) => {
         const selectedIndex = selected.indexOf(name);
@@ -97,6 +97,7 @@ export default function ProductList({products}) {
             return;
         }
         setSelected([]);
+        dispatch(checkoutProduct([]))
     };
 
     return (<>

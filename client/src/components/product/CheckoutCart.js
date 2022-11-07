@@ -84,7 +84,7 @@ export default function CheckoutCart() {
                         <Button
                             color="inherit"
                             component={RouterLink}
-                            to={PATH_PAGE.shopcart}
+                            to={'/'}
                             startIcon={<Icon icon={arrowIosBackFill}/>}
                         >
                             Tiếp tục xem sách
