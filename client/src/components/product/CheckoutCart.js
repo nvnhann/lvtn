@@ -9,7 +9,6 @@ import {cartItemTotal, checkout, onNextStep} from "../../redux/slices/product";
 import {cartItemCount} from "../../redux/slices/cart";
 import Scrollbar from "../Scrollbar";
 import EmptyContent from "../EmptyContent";
-import {PATH_PAGE} from "../../routes/paths";
 import {useEffect, useState} from "react";
 import {API_BASE_URL} from "../../config/configUrl";
 import {postData} from "../../_helper/httpProvider";

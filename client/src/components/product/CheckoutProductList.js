@@ -87,7 +87,7 @@ export default function ProductList({products}) {
         }
         let arr = [];
         newSelected.map(e1 => {
-           arr.push( cart.filter((e,idx) => e.id_sp === e1)[0])
+           return arr.push( cart.filter((e,idx) => e.id_sp === e1)[0])
         })
         dispatch( checkoutProduct(arr))
         setSelected(newSelected);
