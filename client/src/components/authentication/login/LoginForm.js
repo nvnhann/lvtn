@@ -55,7 +55,7 @@ export default function LoginForm() {
                 });
                 if (user.role === 'ADMIN') {
                     navigate('/dashboard');
-                }else{
+                } else {
                     navigate('/');
                 }
             } catch (error) {
@@ -112,18 +112,14 @@ export default function LoginForm() {
                 </Stack>
 
                 <LoadingButton
+                    sx={{mt: 2}}
                     fullWidth
                     size="large"
-                    sx={{mt: 2}}
-                    color="error"
-                    type="button"
+                    type="submit"
                     variant="contained"
                     loading={isSubmitting}
-                    onClick={() => {
-                        window.location.href = API_BASE_URL + '/auth/google';
-                    }}
                 >
-                    Đăng nhập bằng google
+                    Đăng nhập
                 </LoadingButton>
 
                 <Stack
@@ -141,14 +137,19 @@ export default function LoginForm() {
                     </Link>
                 </Stack>
 
+
                 <LoadingButton
                     fullWidth
                     size="large"
-                    type="submit"
+                    color="error"
+                    type="button"
                     variant="contained"
                     loading={isSubmitting}
+                    onClick={() => {
+                        window.location.href = API_BASE_URL + '/auth/google';
+                    }}
                 >
-                    Đăng nhập
+                    Đăng nhập bằng google
                 </LoadingButton>
             </Form>
         </FormikProvider>

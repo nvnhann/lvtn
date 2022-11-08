@@ -116,7 +116,7 @@ export default function ProductList({products}) {
                 <TableBody>
                     {products.map((product) => {
                         const {
-                            sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_soluong, ctpn_soluong, sp_giakhuyenmai, gia_ban, gb_soluong
+                            sp_id, sp_ten, sp_hinhanh, sp_soluong, sp_giakhuyenmai, gia_ban, gb_soluong
                         } = product;
 
                         const isItemSelected = selected.indexOf(sp_id) !== -1;

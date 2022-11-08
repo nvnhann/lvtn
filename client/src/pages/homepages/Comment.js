@@ -83,7 +83,7 @@ export default function Comment() {
         }
     });
 
-    const {errors, touched, resetForm, handleSubmit, isSubmitting, setFieldValue, getFieldProps} = formik;
+    const {errors, touched, handleSubmit, setFieldValue, getFieldProps} = formik;
     return <>
         <Card>
             <Stack sx={{p: 4}}>

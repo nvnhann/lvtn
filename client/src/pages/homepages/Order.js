@@ -1,5 +1,4 @@
 import {
-    Autocomplete,
     Box,
     Button,
     Card,
@@ -54,29 +53,6 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
     borderRadius: theme.shape.borderRadiusSm
 }));
 //-----------------------------------------------------------------------------
-const TrangThaiList = [
-    {
-        id: 0,
-        ten: 'Chờ xác nhận'
-    },
-    {
-        id: 1,
-        ten: 'Đã xác nhận'
-    },
-    {
-        id: 2,
-        ten: 'Đã lấy hàng'
-    },
-    {
-        id: 3,
-        ten: 'Đã giao'
-    },
-    {
-        id: 4,
-        ten: 'Đã hủy'
-    }
-]
-//-----------------------------------------------------------------------------
 
 const steps = ["Chờ xác nhận", "Đã xác nhận", "Đã lấy hàng", "Đã giao", "Đã hủy"];
 
@@ -90,10 +66,8 @@ export default function Order() {
     const [openDetail, setOpenDetail] = useState(false);
     const [load, setLoad] = useState(0);
     const [detail, setDetail] = useState({});
-    const [trangthai, setTrangthai] = useState('');
     const [search, setSearch] = useState('');
     const [activeStep, setActiveStep] = useState(0);
-    const [completed, setCompleted] = useState({});
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -111,46 +85,8 @@ export default function Order() {
         setOpenDetail(false);
     };
 
-    const totalSteps = () => {
-        return steps.length;
-    };
-
-    const isLastStep = () => {
-        return activeStep === totalSteps() - 1;
-    };
-
-    const completedSteps = () => {
-        return Object.keys(completed).length;
-    };
-
-    const allStepsCompleted = () => {
-        return completedSteps() === totalSteps();
-    };
-
-    const handleNext = () => {
-        const newActiveStep =
-            isLastStep() && !allStepsCompleted()
-                ? // It's the last step, but not all steps have been completed,
-                  // find the first step that has been completed
-                steps.findIndex((step, i) => !(i in completed))
-                : activeStep + 1;
-        setActiveStep(newActiveStep);
-    };
-
     const handleStep = (step) => () => {
         setActiveStep(step);
-    };
-
-    const handleComplete = () => {
-        const newCompleted = completed;
-        newCompleted[activeStep] = true;
-        setCompleted(newCompleted);
-        handleNext();
-    };
-
-    const handleReset = () => {
-        setActiveStep(0);
-        setCompleted({});
     };
 
     useEffect(() => {
@@ -158,7 +94,7 @@ export default function Order() {
             const _hoadon = await getData(API_BASE_URL + `/hoadon/${id}?trangthai=${activeStep}&&search=${search}`);
             setHoadon(_hoadon.data);
         })()
-    }, [id, load,activeStep, search]);
+    }, [id, load, activeStep, search]);
 
     const changeOrder = async () => {
         try {
@@ -194,7 +130,7 @@ export default function Order() {
                         <Stack direction='row' justifyContent='center'>
                             <Stepper nonLinear activeStep={activeStep} sx={{m: 2}}>
                                 {steps.map((label, index) => (
-                                    <Step key={label} completed={completed[index]}>
+                                    <Step key={label}>
                                         <StepButton color="inherit" onClick={handleStep(index)}>
                                             {label}
                                         </StepButton>

@@ -35,7 +35,7 @@ ProductCard.propTypes = {
 };
 
 export default function ProductCard({product}) {
-    const {sp_ten, sp_hinhanh, ctpn_gia, status, sp_giakhuyenmai, sp_id, ctpn_soluong, gia_ban, gb_soluong} = product;
+    const {sp_ten, sp_hinhanh, status, sp_giakhuyenmai, sp_id, gia_ban, gb_soluong} = product;
     const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
@@ -85,7 +85,7 @@ export default function ProductCard({product}) {
                         {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                     </Typography>
                     <IconButton onClick={() => {
-                        
+
                         if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > gb_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
                             variant: 'error',
                             action: (key) => (

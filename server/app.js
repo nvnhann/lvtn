@@ -152,6 +152,12 @@ require("./routes/hoadon")(app);
 app.get("/", (req, res) => {
     res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
+
+app.get("/test", async (req, res)=>{
+    let user = await query(db, "select  cthd_idsp, hd_idkh\n" +
+        "from hoa_don left join chi_tiet_hoa_don on hoa_don.hd_id = chi_tiet_hoa_don.cthd_idhd");
+    res.status(200).send("ok");
+})
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

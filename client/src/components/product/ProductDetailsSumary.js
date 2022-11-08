@@ -88,7 +88,6 @@ export default function ProductDetailsSumary(props) {
         sp_ten,
         sp_chieudai,
         sp_chieurong,
-        ctpn_gia,
         sp_giakhuyenmai,
         tl_ten,
         nxb_ten,
