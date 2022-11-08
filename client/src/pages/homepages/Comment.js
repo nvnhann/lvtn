@@ -5,7 +5,7 @@ import {API_BASE_URL, URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import {
     Box,
     Button,
-    Card,
+    Card, Divider,
     FormHelperText,
     Stack,
     Tab,
@@ -75,7 +75,9 @@ export default function Comment() {
         onSubmit: async (values, {resetForm}) => {
             try {
                 await postData(API_BASE_URL + '/danhgiasanpham', values)
-                resetForm(); handleClose(); setLoad(e=>e+1);
+                resetForm();
+                handleClose();
+                setLoad(e => e + 1);
                 enqueueSnackbar('Đánh giá sản phẩm thành công', {variant: 'success'});
             } catch (e) {
                 console.log(e)
@@ -95,43 +97,48 @@ export default function Comment() {
                 </TabContext>
             </Stack>
             <TableContainer>
-                <Table>
+                <Table >
                     <TableBody>
                         {books?.map((el, idx) => (
-                            <TableRow key={idx}>
-                                <TableCell>{el.sp_masp}</TableCell>
-                                <TableCell>
-                                    <Box sx={{display: 'flex', alignItems: 'center'}}>
-                                        <ThumbImgStyle alt="product image"
-                                                       src={URL_PUBLIC_IMAGES + el.sp_hinhanh[el.sp_hinhanh.length - 1].ha_hinh}/>
-                                        <Box>
-                                            <Link to={`${PATH_PAGE.productDetail}/${el.sp_id}`} color="inherit"
-                                                  component={RouterLink}>
-                                                <Typography noWrap variant="subtitle2"
-                                                            sx={{maxWidth: 240, mb: 0.5}}>
-                                                    {el.sp_ten}
-                                                </Typography>
-                                            </Link>
+                            <>
+                                <TableRow key={idx}>
+                                    <TableCell>
+                                        <Box sx={{display: 'flex', alignItems: 'center'}}>
+                                            <ThumbImgStyle alt="product image"
+                                                           src={URL_PUBLIC_IMAGES + el.sp_hinhanh[el.sp_hinhanh.length - 1].ha_hinh}/>
+                                            <Box>
+                                                <Link to={`${PATH_PAGE.productDetail}/${el.sp_id}`} color="inherit"
+                                                      component={RouterLink}>
+                                                    <Typography variant="subtitle2"
+                                                                sx={{maxWidth: 240, mb: 0.5}}>
+                                                        {el.sp_ten}
+                                                    </Typography>
+                                                </Link>
+                                            </Box>
                                         </Box>
-                                    </Box>
-                                </TableCell>
-                                <TableCell>{el.tl_ten}</TableCell>
-                                <TableCell>{el.tg_ten}</TableCell>
-                                {value === 'chuadanhgia' ? <TableCell>
-                                    <Button variant='contained' endIcon={<Icon icon="ic:outline-star-rate"/>}
-                                            onClick={() => {
-                                                setFieldValue('bl_idsp', el.sp_id);
-                                                handleClickOpen();
-                                            }}>
-                                        Đánh giá
-                                    </Button>
-                                </TableCell> : <TableCell>
-                                    <Stack>
-                                        <Rating name="read-only" value={Number(el.bl_danhgia)} readOnly/>
-                                        <Typography>{el.bl_noidung}</Typography>
-                                    </Stack>
-                                </TableCell>}
-                            </TableRow>
+                                    </TableCell>
+                                    <TableCell>{el.tl_ten}</TableCell>
+                                    <TableCell>{el.tg_ten}</TableCell>
+                                    {value === 'chuadanhgia' && <TableCell>
+                                        <Button variant='contained' endIcon={<Icon icon="ic:outline-star-rate"/>}
+                                                onClick={() => {
+                                                    setFieldValue('bl_idsp', el.sp_id);
+                                                    handleClickOpen();
+                                                }}>
+                                            Đánh giá
+                                        </Button>
+                                    </TableCell>}
+                                </TableRow>
+                                {value !== 'chuadanhgia' && <TableRow>
+                                    <TableCell colSpan={3}>
+                                        <Stack>
+                                            <Rating name="read-only" value={Number(el.bl_danhgia)} readOnly/>
+                                            <Typography>{el.bl_noidung}</Typography>
+                                            <Divider />
+                                        </Stack>
+                                    </TableCell>
+                                </TableRow>}
+                            </>
                         ))}
                     </TableBody>
                 </Table>

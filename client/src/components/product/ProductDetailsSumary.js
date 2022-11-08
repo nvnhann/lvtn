@@ -237,6 +237,7 @@ export default function ProductDetailsSumary(props) {
                             </div>
                         </Stack>
                     </Stack>
+
                     <Divider sx={{borderStyle: 'dashed'}}/>
 
                     <Stack spacing={2} direction={{xs: 'column', sm: 'row'}} sx={{mt: 5}}>
