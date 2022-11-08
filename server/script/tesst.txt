@@ -1,0 +1,102 @@
+
+function randomIntFromInterval(min, max) { // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+function sanpham(_sp, idx){
+    let rs =  _sp[idx];
+    rs.cthd_soluong = randomIntFromInterval(1, 5);
+    return rs;
+}
+
+
+
+function makeName(length) {
+    let result           = '';
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function makePhone(length) {
+    let result           = '';
+    let characters       = '0123456789';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+app.get("/test", async (req, res)=>{
+    let _book = await query(db, "SELECT sp_id as cthd_idsp, (gb_gia * 1.2) cthd_giaban  FROM san_pham LEFT JOIN gia_ban ON san_pham.sp_id = gia_ban.gb_idsp WHERE gb_gia > 0");
+
+
+    let _fullname = [
+        "Nguyễn Thị ",
+        "Nguyễn Văn "
+    ]
+    // let cre = '$2a$08$lbx81pq4pOzujh3wafVU.O5H3WevsHy7UJS8Y49dHRyqV7cXnwfRK';
+    // let users = [];
+    // for(let i = 1; i < 5; i++ ){
+    //     let _gender = randomIntFromInterval(0,1)
+    //     users.push([
+    //         'nhanvien'+i+'@gmail.com',
+    //         _fullname[_gender]  + makeName(1),
+    //         cre,
+    //         '09'+makePhone(8),
+    //         _gender === 1 ? 'male' : 'female',
+    //         '2000-01-01',
+    //         1,
+    //         4
+    //     ])
+    // }
+    // await query(db, "INSERT INTO users(email, fullname, credential, phone, gender, birthday, verify, role_id) VALUES ?", [users])
+    let ngay_tao = randomDate(new Date(2020, 1, 1), new Date());
+
+
+    for (let i = 1; i<= 1000; i++){
+        let _sp = [
+            sanpham(_book,randomIntFromInterval(1, _book.length - 1)),
+            sanpham(_book,randomIntFromInterval(1, _book.length - 1)),
+            sanpham(_book,randomIntFromInterval(1, _book.length - 1)),
+            sanpham(_book,randomIntFromInterval(1, _book.length - 1)),
+            sanpham(_book,randomIntFromInterval(1, _book.length - 1))
+        ]
+        let sp_dif =  _sp.filter((value, index, self) => index === self.findIndex(t => t.cthd_idsp === value.cthd_idsp));
+        let tong_don = sp_dif.reduce((total, item) => total + item.cthd_giaban * item.cthd_soluong, 0);
+        let hoadon = {
+            hd_tenkh: _fullname[randomIntFromInterval(0,1)] + makeName(1),
+            hd_diachi: randomIntFromInterval( 100, 1000)+ "Nguyễn Trãi, Hòa Bình, Ninh Kiều, Cần Thơ",
+            hd_sdt:  '09'+makePhone(8),
+            hd_email: 'khachhang' + randomIntFromInterval(100, 1000) +'@gmail.com',
+            hd_tongtien: tong_don,
+            hd_tienvc: tong_don < 500000 ? 30000: 0,
+            hd_hinhthucthanhtoan: 'offline',
+            hd_idkh: randomIntFromInterval(1160, 2158),
+            hd_idnv: randomIntFromInterval(2159,2162),
+            hd_ngaytao: ngay_tao
+        }
+        let _hoadon = await query(db,"INSERT INTO hoa_don SET ?", hoadon);
+        let trangthai = [
+            [ngay_tao,0,null,_hoadon.insertId, null],
+            [ngay_tao,1, randomIntFromInterval(2163,2166),_hoadon.insertId, null],
+            [ngay_tao,2, randomIntFromInterval(2163,2166),_hoadon.insertId, null],
+            [ngay_tao,3, randomIntFromInterval(2163,2166),_hoadon.insertId, 'hoadon-1667713961810.jpg']
+        ]
+        await query(db,"INSERT INTO trang_thai(tt_ngaycapnhat, tt_trangthai, tt_idnv, tt_idhd, tt_note) VALUES ?", [trangthai]);
+        let sps = [];
+        sp_dif.map(e => sps.push([e.cthd_idsp, e.cthd_giaban,_hoadon.insertId, e.cthd_soluong]))
+        await query(db, "INSERT INTO chi_tiet_hoa_don(cthd_idsp, cthd_giaban, cthd_idhd, cthd_soluong) VALUES ?", [sps]);
+    }
+    return res.status(200).send("ok");
+
+
+})
