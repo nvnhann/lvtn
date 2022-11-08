@@ -33,8 +33,7 @@ export default function CheckoutCart() {
     useEffect(() => {
         (async () => {
             if (cart.length === 0) return;
-            const _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
-            cart.map((e, idx) => _products.data[idx].sp_soluong = e.so_luong > _products.data[idx].gb_soluong ? _products.data[idx].gb_soluong : e.so_luong)
+            let _products = await postData(API_BASE_URL + '/shopcart', {cart: cart});
             setProducts(_products.data);
         })()
     }, [totalItems, cart]);
@@ -84,7 +83,7 @@ export default function CheckoutCart() {
                         <Button
                             color="inherit"
                             component={RouterLink}
-                            to={PATH_PAGE.shopcart}
+                            to={'/'}
                             startIcon={<Icon icon={arrowIosBackFill}/>}
                         >
                             Tiếp tục xem sách

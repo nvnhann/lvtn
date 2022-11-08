@@ -54,7 +54,7 @@ export default function CheckoutSummary({
                         <Typography variant="body2" sx enableEdit={{color: 'text.secondary'}}>
                             Phí vận chuyển
                         </Typography>
-                        <Typography variant="subtitle2">{shipping ? fCurrency(shipping) : ''}</Typography>
+                        <Typography variant="subtitle2">{fCurrency(shipping)}</Typography>
                     </Stack>
 
                     <Divider/>
