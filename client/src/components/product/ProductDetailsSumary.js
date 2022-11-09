@@ -7,14 +7,14 @@ import {Form, FormikProvider, useField, useFormik} from 'formik';
 import {styled} from '@material-ui/core/styles';
 import {Box, Button, Divider, FormHelperText, Stack, Typography} from '@material-ui/core';
 import {MIconButton} from "../@material-extend";
-import {addToCart} from "../../redux/slices/cart";
+import {addToCart, setQuantity} from "../../redux/slices/cart";
 import {useDispatch, useSelector} from "react-redux";
 import {fCurrency} from "../../_helper/formatCurrentCy";
 import closeFill from "@iconify/icons-eva/close-fill";
 import {useSnackbar} from "notistack5";
 import {checkoutOneProduct, checkoutProduct, onGotoStep} from "../../redux/slices/product";
 import {useNavigate} from "react-router-dom";
-import {PATH_PAGE} from "../../routes/paths";
+import {PATH_AUTH, PATH_PAGE} from "../../routes/paths";
 // redux
 
 // ----------------------------------------------------------------------
@@ -98,6 +98,7 @@ export default function ProductDetailsSumary(props) {
         gb_soluong,
         gia_ban
     } = product;
+    const isLogined = !!useSelector(state => state.user.current?.id);
     const CartItemQuantity = cartItem.filter(e => e.id_sp === sp_id)[0];
 
     const formik = useFormik({
@@ -117,7 +118,7 @@ export default function ProductDetailsSumary(props) {
 
 
     const {values, touched, errors, handleSubmit} = formik;
-    const isMaxQuantity = values.quantity >= gb_soluong;
+    const isMaxQuantity = values.quantity >= gb_soluong + 1;
 
     const handleAddCart = () => {
         if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > gb_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
@@ -128,7 +129,11 @@ export default function ProductDetailsSumary(props) {
                 </MIconButton>
             ),
         });
-        dispatch(addToCart({
+        if (CartItemQuantity?.id_sp) dispatch(setQuantity({
+            id_sp: sp_id,
+            so_luong: values.quantity,
+        }))
+        else dispatch(addToCart({
             id_sp: sp_id,
             so_luong: values.quantity,
             sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
@@ -239,35 +244,39 @@ export default function ProductDetailsSumary(props) {
                     </Stack>
 
                     <Divider sx={{borderStyle: 'dashed'}}/>
+                    {gb_soluong !== 0 &&
+                        (<Stack spacing={2} direction={{xs: 'column', sm: 'row'}} sx={{mt: 5}}>
+                            <Button
+                                fullWidth
+                                disabled={isMaxQuantity}
+                                size="large"
+                                type="button"
+                                color="warning"
+                                variant="contained"
+                                startIcon={<Icon icon={roundAddShoppingCart}/>}
+                                onClick={handleAddCart}
+                                sx={{whiteSpace: 'nowrap'}}
+                            >
+                                Thêm giỏ hàng
+                            </Button>
+                            <Button onClick={() => {
+                                if (!isLogined) return navigate(PATH_AUTH.login);
+                                dispatch(checkoutProduct([]));
+                                dispatch(checkoutOneProduct({
+                                    id_sp: sp_id,
+                                    so_luong: values.quantity,
+                                    sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
+                                }));
+                                dispatch(onGotoStep(1));
+                                handleAddCart();
+                                navigate(PATH_PAGE.shopcart)
+                            }} fullWidth size="large" type="submit" variant="contained">
+                                Mua ngay
+                            </Button>
+                        </Stack>)}
+                    {gb_soluong === 0 &&
+                        (<Box>Hết hàng</Box>)}
 
-                    <Stack spacing={2} direction={{xs: 'column', sm: 'row'}} sx={{mt: 5}}>
-                        <Button
-                            fullWidth
-                            disabled={isMaxQuantity}
-                            size="large"
-                            type="button"
-                            color="warning"
-                            variant="contained"
-                            startIcon={<Icon icon={roundAddShoppingCart}/>}
-                            onClick={handleAddCart}
-                            sx={{whiteSpace: 'nowrap'}}
-                        >
-                            Thêm giỏ hàng
-                        </Button>
-                        <Button onClick={() => {
-                            dispatch(checkoutProduct([]));
-                            dispatch(checkoutOneProduct({
-                                id_sp: sp_id,
-                                so_luong: values.quantity,
-                                sp_gia: sp_giakhuyenmai ? sp_giakhuyenmai : gia_ban
-                            }));
-                            dispatch(onGotoStep(1));
-                            handleAddCart();
-                            navigate(PATH_PAGE.shopcart)
-                        }} fullWidth size="large" type="submit" variant="contained">
-                            Mua ngay
-                        </Button>
-                    </Stack>
                 </Form>
             </FormikProvider>
         </RootStyle>
