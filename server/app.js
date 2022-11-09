@@ -72,6 +72,27 @@ require("./routes/khuyenmai")(app);
 require("./routes/diachi")(app);
 require("./routes/hoadon")(app);
 require("./routes/orther")(app);
+
+function randomIntFromInterval(min, max) { // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}
+app.get("/test",async (req, res)=>{
+    let hoa_don = await query(db, "SELECT chi_tiet_hoa_don.cthd_idsp idsp, SUM(chi_tiet_hoa_don.cthd_soluong) soluong\n" +
+        "FROM chi_tiet_hoa_don \n" +
+        "GROUP BY chi_tiet_hoa_don.cthd_idsp");
+
+    let ctpn = await query(db, "SELECT ctpn_idsp idsp, SUM(ctpn_soluong) soluong from chi_tiet_phieu_nhap GROUP BY chi_tiet_phieu_nhap.ctpn_idsp");
+
+    await Promise.all(hoa_don.map(async e=>{
+       await ctpn.map(async e1=>{
+            if(e1.idsp === e.idsp) {console.log(e,e1)
+           await query(db, "UPDATE gia_ban SET gb_soluong = ? - ? WHERE gb_idsp = ?", [e1.soluong, e.soluong, e.idsp])}
+        })
+    }))
+    console.log(ctpn);
+   // await Promise.all(hoa_don.map(async e => await query(db, "UPDATE chi_tiet_phieu_nhap SET ctpn_soluong = ? + ? WHERE ctpn_idsp = ?", [e.soluong, randomIntFromInterval(10,50), e.idsp])))
+    return res.status(200).send("ok")
+})
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

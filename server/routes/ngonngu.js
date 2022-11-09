@@ -1,82 +1,55 @@
-const sql = require("../db");
-
+const db = require("../db");
+const query = require("../lib/query");
+//--------------------------------------------------------------------------------------
 module.exports = function (app) {
+    // list ngon
     app.get("/ngonngu", async (req, res) => {
         let qr = "SELECT * FROM ngon_ngu ";
-        if (req.query.search) {
-            qr += `WHERE nn_ten like '%${req.query.search}%'`;
-        }
-        sql.query(qr, (err, data) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            }
-            return res.status(200).send(data);
-        });
+        if (req.query.search) qr += `WHERE nn_ten like '%${req.query.search}%'`;
+        return res.status(200).send(await query(db, qr));
     });
 
+    // set active ngon ngu
     app.post("/ngonngu/active", async (req, res) => {
         const {id, active} = req.body;
         if (!id) return res.status(404).send("No content");
-        const qr = "UPDATE ngon_ngu SET active = ? where nn_id = ?";
-        sql.query(qr, [active, id], (err, _) => {
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            }
-            return res.status(200).send("Cập nhật thành công");
-        });
+        await query(db, `UPDATE ngon_ngu SET active = ? where nn_id = ?`, [active, id])
+        return res.status(200).send("Cập nhật thành công");
     });
 
+    // lay ngon ngu theo id
     app.get("/ngonngu/:id", async (req, res) => {
         const {id} = req.params;
         if (!id) return res.status(404).send(null);
-        const qr = " SELECT * FROM ngon_ngu where nn_id = ?";
-        await sql.query(qr, id, (err, data) => {
-            if (err) return res.status(500).send(err);
-            return res.status(200).send(data);
-        });
+        return res.status(200).send(await query(db, `SELECT * FROM ngon_ngu where nn_id = ?`, id));
     });
 
+    // chinh sua ngon ngu
     app.put("/ngonngu/:id/edit", async (req, res) => {
         const {id} = req.params;
         const data = req.body;
-        const qr = "UPDATE ngon_ngu SET ? WHERE nn_id = ?";
-        sql.query(qr, [data, id], (err, _) => {
-            if (err) {
-                return res.status(500).send(err);
-            }
-            return res.status(200).send("Cập nhật thành công!");
-        });
+        await query(db, `UPDATE ngon_ngu SET ? WHERE nn_id = ?`, [data, id]);
+        return res.status(200).send("Cập nhật thành công!");
     });
 
+    // tao ngon nguc
     app.post("/ngonngu/create", async (req, res) => {
         const data = req.body;
-        const qr_exist = "SELECT * FROM ngon_ngu where nn_ten = ?";
-
-        await sql.query(qr_exist, data.nn_ten, async (err, result) => {
-            if (err) return res.status(500).send(err);
-            if (result.length !== 0) return res.status(500).send("Tên đã tồn tại");
-            const qr = "INSERT INTO ngon_ngu SET ?";
-            await sql.query(qr, data);
-            return res.status(200).send("Thêm thành công!");
-        });
+        const isExist = query(db, "SELECT * FROM ngon_ngu where nn_ten = ?", data.nn_ten);
+        if(isExist.length > 0) return res.status(500).send("Tên đã tồn tại");
+        await query(db, `INSERT INTO ngon_ngu SET ?`, data);
+        return res.status(200).send("Thêm thành công!");
     });
 
+    // xoa ngon ngu
     app.delete("/ngonngu/delete", async (req, res) => {
         if (!!req.body.arrID) {
             const arrID = JSON.parse(req.body.arrID);
             await Promise.all(
-                arrID.map(async (e) => {
-                    let qr = "DELETE FROM ngon_ngu where nn_id = ?";
-                    await sql.query(qr, [e], (err, _) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    });
-                })
-            );
-            return res.status(201).send("Xóa thành công!");
+                arrID.map(async (e) =>
+                    await query(db, `DELETE FROM ngon_ngu where nn_id = ?`, [e])
+            ))
         }
+        return res.status(201).send("Xóa thành công!");
     });
 };
