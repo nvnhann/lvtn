@@ -275,7 +275,7 @@ export default function ProductDetailsSumary(props) {
                             </Button>
                         </Stack>)}
                     {gb_soluong === 0 &&
-                        (<Box>Hết hàng</Box>)}
+                        (<Box><Typography align="center" color="error">Hết hàng</Typography></Box>)}
 
                 </Form>
             </FormikProvider>

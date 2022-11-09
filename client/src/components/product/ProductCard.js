@@ -84,7 +84,7 @@ export default function ProductCard({product}) {
                         &nbsp;
                         {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                     </Typography>
-                    <IconButton onClick={() => {
+                    {gb_soluong > 0 && (<IconButton onClick={() => {
 
                         if (CartItemQuantity?.so_luong && CartItemQuantity.so_luong > gb_soluong) return enqueueSnackbar('Số lượng sản phẩm đạt tối đa!', {
                             variant: 'error',
@@ -111,7 +111,9 @@ export default function ProductCard({product}) {
                         });
                     }}>
                         <IconCart/>
-                    </IconButton>
+                    </IconButton>)}
+                    {gb_soluong === 0 &&
+                        (<Box><Typography align="center" color="error">Hết hàng</Typography></Box>)}
                 < /Stack>
             </Stack>
         </Card>

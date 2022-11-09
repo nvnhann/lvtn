@@ -159,7 +159,7 @@ export default function PhieuNhapNewForm({isEdit, current, id, user}) {
                 await postData(API_BASE_URL + '/phieunhap', _values);
                 setListBooks([]);
             }
-            enqueueSnackbar(!isEdit ? 'Thêm thành công[' : 'Cập nhật thành công', {
+            enqueueSnackbar(!isEdit ? 'Thêm thành công' : 'Cập nhật thành công', {
                 variant: 'success',
             });
         } catch (e) {
