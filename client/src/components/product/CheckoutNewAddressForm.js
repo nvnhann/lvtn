@@ -33,7 +33,10 @@ export default function CheckoutNewAddressForm({open, onClose, onNextStep, setLo
 
     const NewAddressSchema = Yup.object().shape({
         dc_tenkh: Yup.string().required('Vui lòng nhập họ tên'),
-        dc_sdt: Yup.string().required('Vui lòng nhập số điện thoại'),
+        dc_sdt: Yup.string()
+            .matches(/^[0-9]{10}$/, 'Số điện thoại không hợp lệ')
+            .typeError('Số điện thoại không hợp lệ')
+            .required('Vui lòng nhập số điện thoại'),
         dc_diachi: Yup.string().required('Vui lòng nhập địa chỉ'),
         dc_email: Yup.string().required('Vui lòng nhập email').email('Email không hợp lệ')
     });
