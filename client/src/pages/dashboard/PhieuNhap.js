@@ -8,6 +8,7 @@ import {
     Card,
     Checkbox,
     Container,
+    Switch,
     Table,
     TableBody,
     TableCell,
@@ -25,13 +26,16 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {getData} from '../../_helper/httpProvider';
+import {getData, postData} from '../../_helper/httpProvider';
 import {API_BASE_URL} from '../../config/configUrl';
 import PhieuNhapListHead from '../../components/_dashboard/phieunhap/list/PhieuNhapListHead';
 import PhieuNhapToolbar from '../../components/_dashboard/phieunhap/list/PhieuNhapToolbar';
 import {fCurrency} from '../../_helper/formatCurrentCy';
 import {formatDateTime} from '../../_helper/formatDate';
 import PhieuNhapMoreMenu from '../../components/_dashboard/phieunhap/list/PhieuNhapMoreMenu';
+import {MIconButton} from "../../components/@material-extend";
+import closeFill from "@iconify/icons-eva/close-fill";
+import {useSnackbar} from "notistack5";
 
 // ----------------------------------------------------------------------
 
@@ -42,6 +46,7 @@ const TABLE_HEAD = [
     {id: 'pn_ncc', label: 'Nhà Cung Cấp', alignRight: false},
     {id: 'pn_tongtien', label: 'Tổng Tiền', alignRight: false},
     {id: 'pn_ngaynhap', label: 'Ngày Nhập', alignRight: false},
+    {id: 'pn_trangthai', label: 'Trạng thái', alignRight: false},
     {id: ''},
 ];
 
@@ -57,6 +62,8 @@ export default function BookList() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [_datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
 
     useEffect(() => {
         (async () => {
@@ -121,6 +128,26 @@ export default function BookList() {
 
     const isUserNotFound = _datas.length === 0;
 
+    const changeActivePN = async (id, active) => {
+        try {
+            const res = await postData(API_BASE_URL + '/phieunhap/active', {
+                id: id,
+                pn_active: active,
+            });
+            setLoad((e) => e + 1);
+            enqueueSnackbar(res.data, {
+                variant: 'success',
+                action: (key) => (
+                    <MIconButton size="small" onClick={() => closeSnackbar(key)}>
+                        <Icon icon={closeFill}/>
+                    </MIconButton>
+                ),
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <Page title="PN | HYPE">
             <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -174,6 +201,7 @@ export default function BookList() {
                                                 ncc_ten,
                                                 pn_tongtien,
                                                 pn_ngaylapphieu,
+                                                pn_active
                                             } = row;
                                             const isItemSelected = selected.indexOf(pn_id) !== -1;
                                             return (
@@ -212,7 +240,17 @@ export default function BookList() {
                                                     <TableCell align="left">
                                                         {formatDateTime(pn_ngaylapphieu)}
                                                     </TableCell>
+                                                    <TableCell align="left">
+                                                        {!pn_active && <Switch
+                                                            checked={pn_active === 1}
+                                                            onChange={() => {
+                                                                changeActivePN(pn_id, !pn_active);
+                                                            }}
+                                                        />}
 
+                                                        {!!pn_active && <Typography color='blueviolet'>Đã nhập</Typography>}
+
+                                                    </TableCell>
                                                     <TableCell align="right">
                                                         <PhieuNhapMoreMenu id={pn_id}/>
                                                     </TableCell>

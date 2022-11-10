@@ -98,5 +98,13 @@ module.exports = function (app) {
         await query(db, qr_ctpn, [_spArr]);
 
         return res.status(200).send("Cập nhật thành công!")
-    })
+    });
+
+    app.post("/phieunhap/active", async (req, res) => {
+        const {id, pn_active} = req.body;
+        if (!id) return res.status(404).send("No content");
+        await query(db, `UPDATE phieu_nhap SET pn_active = ? where pn_id = ?`, [pn_active, id])
+        return res.status(200).send("Cập nhật thành công");
+    });
+
 };
