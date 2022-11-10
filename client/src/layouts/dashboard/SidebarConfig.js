@@ -22,13 +22,19 @@ const ICONS = {
     phieunhap   : getIcon('ic_addbook'),
     giamgia     : getIcon('ic_discount'),
     order       : getIcon('ic_order'),
-    store       : getIcon('ic_store')
+    store       : getIcon('ic_store'),
+    thongke     : getIcon('ic_analytics')
 };
 
 const sidebarConfig = [
     // ----------------------------------------------------------------------
     {
         items: [
+            {
+                title   : 'Thống kê',
+                path    : PATH_DASHBOARD.thongke.root,
+                icon    : ICONS.thongke
+            },
             {
                 title   : 'Cửa hàng',
                 path    : PATH_DASHBOARD.store.root,

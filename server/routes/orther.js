@@ -89,5 +89,59 @@ module.exports = function (app) {
                                           GROUP BY binh_luan.bl_danhgia
                                           ORDER BY binh_luan.bl_danhgia DESC`, id);
         return res.status(200).send(_rs);
+    });
+
+    app.get('/thongke', async (req, res)=>{
+        let _result = {};
+
+        _user = await query(db, `SELECT COUNT (*) so_luong FROM users`);
+        _employee = await query(db, `SELECT COUNT (*) so_luong FROM users WHERE role_id = 3`);
+        _shipper = await query(db, `SELECT COUNT (*) so_luong FROM users WHERE role_id = 4`);
+        _so_luong_nhap = await query(db, `SELECT
+                                            SUM(chi_tiet_phieu_nhap.ctpn_soluong) so_luong
+                                        FROM
+                                            chi_tiet_phieu_nhap
+                                        LEFT JOIN phieu_nhap ON phieu_nhap.pn_id = chi_tiet_phieu_nhap.ctpn_idpn
+                                        WHERE
+                                            phieu_nhap.pn_active = 1`);
+        _so_luong_ban = await query(db , `SELECT
+                                                SUM(chi_tiet_hoa_don.cthd_soluong) so_luong
+                                            FROM
+                                                chi_tiet_hoa_don
+                                            LEFT JOIN trang_thai ON trang_thai.tt_idhd = chi_tiet_hoa_don.cthd_idhd
+                                            WHERE
+                                                trang_thai.tt_trangthai = 3`);
+        _hoa_don_da_giao = await query(db, `SELECT
+                                                    COUNT(*) so_luong
+                                                FROM
+                                                    hoa_don
+                                                LEFT JOIN trang_thai ON trang_thai.tt_idhd = hoa_don.hd_id
+                                                WHERE
+                                                    trang_thai.tt_trangthai = 3`);
+        _theo_nam = await query(db, `CALL thongketheonam(2022)`);
+        _result.user = _user[0].so_luong;
+        _result.employee = _employee[0].so_luong;
+        _result.shipper = _shipper[0].so_luong;
+        _result.so_luong_nhap = _so_luong_nhap[0].so_luong;
+        _result.so_luong_ban = _so_luong_ban[0].so_luong;
+        _result.hoa_don_da_giao = _hoa_don_da_giao[0].so_luong;
+        let theonam = [{
+            name: 'nhap',
+            data: []
+        }, {
+            name: 'ban',
+            data: []
+        }];
+        _theo_nam[0].map(e=> {
+            theonam[0].data.push(e.nhap_vao)
+            theonam[1].data.push(e.ban_ra)
+        });
+        for(let i = 0; i<12; i++){
+            if(!theonam[0].data[i]) theonam[0].data[i] = 0;
+            if(!theonam[1].data[i]) theonam[1].data[i] = 0;
+        }
+        _result.theo_nam =  theonam;
+
+        return res.status(200).send(_result);
     })
 }

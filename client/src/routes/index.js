@@ -63,6 +63,10 @@ export default function Router() {
             element: isAdmin ? <DashboardLayout/> : <Navigate to='/'/>,
             children: [
                 {
+                    path: '/thongke',
+                    element: <Analytic />
+                },
+                {
                     path: 'user',
                     children: [
                         {
@@ -343,3 +347,4 @@ const Hoadon = Loadable(lazy(() => import('../pages/dashboard/HoaDon')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const Store = Loadable(lazy(() => import('../pages/dashboard/Store')));
+const Analytic = Loadable(lazy(()=> import('../pages/dashboard/Analytic')));
