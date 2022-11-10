@@ -23,6 +23,7 @@ module.exports = function (app) {
     app.post('/hoadon', async (req, res) => {
         let data = req.body;
         let product = data.product;
+        console.log(data)
         delete data.product;
         let _qr = `INSERT INTO hoa_don SET ?`;
         let _hoadon = await query(db, _qr, data);
@@ -36,7 +37,7 @@ module.exports = function (app) {
         await query(db, _qr_status, _trangthaihoadon);
         let _ctht = [];
         let _giabn = [];
-        product.map(e => _ctht.push([_hoadon.insertId, e.ctpn_gia, e.sp_giakhuyenmai, e.sp_soluong, e.sp_id]));
+        product.map(e => _ctht.push([_hoadon.insertId, e.gia_ban, e.sp_giakhuyenmai, e.sp_soluong, e.sp_id]));
         await query(db, `INSERT INTO chi_tiet_hoa_don (cthd_idhd, cthd_giaban, cthd_giakm, cthd_soluong, cthd_idsp) VALUES ?`, [_ctht]);
         await Promise.all(product.map(async e => await query(db, "UPDATE gia_ban SET gb_soluong = gb_soluong - ? WHERE gb_idsp = ?", [e.sp_soluong, e.sp_id])))
         return res.status(200).send("Thêm thành công hóa đơn!")

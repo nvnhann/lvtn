@@ -177,7 +177,7 @@ export default function Order() {
                                         <TableCell>#{hd_id}</TableCell>
                                         <TableCell>{hd_tenkh}</TableCell>
                                         <TableCell
-                                            sx={{width: '7rem'}}>{!!hd_tienvc ? fCurrency(hd_tongtien + hd_tienvc) : fCurrency(hd_tongtien)}</TableCell>
+                                            sx={{width: '8rem'}}>{!!hd_tienvc ? fCurrency(hd_tongtien + hd_tienvc) : fCurrency(hd_tongtien)}</TableCell>
                                         <TableCell>{!!hd_tienvc ? fCurrency(hd_tienvc) : '0đ'}</TableCell>
                                         <TableCell>{hd_hinhthucthanhtoan}</TableCell>
                                         <TableCell>{formatDateTime(hd_ngaytao)}</TableCell>

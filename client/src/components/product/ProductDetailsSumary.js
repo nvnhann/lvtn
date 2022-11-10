@@ -94,7 +94,6 @@ export default function ProductDetailsSumary(props) {
         ncc_ten,
         tg_ten,
         nn_ten,
-        ctpn_soluong,
         gb_soluong,
         gia_ban
     } = product;
@@ -104,11 +103,10 @@ export default function ProductDetailsSumary(props) {
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            quantity: ctpn_soluong < 1 ? 0 : 1
+            quantity: gb_soluong < 1 ? 0 : 1
         },
         onSubmit: async (values, {setSubmitting}) => {
             try {
-
                 setSubmitting(false);
             } catch (error) {
                 setSubmitting(false);
@@ -131,8 +129,9 @@ export default function ProductDetailsSumary(props) {
         });
         if (CartItemQuantity?.id_sp) dispatch(setQuantity({
             id_sp: sp_id,
-            so_luong: values.quantity + CartItemQuantity.so_luong > gb_soluong ? gb_soluong :  values.quantity + CartItemQuantity.so_luong,
+            so_luong: (values.quantity + CartItemQuantity.so_luong > gb_soluong ) ? gb_soluong :  (values.quantity + CartItemQuantity.so_luong),
         }))
+
         else dispatch(addToCart({
             id_sp: sp_id,
             so_luong: values.quantity,
