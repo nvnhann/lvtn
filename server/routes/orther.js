@@ -37,7 +37,7 @@ module.exports = function (app) {
                 san_pham.active = 1 AND
                 tac_gia.active = 1 AND
                 the_loai.active = 1 AND
-                san_pham.sp_id NOT IN (SELECT bl_idsp FROM binh_luan) AND
+                san_pham.sp_id NOT IN (SELECT bl_idsp FROM binh_luan WHERE bl_idkh = ? ) AND
                 hoa_don.hd_idkh = ?
     `;
         else _qr = `
@@ -50,10 +50,10 @@ module.exports = function (app) {
                 san_pham.active = 1 AND
                 tac_gia.active = 1 AND
                 the_loai.active = 1 AND
-                san_pham.sp_id IN (SELECT bl_idsp FROM binh_luan) AND
+                san_pham.sp_id IN (SELECT bl_idsp FROM binh_luan WHERE bl_idkh = ?) AND
                 binh_luan.bl_idkh = ?
     `;
-        let _books = await query(db, _qr, id);
+        let _books = await query(db, _qr, [id,id]);
         await Promise.all(
             _books.map(async (book, idx) => {
                 _hinhanh = await query(
