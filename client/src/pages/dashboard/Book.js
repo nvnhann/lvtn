@@ -149,7 +149,7 @@ export default function BookList() {
     return (
         <Page title="Book: List | HYPE">
             <Container maxWidth={themeStretch ? false : 'lg'}>
-               maxWidth={themeStretch ? false : 'lg'} <HeaderBreadcrumbs
+                <HeaderBreadcrumbs
                     heading="Sách"
                     links={[
                         {name: 'Quản lý', href: PATH_DASHBOARD.root},
