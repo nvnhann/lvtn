@@ -64,7 +64,7 @@ export default function DialogConfirm({
         })()
     }, [status]);
     const Schema = Yup.object().shape({
-        idnv: Yup.string().required('Vui lòng chọn Shipper'),
+        idnv: Yup.object().required('Vui lòng chọn Shipper'),
     });
     const formik = useFormik({
         enableReinitialize: true,
