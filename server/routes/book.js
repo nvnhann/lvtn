@@ -384,6 +384,7 @@ module.exports = function (app) {
 
     app.post('/shopcart', async (req, res) => {
         const {cart} = req.body;
+
         if (cart.length === 0) return res.status(500).send("Cart empty")
         let qr = `
             SELECT 
@@ -417,9 +418,10 @@ module.exports = function (app) {
                 tg.active = 1 AND 
                 dm.active = 1 AND 
                 tl.active = 1 AND 
-                sp.sp_id IN (?);`;
+                sp.sp_id IN (?) GROUP BY sp_id`;
 
         const _books = await query(db, qr, [cart.map(e => e.id_sp)]);
+        console.log(_books.map(e=>e.sp_id))
         await Promise.all(
             _books.map(async (book, idx) => {
                 _hinhanh = await query(
@@ -428,7 +430,8 @@ module.exports = function (app) {
                     book.sp_id
                 );
                 _books[idx].sp_hinhanh = _hinhanh;
-                _books[idx].sp_soluong = cart[idx].so_luong >   _books[idx].gb_soluong ?  _books[idx].gb_soluong : cart[idx].so_luong;
+                console.log( cart[idx], idx)
+                _books[idx].sp_soluong = cart[idx].so_luong > _books[idx].gb_soluong ?  _books[idx].gb_soluong : cart[idx].so_luong;
             })
         );
         return res.status(200).send(_books);
