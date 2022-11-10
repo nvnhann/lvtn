@@ -33,7 +33,7 @@ module.exports = function (app) {
         SELECT phieu_nhap.*, users.fullname, nha_cung_cap.ncc_ten
         FROM phieu_nhap
         LEFT JOIN users ON users.id = phieu_nhap.pn_idnv
-        LEFT JOIN nha_cung_cap ON nha_cung_cap.ncc_id = phieu_nhap.pn_idncc
+        LEFT JOIN nha_cung_cap ON nha_cung_cap.ncc_id = phieu_nhap.pn_idncc ORDER BY pn_id DESC
     `;
         return res.status(200).send(await query(db, qr_pn));
     });

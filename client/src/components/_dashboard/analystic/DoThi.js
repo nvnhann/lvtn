@@ -1,37 +1,14 @@
-import { merge } from 'lodash';
-import { useState } from 'react';
+import {merge} from 'lodash';
+import {useState} from 'react';
 import ReactApexChart from 'react-apexcharts';
 // material
-import { Card, CardHeader, Box, TextField } from '@material-ui/core';
+import {Card, CardHeader} from '@material-ui/core';
 import {BaseOptionChart} from "../../charts";
 import {fCurrency} from "../../../_helper/formatCurrentCy";
 //
 
 // ----------------------------------------------------------------------
 
-const CHART_DATA = [
-    {
-        year: 'Week',
-        data: [
-            { name: 'Income', data: [10, 41, 35, 151, 49, 62, 69, 91, 48] },
-            { name: 'Expenses', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] }
-        ]
-    },
-    {
-        year: 'Month',
-        data: [
-            { name: 'Income', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-            { name: 'Expenses', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] }
-        ]
-    },
-    {
-        year: 'Year',
-        data: [
-            { name: 'Income', data: [76, 42, 29, 41, 27, 138, 117, 86, 63] },
-            { name: 'Expenses', data: [80, 55, 34, 114, 80, 130, 15, 28, 55] }
-        ]
-    }
-];
 
 export default function DoThi({theo_nam}) {
     const [seriesData, setSeriesData] = useState('Year');
@@ -41,11 +18,6 @@ export default function DoThi({theo_nam}) {
     };
 
     const chartOptions = merge(BaseOptionChart(), {
-        stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-        },
         xaxis: {
             categories: ['Một', 'Hai', 'Ba', 'Bốn', 'Năm', 'Sáu', 'Bảy', 'Tám', 'Chín', 'Mười', 'Mười một', 'Mười hai']
         },
@@ -82,7 +54,7 @@ export default function DoThi({theo_nam}) {
                 //     </TextField>
                 // }
             />
-            <ReactApexChart type="bar" series={theo_nam} options={chartOptions} height={364} />
+            <ReactApexChart type="line" series={theo_nam} options={chartOptions} height={364}/>
 
         </Card>
     );

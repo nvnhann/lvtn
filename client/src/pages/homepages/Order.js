@@ -280,9 +280,15 @@ export default function Order() {
                         </Stack>
                         <Stack direction="row" justifyContent="space-between">
                             <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
+                                Tiền vận chuyển
+                            </Typography>
+                            <Typography variant="body2">{fCurrency(detail.hd_tienvc)}</Typography>
+                        </Stack>
+                        <Stack direction="row" justifyContent="space-between">
+                            <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
                                 Tổng đơn
                             </Typography>
-                            <Typography variant="body2">{fCurrency(detail.hd_tongtien)}</Typography>
+                            <Typography variant="body2">{fCurrency(detail.hd_tongtien+detail.hd_tienvc)}</Typography>
                         </Stack>
                         <Scrollbar>
                             <TableContainer sx={{minWidth: 720, mt: 2}}>
