@@ -435,5 +435,11 @@ module.exports = function (app) {
             })
         );
         return res.status(200).send(_books);
-    })
+    });
+    app.post("/book/active", async (req, res) => {
+        const {id, active} = req.body;
+        if (!id) return res.status(404).send("No content");
+        await query(db, `UPDATE san_pham SET active = ? where sp_id = ?`, [active, id]);
+        return res.status(200).send("Cập nhật thành công");
+    });
 };

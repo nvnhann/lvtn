@@ -131,7 +131,7 @@ export default function BookList() {
 
     const changeActiveBook = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/user/active', {
+            const res = await postData(API_BASE_URL + '/book/active', {
                 id: id,
                 active: active,
             });
