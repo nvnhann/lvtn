@@ -38,22 +38,7 @@ export default function Store() {
         validationSchema: Schema,
         onSubmit: async values => {
             try {
-                const formDt = new FormData();
-                formDt.append('data', JSON.stringify({
-                    ch_ten: values.ch_ten,
-                    ch_sdt: values.ch_sdt,
-                    ch_email: values.ch_email,
-                    ch_diachi: values.ch_diachi,
-                    ch_loinhuanbanhang: values.ch_loinhuanbanhang,
-                }));
-                if (values.banner.length > 0) {
-                    values.banner.map((value) => {
-                        return formDt.append('banner', value);
-                    });
-                }
-                // console.log(values)
-
-                await putData(API_BASE_URL + `/store/${store.id}`, formDt);
+                await putData(API_BASE_URL + `/store/${store.id}`, values);
                 dispatch(getStore());
                 setEdit(false);
                 enqueueSnackbar('Cập nhật thành công!', {
@@ -71,7 +56,7 @@ export default function Store() {
     });
 
     const {handleSubmit, getFieldProps, touched, errors} = formik;
-
+console.log(errors)
     return <>
         <Page title="Store | HYPE">
             <Container>
@@ -183,11 +168,8 @@ export default function Store() {
                                         <Button onClick={() => setEdit(false)}>Đóng</Button>
                                         <Button variant='contained' type='submit'>Lưu</Button>
                                     </Stack>
-
                                 </Card>}
                             </Grid>
-
-
                         </Grid>
                     </Form>
                 </FormikProvider>

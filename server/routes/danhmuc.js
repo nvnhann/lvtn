@@ -54,10 +54,9 @@ module.exports = function (app) {
 
     // get danh muc the loai
     app.get('/api/danhmuc', async (req, res) => {
-        let qr = "SELECT * FROM danh_muc WHERE active = 1";
-        let _danh_muc = await query(sql, qr);
+        let _danh_muc = await query(db, `SELECT * FROM danh_muc WHERE active = 1`);
         await Promise.all(_danh_muc.map(async (_dm, idx) => {
-            _danh_muc[idx].the_loai = await query(sql, "SELECT * FROM the_loai WHERE active = 1 AND tl_iddm = ?", _dm.dm_id);
+            _danh_muc[idx].the_loai = await query(db, "SELECT * FROM the_loai WHERE active = 1 AND tl_iddm = ?", _dm.dm_id);
         }))
         return res.status(200).send(_danh_muc)
     })
