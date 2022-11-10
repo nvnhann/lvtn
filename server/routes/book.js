@@ -229,7 +229,7 @@ module.exports = function (app) {
                 nxb.active = 1 AND 
                 tg.active = 1 AND 
                 dm.active = 1 AND 
-                tl.active = 1 LIMIT ?`;
+                tl.active = 1 GROUP BY sp.sp_id LIMIT ?`;
         let _books = await query(db, qr_book, limit);
         await Promise.all(
             _books.map(async (book, idx) => {
