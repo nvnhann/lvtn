@@ -38,6 +38,7 @@ const Loadable = (Component) => (props) => {
 export default function Router() {
     const isLogined = !!useSelector(state => state.user.current?.id);
     const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
+    const isEmployee = useSelector(state => state.user.current?.role) === "EMPLOYEE";
 
     return useRoutes([
         {
@@ -60,11 +61,15 @@ export default function Router() {
         // Dashboard Routes
         {
             path: 'dashboard',
-            element: isAdmin ? <DashboardLayout/> : <Navigate to='/'/>,
+            element: (isAdmin || isEmployee) ? <DashboardLayout/> : <Navigate to='/'/>,
             children: [
                 {
+                    path: '/',
+                    element: <Analytic/>
+                },
+                {
                     path: '/thongke',
-                    element: <Analytic />
+                    element: <Analytic/>
                 },
                 {
                     path: 'user',
@@ -347,4 +352,4 @@ const Hoadon = Loadable(lazy(() => import('../pages/dashboard/HoaDon')));
 const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const Store = Loadable(lazy(() => import('../pages/dashboard/Store')));
-const Analytic = Loadable(lazy(()=> import('../pages/dashboard/Analytic')));
+const Analytic = Loadable(lazy(() => import('../pages/dashboard/Analytic')));

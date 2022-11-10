@@ -36,6 +36,7 @@ import {MIconButton} from "../../components/@material-extend";
 import BookListToolbar from "../../components/_dashboard/book/list/BookListToolbar";
 import BookListHead from "../../components/_dashboard/book/list/BookListHead";
 import BookMoreMenu from "../../components/_dashboard/book/list/BookMoreMenu";
+import {useSelector} from "react-redux";
 
 
 // ----------------------------------------------------------------------
@@ -64,6 +65,7 @@ export default function BookList() {
     const [_datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -157,7 +159,7 @@ export default function BookList() {
                         {name: 'Danh sách'},
                     ]}
                     action={
-                        <Button
+                       isAdmin && <Button
                             variant="contained"
                             component={RouterLink}
                             to={PATH_DASHBOARD.book.new}
@@ -214,10 +216,10 @@ export default function BookList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox
+                                                        {isAdmin &&  <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) => handleClick(event, sp_id)}
-                                                        />
+                                                        />}
                                                     </TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack
@@ -252,16 +254,17 @@ export default function BookList() {
                                                     <TableCell align="left">{tl_ten}</TableCell>
                                                     <TableCell align="left">{nn_ten}</TableCell>
                                                     <TableCell align="left">
-                                                        <Switch
+                                                        { isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveBook(sp_id, !active);
                                                             }}
-                                                        />
+                                                        />}
+                                                        {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <BookMoreMenu id={sp_id}/>
+                                                        {  isAdmin && <BookMoreMenu id={sp_id}/>}
                                                     </TableCell>
                                                 </TableRow>
                                             );

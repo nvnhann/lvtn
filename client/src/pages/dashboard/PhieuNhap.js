@@ -36,6 +36,7 @@ import PhieuNhapMoreMenu from '../../components/_dashboard/phieunhap/list/PhieuN
 import {MIconButton} from "../../components/@material-extend";
 import closeFill from "@iconify/icons-eva/close-fill";
 import {useSnackbar} from "notistack5";
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -63,6 +64,7 @@ export default function BookList() {
     const [_datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
 
     useEffect(() => {
@@ -214,12 +216,12 @@ export default function BookList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox
+                                                        { isAdmin &&  <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) =>
                                                                 handleClick(event, pn_id)
                                                             }
-                                                        />
+                                                        />}
                                                     </TableCell>
                                                     <TableCell
                                                         align="center"
@@ -241,7 +243,7 @@ export default function BookList() {
                                                         {formatDateTime(pn_ngaylapphieu)}
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        {!pn_active && <Switch
+                                                        {(!pn_active && isAdmin) && <Switch
                                                             checked={pn_active === 1}
                                                             onChange={() => {
                                                                 changeActivePN(pn_id, !pn_active);
@@ -252,7 +254,7 @@ export default function BookList() {
 
                                                     </TableCell>
                                                     <TableCell align="right">
-                                                        <PhieuNhapMoreMenu id={pn_id}/>
+                                                        <PhieuNhapMoreMenu id={pn_id} active={pn_active}/>
                                                     </TableCell>
                                                 </TableRow>
                                             );

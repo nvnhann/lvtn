@@ -35,6 +35,7 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import NXBListToolbar from '../../components/_dashboard/nhaxuatban/list/NXBListToolbar';
 import NXBListHead from '../../components/_dashboard/nhaxuatban/list/NXBListHead';
 import NXBMoreMenu from '../../components/_dashboard/nhaxuatban/list/NXBMoreMenu';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -60,6 +61,7 @@ export default function NhaXuatBanList() {
     const [datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -156,7 +158,7 @@ export default function NhaXuatBanList() {
                         {name: 'Nhà xuất bản', href: PATH_DASHBOARD.nhaxuatban.root},
                     ]}
                     action={
-                        <Button
+                       isAdmin && <Button
                             variant="contained"
                             component={RouterLink}
                             to={PATH_DASHBOARD.nhaxuatban.new}
@@ -210,10 +212,10 @@ export default function NhaXuatBanList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox
+                                                        {isAdmin && <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) => handleClick(event, nxb_id)}
-                                                        />
+                                                        />}
                                                     </TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack
@@ -230,16 +232,18 @@ export default function NhaXuatBanList() {
                                                     <TableCell align="left">{nxb_sdt}</TableCell>
                                                     <TableCell align="left">{nxb_diachi}</TableCell>
                                                     <TableCell align="left">
-                                                        <Switch
+                                                        { isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveRole(nxb_id, !active);
                                                             }}
-                                                        />
+                                                        />}
+                                                        {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <NXBMoreMenu id={nxb_id}/>
+                                                        {isAdmin &&  <NXBMoreMenu id={nxb_id}/>}
                                                     </TableCell>
                                                 </TableRow>
                                             );

@@ -33,6 +33,7 @@ import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
 import {MIconButton} from '../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ const TABLE_HEAD = [
     {id: 'status', label: 'Trạng thái', alignRight: false},
     {id: ''},
 ];
+
 
 // ----------------------------------------------------------------------
 
@@ -59,6 +61,8 @@ export default function UserList() {
     const [users, setUsers] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+
 
     useEffect(() => {
         (async () => {
@@ -152,7 +156,7 @@ export default function UserList() {
                         {name: 'Danh sách'},
                     ]}
                     action={
-                        <Button
+                        isAdmin && <Button
                             variant="contained"
                             component={RouterLink}
                             to={PATH_DASHBOARD.user.newUser}
@@ -207,10 +211,10 @@ export default function UserList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox
+                                                        {isAdmin &&  <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) => handleClick(event, id)}
-                                                        />
+                                                        />}
                                                     </TableCell>
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack
@@ -230,16 +234,19 @@ export default function UserList() {
                                                         {verify ? 'Đã xác minh' : 'Chưa'}
                                                     </TableCell>
                                                     <TableCell align="left">
-                                                        <Switch
+                                                        {isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveUser(id, !active);
                                                             }}
-                                                        />
+                                                        />}
+                                                        {!isAdmin && <Typography>
+                                                            {active ? 'Hiện' : 'Ần'}
+                                                        </Typography>}
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <UserMoreMenu id={id}/>
+                                                        {isAdmin && <UserMoreMenu id={id}/>}
                                                     </TableCell>
                                                 </TableRow>
                                             );
@@ -250,15 +257,17 @@ export default function UserList() {
                                         </TableRow>
                                     )}
                                 </TableBody>
-                                {isUserNotFound && (
-                                    <TableBody>
-                                        <TableRow>
-                                            <TableCell align="center" colSpan={6} sx={{py: 3}}>
-                                                <SearchNotFound searchQuery={filterName}/>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                )}
+                                {
+                                    isUserNotFound && (
+                                        <TableBody>
+                                            <TableRow>
+                                                <TableCell align="center" colSpan={6} sx={{py: 3}}>
+                                                    <SearchNotFound searchQuery={filterName}/>
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )
+                                }
                             </Table>
                         </TableContainer>
                     </Scrollbar>
@@ -275,5 +284,6 @@ export default function UserList() {
                 </Card>
             </Container>
         </Page>
-    );
+    )
+        ;
 }

@@ -131,15 +131,15 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
 
                             <Stack direction="row" justifyContent="space-between">
                                 <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
-                                    Địa chỉ
+                                    Tiền vận chuyển
                                 </Typography>
-                                <Typography variant="body2">{hoadon.hd_diachi}</Typography>
+                                <Typography variant="body2">{fCurrency(hoadon.hd_tienvc)}</Typography>
                             </Stack>
                             <Stack direction="row" justifyContent="space-between">
                                 <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
                                     Tổng đơn
                                 </Typography>
-                                <Typography variant="body2">{fCurrency(hoadon.hd_tongtien)}</Typography>
+                                <Typography variant="body2">{fCurrency(hoadon.hd_tongtien+hoadon.hd_tienvc)}</Typography>
                             </Stack>
                         </Card>
                         <Card>

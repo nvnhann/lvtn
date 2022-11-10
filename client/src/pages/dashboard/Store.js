@@ -18,6 +18,8 @@ export default function Store() {
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [isEdit, setEdit] = useState(false);
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+
     const Schema = Yup.object().shape({
         ch_ten: Yup.string().required('Vui lòng nhập tên cửa hàng'),
         ch_sdt: Yup.string().required('Vui lòng nhập số điện thoại'),
@@ -56,9 +58,9 @@ export default function Store() {
     });
 
     const {handleSubmit, getFieldProps, touched, errors} = formik;
-console.log(errors)
+
     return <>
-        <Page title="Store | HYPE">
+        <Page title="Cửa hàng">
             <Container>
                 <Typography variant='h3'>Thông tin cửa hàng</Typography>
                 <FormikProvider value={formik}>
@@ -102,11 +104,11 @@ console.log(errors)
                                         <Typography variant="subtitle2">{store.ch_loinhuanbanhang} %</Typography>
                                     </Stack>
 
-                                    <Stack direction="row" justifyContent="end">
+                                    {isAdmin && <Stack direction="row" justifyContent="end">
                                         {!isEdit && <Button variant='contained' onClick={() => setEdit(true)}>
                                             Chỉnh sửa
                                         </Button>}
-                                    </Stack>
+                                    </Stack>}
                                 </Card>
                             </Grid>
 

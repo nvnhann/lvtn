@@ -7,14 +7,13 @@ import {
     Button,
     Card,
     Checkbox,
-    Container,
-    Switch,
+    Container, Switch,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TablePagination,
-    TableRow,
+    TableRow, Typography,
 } from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
@@ -32,7 +31,8 @@ import {MIconButton} from '../../components/@material-extend';
 import closeFill from '@iconify/icons-eva/close-fill';
 import NCCListToolbar from '../../components/_dashboard/nhacungcap/list/NCCListToolbar';
 import NCCListHead from '../../components/_dashboard/nhacungcap/list/NCCListHead';
-import NCCMoreMenu from '../../components/_dashboard/nhacungcap/list/NCCMoreMenu';
+import {useSelector} from "react-redux";
+import NCCMoreMenu from "../../components/_dashboard/nhacungcap/list/NCCMoreMenu";
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +58,7 @@ export default function CungCapList() {
     const [datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -152,7 +153,7 @@ export default function CungCapList() {
                         {name: 'Nhà cung cấp', href: PATH_DASHBOARD.nhaxuatban.root},
                     ]}
                     action={
-                        <Button
+                        isAdmin && <Button
                             variant="contained"
                             component={RouterLink}
                             to={PATH_DASHBOARD.nhacungcap.new}
@@ -206,10 +207,10 @@ export default function CungCapList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        <Checkbox
+                                                        {isAdmin && <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) => handleClick(event, ncc_id)}
-                                                        />
+                                                        />}
                                                     </TableCell>
                                                     <TableCell component="th" padding="none">
                                                         {ncc_ten}
@@ -218,16 +219,18 @@ export default function CungCapList() {
                                                     <TableCell align="left" sx={{width: '10rem'}}>{ncc_sdt}</TableCell>
                                                     <TableCell align="left">{ncc_diachi}</TableCell>
                                                     <TableCell align="left">
-                                                        <Switch
+                                                        {isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveRole(ncc_id, !active);
                                                             }}
-                                                        />
+                                                        />}
+                                                        {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <NCCMoreMenu id={ncc_id}/>
+                                                        {isAdmin && <NCCMoreMenu id={ncc_id}/>}
                                                     </TableCell>
                                                 </TableRow>
                                             );
@@ -263,5 +266,6 @@ export default function CungCapList() {
                 </Card>
             </Container>
         </Page>
-    );
+    )
+        ;
 }

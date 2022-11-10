@@ -34,6 +34,7 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import TacGiaNewForm from '../../components/_dashboard/tacgia/TacGiaNewForm';
 import TacGiaListToolbar from '../../components/_dashboard/tacgia/list/TacGiaListToolbar';
 import TacGiaListHead from '../../components/_dashboard/tacgia/list/TacGiaListHead';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,7 @@ export default function TacGiaList() {
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [edit, setEdit] = useState({isEdit: false, current: {}});
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -153,15 +155,16 @@ export default function TacGiaList() {
                 />
 
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
-                        <TacGiaNewForm
-                            isEdit={edit.isEdit}
-                            current={edit.current}
-                            setEdit={setEdit}
-                            setLoad={setLoad}
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={8}>
+                    {isAdmin &&
+                        <Grid item xs={12} md={3}>
+                            <TacGiaNewForm
+                                isEdit={edit.isEdit}
+                                current={edit.current}
+                                setEdit={setEdit}
+                                setLoad={setLoad}
+                            />
+                        </Grid>}
+                    <Grid item xs={12} md={isAdmin ? 8 : 12}>
                         <Card>
                             <TacGiaListToolbar
                                 selected={selected}
@@ -201,12 +204,12 @@ export default function TacGiaList() {
                                                             aria-checked={isItemSelected}
                                                         >
                                                             <TableCell padding="checkbox">
-                                                                <Checkbox
+                                                                {isAdmin &&  <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
                                                                         handleClick(event, tg_id)
                                                                     }
-                                                                />
+                                                                />}
                                                             </TableCell>
                                                             <TableCell
                                                                 component="th"
@@ -224,16 +227,17 @@ export default function TacGiaList() {
                                                                 </Stack>
                                                             </TableCell>
                                                             <TableCell align="left">
-                                                                <Switch
+                                                                { isAdmin &&   <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
                                                                         changeActiveRole(tg_id, !active);
                                                                     }}
-                                                                />
+                                                                />}
+                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                             </TableCell>
 
                                                             <TableCell>
-                                                                <IconButton>
+                                                                {isAdmin && <IconButton>
                                                                     <Icon
                                                                         icon="akar-icons:edit"
                                                                         color="#B72136"
@@ -244,7 +248,7 @@ export default function TacGiaList() {
                                                                             })
                                                                         }
                                                                     />
-                                                                </IconButton>
+                                                                </IconButton>}
                                                             </TableCell>
                                                         </TableRow>
                                                     );

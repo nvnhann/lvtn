@@ -14,7 +14,7 @@ PhieuNhapMoreMenu.propTypes = {
     id: PropTypes.string,
 };
 
-export default function PhieuNhapMoreMenu({id}) {
+export default function PhieuNhapMoreMenu({id, active}) {
     const ref = useRef(null);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -34,7 +34,7 @@ export default function PhieuNhapMoreMenu({id}) {
                 anchorOrigin={{vertical: 'top', horizontal: 'right'}}
                 transformOrigin={{vertical: 'top', horizontal: 'right'}}
             >
-                <MenuItem
+                {!active && <MenuItem
                     component={RouterLink}
                     to={`${PATH_DASHBOARD.phieunhap.root}/${id}/edit`}
                     sx={{color: 'text.secondary'}}
@@ -46,7 +46,7 @@ export default function PhieuNhapMoreMenu({id}) {
                         primary="Chỉnh sửa"
                         primaryTypographyProps={{variant: 'body2'}}
                     />
-                </MenuItem>
+                </MenuItem>}
                 <MenuItem
                     component={RouterLink}
                     to={`${PATH_DASHBOARD.phieunhap.root}/${id}/detail`}

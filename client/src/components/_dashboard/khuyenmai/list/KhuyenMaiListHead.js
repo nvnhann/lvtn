@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // material
 import {visuallyHidden} from '@material-ui/utils';
 import {Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel,} from '@material-ui/core';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -27,16 +28,17 @@ export default function KhuyenMaiListHead({
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     return (
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    <Checkbox
+                    {isAdmin &&  <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                    />
+                    />}
                 </TableCell>
                 {headLabel.map((headCell) => (
                     <TableCell

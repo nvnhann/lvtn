@@ -224,7 +224,6 @@ module.exports = function (app) {
         const _qr = "INSERT INTO trang_thai SET ?";
 
         if(data.tt_trangthai === 4){
-            console.log('âa')
             let _listSP = await query(db, "SELECT cthd_idsp, cthd_soluong FROM `chi_tiet_hoa_don` WHERE cthd_idhd = ?", id);
            await Promise.all( _listSP.map(async e => await query(db, "UPDATE gia_ban SET gb_soluong = gb_soluong + ? WHERE gb_idsp = ?", [e.cthd_soluong, e.cthd_idsp])))
         }

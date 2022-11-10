@@ -34,6 +34,7 @@ import closeFill from '@iconify/icons-eva/close-fill';
 import DanhMucNewForm from '../../components/_dashboard/danhmuc/DanhMucNewForm';
 import DanhMucListToolbar from '../../components/_dashboard/danhmuc/list/DanhMucListToolbar';
 import DanhMucListHead from '../../components/_dashboard/danhmuc/list/DanhMucListHead';
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -57,6 +58,7 @@ export default function DanhMucList() {
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [edit, setEdit] = useState({isEdit: false, current: {}});
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -153,15 +155,15 @@ export default function DanhMucList() {
                 />
 
                 <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
+                    {isAdmin &&  <Grid item xs={12} md={3}>
                         <DanhMucNewForm
                             isEdit={edit.isEdit}
                             current={edit.current}
                             setEdit={setEdit}
                             setLoad={setLoad}
                         />
-                    </Grid>
-                    <Grid item xs={12} md={8}>
+                    </Grid>}
+                    <Grid item xs={12} md={isAdmin ? 8 : 12}>
                         <Card>
                             <DanhMucListToolbar
                                 selected={selected}
@@ -201,12 +203,12 @@ export default function DanhMucList() {
                                                             aria-checked={isItemSelected}
                                                         >
                                                             <TableCell padding="checkbox">
-                                                                <Checkbox
+                                                                {isAdmin && <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
                                                                         handleClick(event, dm_id)
                                                                     }
-                                                                />
+                                                                />}
                                                             </TableCell>
                                                             <TableCell
                                                                 component="th"
@@ -224,16 +226,18 @@ export default function DanhMucList() {
                                                                 </Stack>
                                                             </TableCell>
                                                             <TableCell align="left">
-                                                                <Switch
+                                                                {isAdmin && <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
                                                                         changeActiveRole(dm_id, !active);
                                                                     }}
-                                                                />
+                                                                />}
+                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+
                                                             </TableCell>
 
                                                             <TableCell>
-                                                                <IconButton>
+                                                                {isAdmin &&<IconButton>
                                                                     <Icon
                                                                         icon="akar-icons:edit"
                                                                         color="#B72136"
@@ -244,7 +248,7 @@ export default function DanhMucList() {
                                                                             })
                                                                         }
                                                                     />
-                                                                </IconButton>
+                                                                </IconButton>}
                                                             </TableCell>
                                                         </TableRow>
                                                     );

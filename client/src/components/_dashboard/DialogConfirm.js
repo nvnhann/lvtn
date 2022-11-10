@@ -1,5 +1,6 @@
 import {forwardRef, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 // material
 import {
     Autocomplete,
@@ -8,13 +9,15 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Grid,
     Slide,
     TextField,
 } from '@material-ui/core';
 import {getData, putData} from "../../_helper/httpProvider";
 import {API_BASE_URL} from "../../config/configUrl";
-import {useFormik} from "formik";
+import {Form, FormikProvider, useFormik} from "formik";
 import {useSnackbar} from "notistack5";
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +27,7 @@ DialogConfirm.propTypes = {
     handleClickOpen: PropTypes.func,
     excFunc: PropTypes.func,
 };
+
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +52,7 @@ export default function DialogConfirm({
                                       }) {
     const [shipper, sertShipper] = useState();
     const {enqueueSnackbar} = useSnackbar();
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
 
     useEffect(() => {
@@ -58,24 +63,39 @@ export default function DialogConfirm({
             }
         })()
     }, [status]);
-
+    const Schema = Yup.object().shape({
+        idnv: Yup.string().required('Vui lòng chọn Shipper'),
+    });
     const formik = useFormik({
         enableReinitialize: true,
         initialValues: {
             idnv: ''
-        }
+        },
+        onSubmit: async values => {
+            try {
+                await putData(API_BASE_URL + `/hoadon/${idhd}`, {
+                    tt_trangthai: 1,
+                    hd_idnv: values.idnv.id,
+                    tt_idnv: idnv
+                })
+                if (setLoad) setLoad(e => e + 1);
+                enqueueSnackbar('Xác nhận đơn hàng thành công', {
+                    variant: 'success',
+                });
+                handleClose()
+            } catch (e) {
+                console.log(e)
+            }
+        },
+        validationSchema: Schema
     });
 
-    const {values, setFieldValue} = formik;
-
-    const handleConfirm = async () => {
-        if (excFunc) await excFunc();
-        handleClose();
-    };
-
-    const XacNhanDon = async () => {
+    const huyDon = async () =>{
         try {
-            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 1, hd_idnv: values.idnv.id, tt_idnv: idnv})
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {
+                tt_trangthai: 4,
+                tt_idnv: idnv
+            })
             if (setLoad) setLoad(e => e + 1);
             enqueueSnackbar('Xác nhận đơn hàng thành công', {
                 variant: 'success',
@@ -86,8 +106,16 @@ export default function DialogConfirm({
         }
     }
 
+    const {values, setFieldValue, errors, handleSubmit, touched} = formik;
+
+    const handleConfirm = async () => {
+        if (excFunc) await excFunc();
+        handleClose();
+    };
+
     return (
         <div>
+
             <Dialog
                 open={open}
                 TransitionComponent={Transition}
@@ -100,31 +128,44 @@ export default function DialogConfirm({
             >
                 <DialogTitle id="alert-dialog-slide-title">{!!title ? title : 'Thông báo'}</DialogTitle>
                 <DialogContent>{message}</DialogContent>
-                {showAction && <DialogActions>
 
+                {showAction && <DialogActions>
                     {status === 0 && (
                         <>
-                            <Autocomplete
-                                fullWidth
-                                freeSolo
-                                value={values.idnv}
-                                onChange={(event, newValue) => {
-                                    setFieldValue('idnv', newValue);
-                                }}
-                                options={shipper?.map((option) => ({
-                                    id: option.id,
-                                    fullname: option.fullname,
-                                }))}
-                                renderInput={(params) => (
-                                    <TextField label="Shipper" {...params} />
-                                )}
-                                getOptionLabel={(option) => option.fullname || ''}
-                            />
-                            <Button sx={{width: '14rem'}} onClick={() => {
-                                XacNhanDon()
-                            }}>Xác nhận đơn hàng</Button>
+                            <FormikProvider value={formik}>
+                                <Form noValidate autoComplete="off" onSubmit={handleSubmit}>
+                                    <Grid  alignItems='center' spacing={2} sx={{width: '40rem'}} container>
+                                        <Grid item md={8}>
+                                            <Autocomplete
+                                                fullWidth
+                                                freeSolo
+                                                value={values.idnv}
+                                                onChange={(event, newValue) => {
+                                                    setFieldValue('idnv', newValue);
+                                                }}
+                                                options={shipper?.map((option) => ({
+                                                    id: option.id,
+                                                    fullname: option.fullname,
+                                                }))}
+                                                renderInput={(params) => (
+                                                    <TextField label="Shipper" {...params}
+                                                               error={Boolean(touched.idnv && errors.idnv)}
+                                                               helperText={touched.idnv && errors.idnv}/>
+                                                )}
+                                                getOptionLabel={(option) => option.fullname || ''}
+                                            />
+                                        </Grid>
+                                        <Grid item md={4} >
+                                            <Button type="submit" variant='contained'>Xác nhận</Button>
+                                        </Grid>
+                                    </Grid>
+
+                                </Form>
+                            </FormikProvider>
+                            {isAdmin && <Button  variant='contained' color='error' onClick={()=> huyDon()}>Hủy đơn</Button>}
                         </>
                     )}
+
 
                     <Button color="inherit" onClick={handleClose}>
                         Đóng
@@ -137,8 +178,10 @@ export default function DialogConfirm({
                     >
                         Đồng ý
                     </Button>}
+
                 </DialogActions>}
             </Dialog>
+
         </div>
     );
 }

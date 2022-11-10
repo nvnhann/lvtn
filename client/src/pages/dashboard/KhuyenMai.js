@@ -13,7 +13,7 @@ import {
     TableCell,
     TableContainer,
     TablePagination,
-    TableRow,
+    TableRow, Typography,
 } from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
@@ -33,6 +33,7 @@ import KhuyenMaiNewForm from "../../components/_dashboard/khuyenmai/KhuyenMaiNew
 import KhuyenMaiListToolbar from "../../components/_dashboard/khuyenmai/list/KhuyenMaiListToolbar";
 import KhuyenMaiListHead from "../../components/_dashboard/khuyenmai/list/KhuyenMaiListHead";
 import {formatDate} from "../../_helper/formatDate";
+import {useSelector} from "react-redux";
 
 // ----------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ export default function KhuyenMai() {
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [edit, setEdit] = useState({isEdit: false, current: {}});
+    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
@@ -146,7 +148,7 @@ export default function KhuyenMai() {
         }
     };
     return (
-        <Page title="Khuyen Mai|HYPE">
+        <Page title="Khuyen Mai">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading="Khuyến mãi"
@@ -158,12 +160,12 @@ export default function KhuyenMai() {
 
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
-                        <KhuyenMaiNewForm
+                        { isAdmin && <KhuyenMaiNewForm
                             isEdit={edit.isEdit}
                             current={edit.current}
                             setEdit={setEdit}
                             setLoad={setLoad}
-                        />
+                        />}
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Card>
@@ -216,12 +218,12 @@ export default function KhuyenMai() {
                                                             aria-checked={isItemSelected}
                                                         >
                                                             <TableCell padding="checkbox">
-                                                                <Checkbox
+                                                                { isAdmin && <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
                                                                         handleClick(event, km_id)
                                                                     }
-                                                                />
+                                                                />}
                                                             </TableCell>
                                                             <TableCell
                                                                 component="th"
@@ -270,16 +272,17 @@ export default function KhuyenMai() {
                                                                 {formatDate(km_ngayketthuc) === '1970-01-01' ? '' : formatDate(km_ngayketthuc)}
                                                             </TableCell>
                                                             <TableCell align="left">
-                                                                <Switch
+                                                                {isAdmin && <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
                                                                         changeActiveRole(km_id, !active);
                                                                     }}
-                                                                />
+                                                                />}
+                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                             </TableCell>
 
                                                             <TableCell>
-                                                                <IconButton>
+                                                                {isAdmin && <IconButton>
                                                                     <Icon
                                                                         icon="akar-icons:edit"
                                                                         color="#B72136"
@@ -305,7 +308,7 @@ export default function KhuyenMai() {
                                                                             })
                                                                         }
                                                                     />
-                                                                </IconButton>
+                                                                </IconButton>}
                                                             </TableCell>
                                                         </TableRow>
                                                     );

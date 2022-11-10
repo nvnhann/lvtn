@@ -23,6 +23,7 @@ export default function AccountPopover() {
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.current);
     const isAdmin = user?.role === 'ADMIN';
+    const isEmployee = user?.role === 'EMPLOYEE';
 
     const handleOpen = () => {
         setOpen(true);
@@ -101,7 +102,7 @@ export default function AccountPopover() {
                     Thông tin tài khoản
                 </MenuItem>
 
-                {isAdmin && (
+                {(isAdmin || isEmployee )&& (
                     <MenuItem
                         to={PATH_DASHBOARD.root}
                         component={RouterLink}
