@@ -124,11 +124,12 @@ export default function TheLoaiList() {
 
     const isRoleNotFound = datas.length === 0;
 
-    const changeActiveRole = async (id, active) => {
+    const changeActiveRole = async (id, active, iddm) => {
         try {
             const res = await postData(API_BASE_URL + '/theloai/active', {
                 id: id,
                 active: active,
+                tl_iddm: iddm
             });
             setLoad((e) => e + 1);
             enqueueSnackbar(res.data, {
@@ -191,8 +192,7 @@ export default function TheLoaiList() {
                                                     page * rowsPerPage + rowsPerPage,
                                                 )
                                                 .map((row) => {
-                                                    const {tl_id, tl_ten, dm_ten, active, tl_iddm} =
-                                                        row;
+                                                    const {tl_id, tl_ten, dm_ten, active, tl_iddm} = row;
                                                     const isItemSelected = selected.indexOf(tl_id) !== -1;
                                                     return (
                                                         <TableRow
@@ -233,7 +233,7 @@ export default function TheLoaiList() {
                                                                 {isAdmin && <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
-                                                                        changeActiveRole(tl_id, !active);
+                                                                        changeActiveRole(tl_id, !active, tl_iddm);
                                                                     }}
                                                                 />}
                                                                 {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}

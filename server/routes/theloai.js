@@ -5,16 +5,16 @@ module.exports = function (app) {
 
     // lay danh sach the loai
     app.get("/theloai", async (req, res) => {
-        let qr = "SELECT * FROM `the_loai` LEFT JOIN danh_muc ON danh_muc.dm_id = the_loai.tl_iddm ";
+        let qr = "SELECT danh_muc.*, the_loai.* FROM `the_loai` LEFT JOIN danh_muc ON danh_muc.dm_id = the_loai.tl_iddm ";
         if (req.query.search) qr += `WHERE tl_ten like '%${req.query.search}%' or dm_ten like '%${req.query.search}%'`;
         return res.status(200).send(await query(db,qr));
     });
 
     // dat lai trang thai the loai
     app.post("/theloai/active", async (req, res) => {
-        const {id, active} = req.body;
+        const {id, active, tl_iddm} = req.body;
         if (!id) return res.status(404).send("No content");
-        await query(db, `UPDATE the_loai SET active = ? where tl_id = ?`,  [active, id]);
+        await query(db, `UPDATE the_loai SET active = ? where tl_id = ? AND tl_iddm = ?`,  [active, id, tl_iddm]);
         return res.status(200).send("Cập nhật thành công");
     });
 
