@@ -58,7 +58,7 @@ export default function CungCapList() {
     const [datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+    const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {

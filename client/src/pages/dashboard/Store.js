@@ -18,7 +18,7 @@ export default function Store() {
     const dispatch = useDispatch();
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [isEdit, setEdit] = useState(false);
-    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+    const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
 
     const Schema = Yup.object().shape({
         ch_ten: Yup.string().required('Vui lòng nhập tên cửa hàng'),

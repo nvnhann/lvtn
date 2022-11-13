@@ -29,7 +29,7 @@ export default function BookListHead({
         onRequestSort(event, property);
     };
 
-    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+    const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
 
 
     return (

@@ -62,7 +62,7 @@ export default function KhuyenMai() {
     const [load, setLoad] = useState(0);
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [edit, setEdit] = useState({isEdit: false, current: {}});
-    const isAdmin = useSelector(state => state.user.current.role) === "ADMIN";
+    const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
 
     useEffect(() => {
         (async () => {
