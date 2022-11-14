@@ -39,7 +39,6 @@ import {useSelector} from "react-redux";
 
 const TABLE_HEAD = [
     {id: 'id', label: 'Sách', alignRight: false},
-    {id: 'têntl', label: 'Tên thể loại', alignRight: false},
     {id: 'tên', label: 'Tên sản phẩm', alignRight: false},
     {id: 'phan_tram', label: 'Phần trăm giảm', alignRight: false},
     {id: 'ngay_bd', label: 'Ngày bắt đầu', alignRight: false},
@@ -228,17 +227,10 @@ export default function KhuyenMai() {
                                                             <TableCell
                                                                 component="th"
                                                                 scope="row"
-                                                                padding="none"
                                                             >
                                                                 {sp_masp}
                                                             </TableCell>
-                                                            <TableCell
-                                                                component="th"
-                                                                scope="row"
-                                                                padding="none"
-                                                            >
-                                                                {tl_ten}
-                                                            </TableCell>
+                                                    
                                                             <TableCell
                                                                 component="th"
                                                                 scope="row"

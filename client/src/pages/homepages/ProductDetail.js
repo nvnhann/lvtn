@@ -52,8 +52,8 @@ export default function ProductDetail() {
     const [product, setProduct] = useState({});
     const [comment, setComment] = useState([]);
     const [pageURL, setPageURL] = useState(1);
-
-    const totalRating = comment?.rating?.length > 0 ? comment.rating.reduce((count, item) => count + item.rate, 0)/comment.rating.length : 0;
+    console.log(comment);
+    const totalRating = comment?.rating?.length > 0 ? comment.rating.reduce((count, item) => count + item.rate * item.num, 0)/comment.rating.reduce((count, item) => count + item.num, 0) : 0;
 
     useEffect(() => {
         (async () => {
@@ -91,7 +91,7 @@ export default function ProductDetail() {
                                 Đánh giá
                             </Typography>
                             <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
-                                {totalRating}/5
+                                {parseFloat(totalRating).toFixed(1)}/5
                             </Typography>
                             <Rating readOnly value={totalRating} precision={0.1} />
                         </GridStyle>

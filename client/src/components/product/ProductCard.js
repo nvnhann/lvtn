@@ -114,7 +114,7 @@ export default function ProductCard({product}) {
                     </IconButton>)}
                     {gb_soluong === 0 &&
                         (<Box><Typography align="center" color="error">Hết hàng</Typography></Box>)}
-                < /Stack>
+                </Stack>
             </Stack>
         </Card>
     );

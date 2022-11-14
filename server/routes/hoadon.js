@@ -49,13 +49,13 @@ module.exports = function (app) {
         if (_hoadon.length) {
             let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
                 "FROM `chi_tiet_hoa_don`\n" +
-                "LEFT JOIN san_pham ON chi_tiet_hoa_don.cthd_idsp = san_pham.sp_id\n" +
+                "INNER JOIN san_pham ON chi_tiet_hoa_don.cthd_idsp = san_pham.sp_id\n" +
                 "LEFT JOIN (SELECT ha_idsp, ha_hinh, MAX(ha_id)  FROM `hinh_anh` GROUP BY ha_idsp) ha_max ON ha_max.ha_idsp = chi_tiet_hoa_don.cthd_idsp\n" +
                 "WHERE chi_tiet_hoa_don.cthd_idhd = ?";
-
+            console.log(_cthd);
             await Promise.all(await _hoadon.map(async (e, idx) => {
                 _hoadon[idx].cthd = await query(db, _cthd, e.hd_id);
-                _hoadon[idx].trangthai = await query(db, "SELECT * FROM trang_thai WHERE tt_idhd = ?", e.hd_id);
+                _hoadon[idx].trangthai = await query(db, "SELECT * FROM trang_thai WHERE tt_trangthai = 3 AND tt_idhd = ?", e.hd_id);
             }));
         }
 

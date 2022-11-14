@@ -144,7 +144,7 @@ export default function Searchbar() {
                         <TableBody>
                             {products?.map((product) => {
                                 const {
-                                    sp_id, sp_ten, ctpn_gia, sp_hinhanh, sp_giakhuyenmai, tl_ten, tg_ten, sp_masp
+                                    sp_id, sp_ten, gia_ban, sp_hinhanh, sp_giakhuyenmai, tl_ten, tg_ten, sp_masp
                                 } = product;
                                 const linkTo = `${PATH_PAGE.productDetail}/${sp_id}`;
                                 return (
@@ -179,10 +179,10 @@ export default function Searchbar() {
                                                     color: 'text.disabled', textDecoration: 'line-through'
                                                 }}
                                             >
-                                                {!!sp_giakhuyenmai && fCurrency(ctpn_gia)}
+                                                {!!sp_giakhuyenmai && fCurrency(gia_ban)}
                                             </Typography>
                                             <Typography>
-                                                {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(ctpn_gia)}
+                                                {!!sp_giakhuyenmai ? fCurrency(sp_giakhuyenmai) : fCurrency(gia_ban)}
                                             </Typography>
                                         </TableCell>
                                     </TableRow>

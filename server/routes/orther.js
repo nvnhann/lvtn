@@ -112,13 +112,10 @@ module.exports = function (app) {
                                             WHERE
                                                 trang_thai.tt_trangthai = 3`);
         _hoa_don_da_giao = await query(db, `SELECT
-                                                    COUNT(*) so_luong
+                                                    SUM(gb_soluong) so_luong
                                                 FROM
-                                                    hoa_don
-                                                LEFT JOIN trang_thai ON trang_thai.tt_idhd = hoa_don.hd_id
-                                                WHERE
-                                                    trang_thai.tt_trangthai = 3`);
-        _theo_nam = await query(db, `CALL thongketheonam(2022)`);
+                                                    gia_ban`);
+        _theo_nam = await query(db, `CALL thongke_1nam_temp(2022)`);
         _result.user = _user[0].so_luong;
         _result.employee = _employee[0].so_luong;
         _result.shipper = _shipper[0].so_luong;

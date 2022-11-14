@@ -41,7 +41,7 @@ export default function Analytic() {
                         <AnalyticNhap total={thongke.so_luong_ban} text={'Số lượng sách đã bán'} />
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
-                        <AnalyticHoaDon total={thongke.hoa_don_da_giao} text={'Đơn hàng đã giao thành công'} />
+                        <AnalyticHoaDon total={thongke.hoa_don_da_giao} text={'Số lượng sách tồn kho'} />
                     </Grid>
                     <Grid item xs={12} md={12}>
                         {thongke?.theo_nam && <DoThi theo_nam={thongke.theo_nam}/>}
