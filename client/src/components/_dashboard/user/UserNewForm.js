@@ -229,7 +229,7 @@ export default function UserNewForm({ isEdit, currentUser, id, isProfile }) {
                     </RadioGroup>
                   </FormControl>
                 </Stack>
-                {(!isProfile && currentUser?.role_id !== 2) && (
+                {!isProfile && currentUser?.role_id !== 2 && (
                   <FormControl>
                     <InputLabel id="role-select">Quyền</InputLabel>
                     <Select

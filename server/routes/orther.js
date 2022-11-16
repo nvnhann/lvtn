@@ -2,7 +2,6 @@ const db = require("../db");
 const query = require("../lib/query");
 
 module.exports = function (app) {
-
   app.get("/api/role", async (req, res) => {
     let qr = "SELECT * FROM quyen WHERE q_id <> 2";
     return res.status(200).send(await query(db, qr));
