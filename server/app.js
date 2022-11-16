@@ -72,6 +72,7 @@ require("./routes/khuyenmai")(app);
 require("./routes/diachi")(app);
 require("./routes/hoadon")(app);
 require("./routes/orther")(app);
+// require("./routes/donhang")(app);
 
 function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)

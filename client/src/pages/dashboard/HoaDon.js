@@ -47,17 +47,20 @@ export default function HoaDon() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [_datas, setDatas] = useState([]);
     const [load, setLoad] = useState(0);
+    const [activeStep, setActiveStep] = useState(0);
+
 
     useEffect(() => {
         (async () => {
             try {
-                const res = await getData(API_BASE_URL + `/hoadon?search=${filterName}`);
+                const res = await getData(API_BASE_URL + `/hoadon?search=${filterName}&&trangthai=${activeStep}`);
                 setDatas(res.data);
             } catch (e) {
                 console.log(e);
             }
         })();
-    }, [filterName, load]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [load, activeStep]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -129,6 +132,8 @@ export default function HoaDon() {
                             onFilterName={handleFilterByName}
                             setLoad={setLoad}
                             setSelected={setSelected}
+                            activeStep={activeStep}
+                            setActiveStep={setActiveStep}
                         />
                         <Scrollbar>
                             <TableContainer sx={{minWidth: 800}}>

@@ -236,7 +236,7 @@ module.exports = function (app) {
         const {search ,type, priceType, priceRange, idtl, idtg} = req.query;
         let qr_book = `SELECT 
         sp.sp_ten, sp.sp_id, sp.sp_masp, tg_ten, tl_ten,
-        gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban, km.km_phantramgiam, 
+        gb.gb_gia * (1 + ch.ch_loinhuanbanhang/100) gia_ban, km.km_phantramgiam, 
         gb.gb_soluong,
         (
             CASE 
@@ -264,13 +264,13 @@ module.exports = function (app) {
         if(!!search && search !== null){
             qr_book += `AND (sp_ten like '%${search}%' OR sp_masp like '%${search}%' OR tg_ten like '%${search}%' OR tl_ten like '%${search}%') `;
         }
-        if (!!priceRange) qr_book += `AND gb_gia*1.2 >= ${priceRange} `;
+        if (!!priceRange) qr_book += `AND (gb.gb_gia * (1 + ch.ch_loinhuanbanhang/100)) >= ${priceRange} `;
         qr_book += "GROUP BY sp_id ";
         if (!!priceType) {
             if (priceType === 'Giá cao đến thấp') {
-                qr_book += 'ORDER BY gb_gia*1.2 DESC'
+                qr_book += 'ORDER BY gb.gb_gia * (1 + ch.ch_loinhuanbanhang/100) DESC'
             } else {
-                qr_book += 'ORDER BY gb_gia*1.2 ASC'
+                qr_book += 'ORDER BY gb.gb_gia * (1 + ch.ch_loinhuanbanhang/100) ASC'
             }
             if(!!type){
                 if (type === 'Mới nhất') {
@@ -342,7 +342,7 @@ module.exports = function (app) {
             _books.map(async (book, idx) => {
                 _hinhanh = await query(
                     db,
-                    "SELECT ha_hinh FROM hinh_anh WHERE ha_idsp = ?",
+                    "SELECT ha_hinh FROM hinh_anh WHERE ha_idsp = ? ORDER BY ha_id DESC",
                     book.sp_id
                 );
                 _books[idx].sp_hinhanh = _hinhanh.map(e => 'http://localhost:4000/public/' + e.ha_hinh);

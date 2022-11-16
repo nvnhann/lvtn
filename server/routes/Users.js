@@ -6,6 +6,7 @@ const query = require('../lib/query');
 module.exports = function (app) {
     app.get("/users", async (req, res) => {
         if (req.query.search) {
+          
             return await sql.query(
                 `
           select users.*, q_ten  as role
@@ -15,6 +16,7 @@ module.exports = function (app) {
                 fullname like '%${req.query.search}%' or
                 q_ten like '%${req.query.search}%'
           `,
+         
                 (err, data) => {
                     if (err) {
                         console.log(err);
@@ -125,7 +127,7 @@ module.exports = function (app) {
                 ]);
                 const optionsSendMail = {
                     to: data.email, // list of receivers
-                    subject: "Tài khoản HYPE shop", // Subject line
+                    subject: "Tài khoản NN shop", // Subject line
                     html: `<h1>Chào <span style="color: red">${data.fullname}</span></h1>
           <h5>Tài khoản của bạn là:</h5>
                   <div>

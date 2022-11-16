@@ -56,7 +56,7 @@ const sidebarConfig = [
                 icon    :  ICONS.phieunhap,
             },
             {
-                title   : 'Hóa đơn',
+                title   : 'Đơn hàng',
                 path    : PATH_DASHBOARD.hoadon.root,
                 icon    : ICONS.order
             },

@@ -21,6 +21,7 @@ import ProductDetailsSumary from "../../components/product/ProductDetailsSumary"
 import {Rating} from "@material-ui/lab";
 import {fShortenNumber, randomIntFromInterval} from "../../_helper/helper";
 import {fDate} from "../../utils/formatTime";
+import IconButton from "src/theme/overrides/IconButton";
 
 
 //----------------------------------------------------------------------------------------
@@ -52,17 +53,19 @@ export default function ProductDetail() {
     const [product, setProduct] = useState({});
     const [comment, setComment] = useState([]);
     const [pageURL, setPageURL] = useState(1);
+    const [star, setStar] = useState(0)
+    
     console.log(comment);
     const totalRating = comment?.rating?.length > 0 ? comment.rating.reduce((count, item) => count + item.rate * item.num, 0)/comment.rating.reduce((count, item) => count + item.num, 0) : 0;
 
     useEffect(() => {
         (async () => {
             const _product = await getData(API_BASE_URL + `/api/books/${id}`);
-            const _comment = await getData(API_BASE_URL + `/binhluan/${id}?pageURL=${pageURL}`);
+            const _comment = await getData(API_BASE_URL + `/binhluan/${id}?pageURL=${pageURL}&&star=${star}`);
             setProduct(_product.data[0]);
             setComment(_comment.data);
         })()
-    }, [id, pageURL]);
+    }, [id, pageURL,star]);
 
     return (
         <RootStyle>
@@ -100,7 +103,10 @@ export default function ProductDetail() {
                             <Stack spacing={1.5} sx={{ width: 1 }}>
                                 {comment?.rating?.map((e,idx)=>(
                                     <Stack direction="row" alignItems="center" spacing={1.5} key={idx}>
-                                        <Rating value={e.rate} readOnly />
+                                        <Button onClick={()=>setStar(e.rate)}>
+                                        <Rating value={e.rate} readOnly  />
+
+                                        </Button>
                                         <Typography variant="body2" sx={{ color: 'text.secondary', minWidth: 64, textAlign: 'right' }}>
                                             {fShortenNumber(e.num)} đánh giá
                                         </Typography>

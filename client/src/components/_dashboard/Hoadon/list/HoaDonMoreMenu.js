@@ -12,6 +12,9 @@ import {
     Menu,
     MenuItem,
     Stack,
+    Step,
+    StepLabel,
+    Stepper,
     Table,
     TableBody,
     TableCell,
@@ -26,6 +29,8 @@ import {URL_PUBLIC_IMAGES} from "../../../../config/configUrl";
 import DialogConfirm from "../../DialogConfirm";
 import {styled} from "@material-ui/core/styles";
 import {useSelector} from "react-redux";
+import { Check } from '@material-ui/icons';
+import HoaDonStepper from './HoaDonStep';
 // ------------------------------------------------------------------------------------------
 const ThumbImgStyle = styled('img')(({theme}) => ({
     width: 64,
@@ -36,8 +41,8 @@ const ThumbImgStyle = styled('img')(({theme}) => ({
 }));
 
 const ThumbImgStyleOrder = styled('img')(({theme}) => ({
-    width: 300,
-    height: 400,
+    width: '100%',
+    height: 700,
     objectFit: 'cover',
     margin: '0 auto',
     borderRadius: theme.shape.borderRadiusSm
@@ -49,6 +54,7 @@ HoaDonMoreMenu.propTypes = {
 };
 
 export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
+    console.log(hoadon)
     const ref = useRef(null);
     const id = useSelector(state => state.user.current?.id);
 
@@ -62,6 +68,35 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
     const handleCloseDetail = () => {
         setOpenDetail(false);
     };
+    const QontoStepIconRoot = styled('div')(({ theme, ownerState }) => ({
+        color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#eaeaf0',
+        display: 'flex',
+        height: 22,
+        alignItems: 'center',
+        ...(ownerState.active && {
+          color: '#784af4',
+        }),
+        '& .QontoStepIcon-completedIcon': {
+          color: '#784af4',
+          zIndex: 1,
+          fontSize: 18,
+        },
+        '& .QontoStepIcon-circle': {
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          backgroundColor: 'currentColor',
+        },
+      }));
+    function QontoStepIcon(props) {
+        const { active, completed, className } = props;
+      
+        return (
+          <QontoStepIconRoot ownerState={{ active }} className={className}>
+            <Check className="QontoStepIcon-completedIcon" />
+          </QontoStepIconRoot>
+        );
+      }
 
     return (
         <>
@@ -196,7 +231,12 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
                                     </Table>
                                 </TableContainer>
                             </Scrollbar>
+                           
                         </Card>
+                        <Card sx={{my: 2, p: 2}}>
+                            <HoaDonStepper trang_thai={hoadon.trang_thai_all} />
+
+                            </Card>
                         {hoadon.trangthai[hoadon.trangthai.length - 1].tt_trangthai === 3 &&
                             <Card sx={{my: 2, p: 2}}>
                                 <Typography variant='h3' align='center'>Ảnh giao hàng</Typography>

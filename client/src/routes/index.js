@@ -238,7 +238,7 @@ export default function Router() {
         },
         {
             path: '/',
-            element: <MainLayout/>,
+            element: (isAdmin || isEmployee) ? <Navigate to="/dashboard"/> : <MainLayout/>,
             children: [{
                 path: '/',
                 element: <ProductList/>

@@ -5,7 +5,7 @@ import trash2Fill from '@iconify/icons-eva/trash-2-fill';
 import roundFilterList from '@iconify/icons-ic/round-filter-list';
 // material
 import {styled, useTheme} from '@material-ui/core/styles';
-import {Box, IconButton, InputAdornment, OutlinedInput, Toolbar, Tooltip, Typography,} from '@material-ui/core';
+import {Box, IconButton, InputAdornment, OutlinedInput, Stack, Step, StepButton, Stepper, Toolbar, Tooltip, Typography,} from '@material-ui/core';
 import {API_BASE_URL} from '../../../../config/configUrl';
 import {deleteData} from '../../../../_helper/httpProvider';
 import {useSnackbar} from 'notistack5';
@@ -37,6 +37,7 @@ const SearchStyle = styled(OutlinedInput)(({theme}) => ({
 }));
 
 // ----------------------------------------------------------------------
+const steps = ["Chờ xác nhận", "Đã xác nhận", "Đã lấy hàng", "Đã giao", "Đã hủy"];
 
 HoaDonListToolbar.propTypes = {
     numSelected: PropTypes.number,
@@ -52,12 +53,18 @@ export default function HoaDonListToolbar({
                                               onFilterName,
                                               setLoad,
                                               setSelected,
+                                              activeStep,
+                                              setActiveStep
                                           }) {
     const theme = useTheme();
     const isLight = theme.palette.mode === 'light';
     const numSelected = selected.length;
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const [open, setOpen] = useState(false);
+    
+    const handleStep = (step) => () => {
+        setActiveStep(step);
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -101,20 +108,36 @@ export default function HoaDonListToolbar({
                         {numSelected} hàng được chọn
                     </Typography>
                 ) : (
-                    <SearchStyle
-                        value={filterName}
-                        onChange={onFilterName}
-                        placeholder="Tìm kiếm..."
-                        startAdornment={
-                            <InputAdornment position="start">
-                                <Box
-                                    component={Icon}
-                                    icon={searchFill}
-                                    sx={{color: 'text.disabled'}}
-                                />
-                            </InputAdornment>
-                        }
-                    />
+                    <>
+                        <SearchStyle
+                            value={filterName}
+                            onChange={onFilterName}
+                            placeholder="Tìm kiếm..."
+                            onKeyPress={(e)=>{
+                                if(e.key === 'Enter') setLoad(e=>e+1);
+                            }}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <Box
+                                        component={Icon}
+                                        icon={searchFill}
+                                        sx={{color: 'text.disabled'}}
+                                    />
+                                </InputAdornment>
+                            }
+                        />
+                        <Stack direction='row' justifyContent='center'>
+                            <Stepper nonLinear activeStep={activeStep} sx={{m: 2}}>
+                                {steps.map((label, index) => (
+                                    <Step key={label}>
+                                        <StepButton color="inherit" onClick={handleStep(index)}>
+                                            {label}
+                                        </StepButton>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Stack>
+                    </>
                 )}
 
                 {numSelected > 0 ? (
