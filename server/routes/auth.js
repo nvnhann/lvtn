@@ -45,7 +45,7 @@ module.exports = function (app) {
           });
           const sql_insert =
             "\
-                      INSERT INTO `users` (`email`, `fullname`, `credential`) VALUES (?,?,?)";
+                                  INSERT INTO `users` (`email`, `fullname`, `credential`) VALUES (?,?,?)";
           await db.query(sql_insert, [
             email,
             fullname,
@@ -127,32 +127,34 @@ module.exports = function (app) {
     });
 
     let _qr = `select users.*, q_ten  as role from users left join quyen on users.role_id = quyen.q_id WHERE email = ?`;
-    const user = await query(db, _qr, req.user.email);      
+    const user = await query(db, _qr, req.user.email);
     if (user.length !== 0) {
-        console.log(user)
-    if(!Number(user[0].active)) return res.redirect("http://localhost:3000/auth/login?noErr=2");
+      if (!Number(user[0].active))
+        return res.redirect("http://localhost:3000/auth/login?noErr=2");
       res.cookie("token", token, { expire: new Date() + 86400 });
       res.cookie("user", JSON.stringify(user[0]));
       if (user[0].role === "ADMIN")
         return res.redirect("http://localhost:3000/dashboard");
       return res.redirect("http://localhost:3000");
-    }else{
-        let sql =
+    } else {
+      let sql =
         "INSERT INTO `users` (`user_id`, `email`, `fullname`, `verify`) VALUES ?";
-        let newUser = await query(db, sql, [[req.user.id, req.user.email, req.user.displayName, 1]]);
-        let _user = {
-            id: newUser.insertId,
-            email: req.user.email,
-            fullname: req.user.displayName,
-            phone: "",
-            gender: "",
-            birthday: "",
-            role_id: 1,
-            role: "USER",
-          };
-          res.cookie("token", token, { expire: new Date() + 86400 });
-          res.cookie("user", JSON.stringify(_user));
-          return res.redirect("http://localhost:3000");
+      let newUser = await query(db, sql, [
+        [req.user.id, req.user.email, req.user.displayName, 1],
+      ]);
+      let _user = {
+        id: newUser.insertId,
+        email: req.user.email,
+        fullname: req.user.displayName,
+        phone: "",
+        gender: "",
+        birthday: "",
+        role_id: 1,
+        role: "USER",
+      };
+      res.cookie("token", token, { expire: new Date() + 86400 });
+      res.cookie("user", JSON.stringify(_user));
+      return res.redirect("http://localhost:3000");
     }
   });
 

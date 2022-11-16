@@ -30,7 +30,7 @@ import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import {useSnackbar} from 'notistack5';
 import closeFill from '@iconify/icons-eva/close-fill';
-import {getData, postData} from "../../_helper/httpProvider";
+import {getData, putData} from "../../_helper/httpProvider";
 import {API_BASE_URL, URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import {MIconButton} from "../../components/@material-extend";
 import BookListToolbar from "../../components/_dashboard/book/list/BookListToolbar";
@@ -131,7 +131,7 @@ export default function BookList() {
 
     const changeActiveBook = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/book/active', {
+            const res = await putData(API_BASE_URL + '/api/book-active', {
                 id: id,
                 active: active,
             });
@@ -159,7 +159,7 @@ export default function BookList() {
                         {name: 'Danh sách'},
                     ]}
                     action={
-                       isAdmin && <Button
+                        isAdmin && <Button
                             variant="contained"
                             component={RouterLink}
                             to={PATH_DASHBOARD.book.new}
@@ -216,7 +216,7 @@ export default function BookList() {
                                                     aria-checked={isItemSelected}
                                                 >
                                                     <TableCell padding="checkbox">
-                                                        {isAdmin &&  <Checkbox
+                                                        {isAdmin && <Checkbox
                                                             checked={isItemSelected}
                                                             onChange={(event) => handleClick(event, sp_id)}
                                                         />}
@@ -254,17 +254,18 @@ export default function BookList() {
                                                     <TableCell align="left">{tl_ten}</TableCell>
                                                     <TableCell align="left">{nn_ten}</TableCell>
                                                     <TableCell align="left">
-                                                        { isAdmin && <Switch
+                                                        {isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveBook(sp_id, !active);
                                                             }}
                                                         />}
-                                                        {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+                                                        {!isAdmin && <Typography
+                                                            color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        {  isAdmin && <BookMoreMenu id={sp_id}/>}
+                                                        {isAdmin && <BookMoreMenu id={sp_id}/>}
                                                     </TableCell>
                                                 </TableRow>
                                             );

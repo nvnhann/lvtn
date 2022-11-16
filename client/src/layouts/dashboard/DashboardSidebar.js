@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import {Link as RouterLink, useLocation} from 'react-router-dom';
 // material
 import {alpha, styled} from '@material-ui/core/styles';
-import {Box, CardActionArea, Drawer, Link, Stack, Tooltip, Typography,} from '@material-ui/core';
+import {Box, Button, CardActionArea, Drawer, Link, Stack, Tooltip, Typography,} from '@material-ui/core';
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // routes
@@ -16,7 +16,8 @@ import NavSection from '../../components/NavSection';
 import {MHidden} from '../../components/@material-extend';
 //
 import sidebarConfig from './SidebarConfig';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../../redux/slices/user';
 
 // ----------------------------------------------------------------------
 
@@ -92,6 +93,7 @@ DashboardSidebar.propTypes = {
 
 export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
     const {pathname} = useLocation();
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user.current);
     const store = useSelector(state => state.store.store);
 
@@ -184,8 +186,9 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
                 <Stack
                     spacing={3}
                     alignItems="center"
-                    sx={{px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center'}}
+                    sx={{px: 5, pb: 5, mt: 2, width: 1, textAlign: 'center'}}
                 >
+                    <Button variant='contained' onClick={() => dispatch(logout())}>Đăng xuất</Button>
                     <div>
                         <Typography gutterBottom variant="subtitle1">
                             Hi, {user?.fullname}

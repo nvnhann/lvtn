@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import {useState} from 'react';
 import {useSnackbar} from 'notistack5';
-import {Link as RouterLink, useNavigate, useSearchParams} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {Form, FormikProvider, useFormik} from 'formik';
 import {Icon} from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -43,7 +43,7 @@ export default function LoginForm({errParams}) {
         validationSchema: LoginSchema,
         onSubmit: async (values, {resetForm}) => {
             try {
-               if(errParams) errParams.set('noErr', '');
+                if (errParams) errParams.set('noErr', '');
                 await postData(API_BASE_URL + '/auth/login', values);
                 dispatch(login());
                 enqueueSnackbar('Đăng nhập thành công', {

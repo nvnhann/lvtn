@@ -33,7 +33,7 @@ export default function PhieuNhapCreate() {
                 const _res = await getData(API_BASE_URL + `/phieunhap/${id}`);
                 setCurrent(_res.data);
             }
-            const _user = await getData(API_BASE_URL + `/user/${email}/email`);
+            const _user = await getData(API_BASE_URL + `/api/user/${email}/email`);
             setUser(_user.data);
         })();
     }, [id, isEdit, email]);

@@ -112,7 +112,6 @@ export default function ProductFilter() {
 
     const [searchParams] = useSearchParams();
     let search = searchParams.get('search');
-    console.log(search);
 
     const handleOpen = () => {
         setOpen(true);
@@ -175,7 +174,6 @@ export default function ProductFilter() {
         })()
     }, []);
 
-    console.log(values)
     return (
         <RootStyle title="HYBE">
             <Grid container spacing={2} p={2}>

@@ -2,7 +2,6 @@ import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
 import {PATH_DASHBOARD} from "../../routes/paths";
 import {
     Card,
-    Checkbox,
     Container,
     Table,
     TableBody,
@@ -59,7 +58,7 @@ export default function HoaDon() {
                 console.log(e);
             }
         })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [load, activeStep]);
 
     const handleRequestSort = (event, property) => {
@@ -75,24 +74,6 @@ export default function HoaDon() {
             return;
         }
         setSelected([]);
-    };
-
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-        setSelected(newSelected);
     };
 
     const handleChangePage = (event, newPage) => {
@@ -174,12 +155,6 @@ export default function HoaDon() {
                                                         selected={isItemSelected}
                                                         aria-checked={isItemSelected}
                                                     >
-                                                        <TableCell padding="checkbox">
-                                                            <Checkbox
-                                                                checked={isItemSelected}
-                                                                onChange={(event) => handleClick(event, hd_id)}
-                                                            />
-                                                        </TableCell>
                                                         <TableCell>#{hd_id}</TableCell>
                                                         <TableCell>{hd_tenkh}</TableCell>
                                                         <TableCell>{hd_sdt}</TableCell>

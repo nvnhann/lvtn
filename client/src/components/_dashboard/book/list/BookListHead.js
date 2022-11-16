@@ -36,11 +36,11 @@ export default function BookListHead({
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    { isAdmin &&  <Checkbox
+                    {isAdmin && <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
-                    /> }
+                    />}
                 </TableCell>
                 {headLabel.map((headCell) => (
                     <TableCell

@@ -25,7 +25,7 @@ export default function UserCreate() {
 
     useEffect(() => {
         (async () => {
-            const _user = await getData(API_BASE_URL + `/user/${id}`);
+            const _user = await getData(API_BASE_URL + `/api/user/${id}`);
             setCurrentUser(_user.data[0]);
         })();
     }, [id]);

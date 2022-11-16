@@ -2,6 +2,12 @@ const db = require("../db");
 const query = require("../lib/query");
 
 module.exports = function (app) {
+
+  app.get("/api/role", async (req, res) => {
+    let qr = "SELECT * FROM quyen WHERE q_id <> 2";
+    return res.status(200).send(await query(db, qr));
+  });
+
   app.get("/store", async (req, res) => {
     let _cuahang = await query(db, "SELECT * FROM cua_hang");
     return res.status(200).send(_cuahang[0]);
@@ -76,7 +82,7 @@ module.exports = function (app) {
 
   app.get("/binhluan/:id", async (req, res) => {
     let { id } = req.params;
-    const { pageURL,starr } = req.query;
+    const { pageURL, starr } = req.query;
     let limit = 5;
     if (pageURL) {
       limit = limit * pageURL;
@@ -84,14 +90,10 @@ module.exports = function (app) {
     let _rs = {};
     let _qr = `SELECT * FROM binh_luan LEFT JOIN users ON binh_luan.bl_idkh = users.id 
     WHERE bl_idsp = ? `;
-    if(Number(star) !== 0) _qr += `AND bl_danhgia = ${star} `
-    _qr += 'LIMIT ?';
+    if (Number(star) !== 0) _qr += `AND bl_danhgia = ${star} `;
+    _qr += "LIMIT ?";
     console.log(_qr);
-    _rs.data = await query(
-      db,_qr
-      ,
-      [id, limit]
-    );
+    _rs.data = await query(db, _qr, [id, limit]);
     _rs.rating = await query(
       db,
       ` SELECT binh_luan.bl_danhgia rate, COUNT(binh_luan.bl_trangthai) num
@@ -105,12 +107,22 @@ module.exports = function (app) {
   });
   app.get("/thongke", async (req, res) => {
     let _result = {};
-    const {year} = req.query;
+    const { year } = req.query;
 
-    const _thongkes = query(db, `call thongke_theokhoangtg_thuchi(NULL, NULL)`)
-    let numYears = await query(db, `SELECT YEAR(hd_ngaytao) nam FROM hoa_don GROUP BY YEAR(hd_ngaytao) ORDER BY nam DESC`);
-    console.log(`CALL thongke_1nam_temp(${!!year ? year : numYears[numYears.length - 1].nam})`);
-    let _theo_nam = await query(db, `CALL thongke_1nam_temp(${!!year ? year : numYears[0].nam})`);
+    const _thongkes = query(db, `call thongke_theokhoangtg_thuchi(NULL, NULL)`);
+    let numYears = await query(
+      db,
+      `SELECT YEAR(hd_ngaytao) nam FROM hoa_don GROUP BY YEAR(hd_ngaytao) ORDER BY nam DESC`
+    );
+    console.log(
+      `CALL thongke_1nam_temp(${
+        !!year ? year : numYears[numYears.length - 1].nam
+      })`
+    );
+    let _theo_nam = await query(
+      db,
+      `CALL thongke_1nam_temp(${!!year ? year : numYears[0].nam})`
+    );
     let theonam = [
       {
         name: "nhap",

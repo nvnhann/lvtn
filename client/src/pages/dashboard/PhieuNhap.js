@@ -6,7 +6,6 @@ import {Link as RouterLink} from 'react-router-dom';
 import {
     Button,
     Card,
-    Checkbox,
     Container,
     Switch,
     Table,
@@ -41,7 +40,7 @@ import {useSelector} from "react-redux";
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    {id: 'pn_id', label: 'Mã Phiếu Nhập', alignRight: false},
+    {id: 'pn_id', label: 'Mã PN', alignRight: false},
     {id: 'pn_idnv', label: 'Mã Nhân Viên', alignRight: false},
     {id: 'pn_tennv', label: 'Tên Nhân Viên', alignRight: false},
     {id: 'pn_ncc', label: 'Nhà Cung Cấp', alignRight: false},
@@ -84,24 +83,6 @@ export default function BookList() {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
-    };
-
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-        setSelected(newSelected);
     };
 
     const handleSelectAllClick = (event) => {
@@ -215,14 +196,6 @@ export default function BookList() {
                                                     selected={isItemSelected}
                                                     aria-checked={isItemSelected}
                                                 >
-                                                    <TableCell padding="checkbox">
-                                                        { isAdmin &&  <Checkbox
-                                                            checked={isItemSelected}
-                                                            onChange={(event) =>
-                                                                handleClick(event, pn_id)
-                                                            }
-                                                        />}
-                                                    </TableCell>
                                                     <TableCell
                                                         align="center"
                                                         component="th"
@@ -250,7 +223,8 @@ export default function BookList() {
                                                             }}
                                                         />}
 
-                                                        {!!pn_active && <Typography color='blueviolet'>Đã nhập</Typography>}
+                                                        {!!pn_active &&
+                                                            <Typography color='blueviolet'>Đã nhập</Typography>}
 
                                                     </TableCell>
                                                     <TableCell align="right">

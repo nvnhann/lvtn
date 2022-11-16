@@ -60,10 +60,10 @@ export default function Profile() {
         value: 'Đơn hàng',
         icon: <Icon icon="icon-park-outline:transaction-order" width={20} height={20}/>,
         component: <Order/>
-    },{
+    }, {
         value: 'Đánh giá sản phẩm',
-        icon: <Icon icon="ic:round-rate-review" width={20} height={20} />,
-        component: <Comment />
+        icon: <Icon icon="ic:round-rate-review" width={20} height={20}/>,
+        component: <Comment/>
     }];
 
     if (isShipper) PROFILE_TABS.push({

@@ -67,8 +67,8 @@ export default function PhieuNhapDetail() {
                                 <TableRow key={idx}>
                                     <TableCell>{book.sp_masp}</TableCell>
                                     <TableCell>{book.sp_ten}</TableCell>
-                                    <TableCell>{book.ctpn_soluong}</TableCell>
-                                    <TableCell>{fCurrency(book.ctpn_gia)}</TableCell>
+                                    <TableCell sx={{width: '8rem'}}>{book.ctpn_soluong}</TableCell>
+                                    <TableCell sx={{width: '8rem'}}>{fCurrency(book.ctpn_gia)}</TableCell>
                                 </TableRow>
                             ))}
                         </Table>

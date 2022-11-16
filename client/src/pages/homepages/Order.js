@@ -98,7 +98,6 @@ export default function Order() {
 
     const changeOrder = async () => {
         try {
-            console.log(idhd)
             if (!idhd) return;
             await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4});
             setLoad(e => e + 1)
@@ -288,7 +287,7 @@ export default function Order() {
                             <Typography variant="subtitle2" sx enableEdit={{color: 'text.secondary'}}>
                                 Tổng đơn
                             </Typography>
-                            <Typography variant="body2">{fCurrency(detail.hd_tongtien+detail.hd_tienvc)}</Typography>
+                            <Typography variant="body2">{fCurrency(detail.hd_tongtien + detail.hd_tienvc)}</Typography>
                         </Stack>
                         <Scrollbar>
                             <TableContainer sx={{minWidth: 720, mt: 2}}>

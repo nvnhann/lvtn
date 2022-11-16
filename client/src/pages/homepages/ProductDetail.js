@@ -1,6 +1,7 @@
 import {
     Avatar,
-    Box, Button,
+    Box,
+    Button,
     Card,
     Container,
     Divider,
@@ -21,7 +22,6 @@ import ProductDetailsSumary from "../../components/product/ProductDetailsSumary"
 import {Rating} from "@material-ui/lab";
 import {fShortenNumber, randomIntFromInterval} from "../../_helper/helper";
 import {fDate} from "../../utils/formatTime";
-import IconButton from "src/theme/overrides/IconButton";
 
 
 //----------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ const RootStyle = styled(Page)(({theme}) => ({
     }
 }));
 
-const GridStyle = styled(Grid)(({ theme }) => ({
+const GridStyle = styled(Grid)(({theme}) => ({
     padding: theme.spacing(3),
     display: 'flex',
     alignItems: 'center',
@@ -54,9 +54,8 @@ export default function ProductDetail() {
     const [comment, setComment] = useState([]);
     const [pageURL, setPageURL] = useState(1);
     const [star, setStar] = useState(0)
-    
-    console.log(comment);
-    const totalRating = comment?.rating?.length > 0 ? comment.rating.reduce((count, item) => count + item.rate * item.num, 0)/comment.rating.reduce((count, item) => count + item.num, 0) : 0;
+
+    const totalRating = comment?.rating?.length > 0 ? comment.rating.reduce((count, item) => count + item.rate * item.num, 0) / comment.rating.reduce((count, item) => count + item.num, 0) : 0;
 
     useEffect(() => {
         (async () => {
@@ -65,7 +64,7 @@ export default function ProductDetail() {
             setProduct(_product.data[0]);
             setComment(_comment.data);
         })()
-    }, [id, pageURL,star]);
+    }, [id, pageURL, star]);
 
     return (
         <RootStyle>
@@ -93,39 +92,40 @@ export default function ProductDetail() {
                             <Typography variant="subtitle1" gutterBottom>
                                 Đánh giá
                             </Typography>
-                            <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
+                            <Typography variant="h2" gutterBottom sx={{color: 'error.main'}}>
                                 {parseFloat(totalRating).toFixed(1)}/5
                             </Typography>
-                            <Rating readOnly value={totalRating} precision={0.1} />
+                            <Rating readOnly value={totalRating} precision={0.1}/>
                         </GridStyle>
 
                         <GridStyle item xs={12} md={8}>
-                            <Stack spacing={1.5} sx={{ width: 1 }}>
-                                {comment?.rating?.map((e,idx)=>(
+                            <Stack spacing={1.5} sx={{width: 1}}>
+                                {comment?.rating?.map((e, idx) => (
                                     <Stack direction="row" alignItems="center" spacing={1.5} key={idx}>
-                                        <Button onClick={()=>setStar(e.rate)}>
-                                        <Rating value={e.rate} readOnly  />
+                                        <Button onClick={() => setStar(e.rate)}>
+                                            <Rating value={e.rate} readOnly/>
 
                                         </Button>
-                                        <Typography variant="body2" sx={{ color: 'text.secondary', minWidth: 64, textAlign: 'right' }}>
+                                        <Typography variant="body2"
+                                                    sx={{color: 'text.secondary', minWidth: 64, textAlign: 'right'}}>
                                             {fShortenNumber(e.num)} đánh giá
                                         </Typography>
                                     </Stack>
-                                    ))}
+                                ))}
                             </Stack>
                         </GridStyle>
                     </Grid>
 
-                    <Divider />
+                    <Divider/>
                     <List disablePadding>
-                        {comment?.data?.map((e,idx)=>(
+                        {comment?.data?.map((e, idx) => (
                             <ListItem key={idx}>
                                 <ListItem
                                     disableGutters
                                     sx={{
                                         mb: 5,
                                         alignItems: 'flex-start',
-                                        flexDirection: { xs: 'column', sm: 'row' }
+                                        flexDirection: {xs: 'column', sm: 'row'}
                                     }}
                                 >
                                     <Box
@@ -133,31 +133,31 @@ export default function ProductDetail() {
                                             mr: 2,
                                             display: 'flex',
                                             alignItems: 'center',
-                                            mb: { xs: 2, sm: 0 },
-                                            minWidth: { xs: 160, md: 240 },
-                                            textAlign: { sm: 'center' },
-                                            flexDirection: { sm: 'column' }
+                                            mb: {xs: 2, sm: 0},
+                                            minWidth: {xs: 160, md: 240},
+                                            textAlign: {sm: 'center'},
+                                            flexDirection: {sm: 'column'}
                                         }}
                                     >
                                         <Avatar
                                             src={`/static/avatar_${randomIntFromInterval(1, 20)}.jpg`}
                                             sx={{
-                                                mr: { xs: 2, sm: 0 },
-                                                mb: { sm: 2 },
-                                                width: { md: 64 },
-                                                height: { md: 64 }
+                                                mr: {xs: 2, sm: 0},
+                                                mb: {sm: 2},
+                                                width: {md: 64},
+                                                height: {md: 64}
                                             }}
                                         />
 
                                         <Typography variant="subtitle2" noWrap>
                                             {e.fullname}
                                         </Typography>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
+                                        <Typography variant="caption" sx={{color: 'text.secondary'}} noWrap>
                                             {fDate(e.bl_thoigian)}
                                         </Typography>
                                     </Box>
                                     <Box>
-                                        <Rating size="small" value={e.bl_danhgia} readOnly />
+                                        <Rating size="small" value={e.bl_danhgia} readOnly/>
                                         <Typography variant="body2">{e.bl_noidung}</Typography>
 
                                     </Box>
@@ -165,8 +165,8 @@ export default function ProductDetail() {
                             </ListItem>
                         ))}
                     </List>
-                    <Stack direction='row' justifyContent='center' sx={{my:2}}>
-                        <Button onClick={()=>setPageURL(e=>e+1)} variant='contained'>Xem thêm</Button>
+                    <Stack direction='row' justifyContent='center' sx={{my: 2}}>
+                        <Button onClick={() => setPageURL(e => e + 1)} variant='contained'>Xem thêm</Button>
                     </Stack>
                 </Card>
             </Container>

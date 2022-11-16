@@ -26,7 +26,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {getData, postData} from '../../_helper/httpProvider';
+import {getData, putData} from '../../_helper/httpProvider';
 import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
 import {MIconButton} from '../../components/@material-extend';
@@ -126,7 +126,7 @@ export default function NgonNguList() {
 
     const changeActiveRole = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/ngonngu/active', {
+            const res = await putData(API_BASE_URL + '/api/ngonngu-active', {
                 id: id,
                 active: active,
             });
@@ -203,7 +203,7 @@ export default function NgonNguList() {
                                                             aria-checked={isItemSelected}
                                                         >
                                                             <TableCell padding="checkbox">
-                                                                {isAdmin &&  <Checkbox
+                                                                {isAdmin && <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
                                                                         handleClick(event, nn_id)
@@ -226,13 +226,14 @@ export default function NgonNguList() {
                                                                 </Stack>
                                                             </TableCell>
                                                             <TableCell align="left">
-                                                                {isAdmin &&   <Switch
+                                                                {isAdmin && <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
                                                                         changeActiveRole(nn_id, !active);
                                                                     }}
                                                                 />}
-                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+                                                                {!isAdmin && <Typography
+                                                                    color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
 
                                                             </TableCell>
 

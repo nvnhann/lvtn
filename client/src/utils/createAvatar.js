@@ -1,4 +1,4 @@
-import {capitalize} from 'lodash';
+import { capitalize } from 'lodash';
 
 // ----------------------------------------------------------------------
 
@@ -9,21 +9,21 @@ const WARNING_NAME = ['P', 'E', 'R', 'S', 'C', 'U', '6', '7'];
 const ERROR_NAME = ['V', 'W', 'X', 'M', 'Z'];
 
 function getFirstCharacter(name) {
-    return capitalize(name && name.charAt(0));
+  return capitalize(name && name.charAt(0));
 }
 
 function getAvatarColor(name) {
-    if (PRIMARY_NAME.includes(getFirstCharacter(name))) return 'primary';
-    if (INFO_NAME.includes(getFirstCharacter(name))) return 'info';
-    if (SUCCESS_NAME.includes(getFirstCharacter(name))) return 'success';
-    if (WARNING_NAME.includes(getFirstCharacter(name))) return 'warning';
-    if (ERROR_NAME.includes(getFirstCharacter(name))) return 'warning';
-    return 'default';
+  if (PRIMARY_NAME.includes(getFirstCharacter(name))) return 'primary';
+  if (INFO_NAME.includes(getFirstCharacter(name))) return 'info';
+  if (SUCCESS_NAME.includes(getFirstCharacter(name))) return 'success';
+  if (WARNING_NAME.includes(getFirstCharacter(name))) return 'warning';
+  if (ERROR_NAME.includes(getFirstCharacter(name))) return 'warning';
+  return 'default';
 }
 
 export default function createAvatar(name) {
-    return {
-        name: getFirstCharacter(name),
-        color: getAvatarColor(name)
-    };
+  return {
+    name: getFirstCharacter(name),
+    color: getAvatarColor(name),
+  };
 }

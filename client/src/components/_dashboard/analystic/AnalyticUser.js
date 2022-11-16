@@ -1,13 +1,13 @@
-import { Icon } from '@iconify/react';
+import {Icon} from '@iconify/react';
 // material
-import { alpha, styled } from '@material-ui/core/styles';
-import { Card, Typography } from '@material-ui/core';
+import {alpha, styled} from '@material-ui/core/styles';
+import {Card, Typography} from '@material-ui/core';
 // utils
-import { fShortenNumber } from '../../../utils/formatNumber';
+import {fShortenNumber} from '../../../utils/formatNumber';
 
 // ----------------------------------------------------------------------
 
-const RootStyle = styled(Card)(({ theme }) => ({
+const RootStyle = styled(Card)(({theme}) => ({
     boxShadow: 'none',
     textAlign: 'center',
     padding: theme.spacing(5, 0),
@@ -15,7 +15,7 @@ const RootStyle = styled(Card)(({ theme }) => ({
     backgroundColor: theme.palette.primary.lighter
 }));
 
-const IconWrapperStyle = styled('div')(({ theme }) => ({
+const IconWrapperStyle = styled('div')(({theme}) => ({
     margin: 'auto',
     display: 'flex',
     borderRadius: '50%',
@@ -38,10 +38,10 @@ export default function AnalyticUser({total, text}) {
     return (
         <RootStyle>
             <IconWrapperStyle>
-                <Icon icon="bx:user-check" width={24} height={24} />
+                <Icon icon="bx:user-check" width={24} height={24}/>
             </IconWrapperStyle>
             <Typography variant="h3">{fShortenNumber(total)}</Typography>
-            <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+            <Typography variant="subtitle2" sx={{opacity: 0.72}}>
                 {text}
             </Typography>
         </RootStyle>

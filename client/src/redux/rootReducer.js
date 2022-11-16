@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 // slices
 import userReducer from './slices/user';
 import cartReducer from './slices/cart';
@@ -7,10 +7,10 @@ import storeReducer from './slices/store';
 // ----------------------------------------------------------------------
 
 const rootReducer = combineReducers({
-    user: userReducer,
-    cart: cartReducer,
-    product: productReducer,
-    store: storeReducer
+  user: userReducer,
+  cart: cartReducer,
+  product: productReducer,
+  store: storeReducer,
 });
 
-export {rootReducer};
+export { rootReducer };

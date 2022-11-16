@@ -5,7 +5,8 @@ import {API_BASE_URL, URL_PUBLIC_IMAGES} from "../../config/configUrl";
 import {
     Box,
     Button,
-    Card, Divider,
+    Card,
+    Divider,
     FormHelperText,
     Stack,
     Tab,
@@ -97,7 +98,7 @@ export default function Comment() {
                 </TabContext>
             </Stack>
             <TableContainer>
-                <Table >
+                <Table>
                     <TableBody>
                         {books?.map((el, idx) => (
                             <>
@@ -134,7 +135,7 @@ export default function Comment() {
                                         <Stack>
                                             <Rating name="read-only" value={Number(el.bl_danhgia)} readOnly/>
                                             <Typography>{el.bl_noidung}</Typography>
-                                            <Divider />
+                                            <Divider/>
                                         </Stack>
                                     </TableCell>
                                 </TableRow>}

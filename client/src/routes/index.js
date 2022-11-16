@@ -122,23 +122,6 @@ export default function Router() {
                     ],
                 },
                 {
-                    path: 'role',
-                    children: [
-                        {
-                            path: '/',
-                            element: <RoleList/>,
-                        },
-                        {
-                            path: '/new',
-                            element: <RoleCreate/>,
-                        },
-                        {
-                            path: '/:id/edit',
-                            element: <RoleCreate/>,
-                        },
-                    ],
-                },
-                {
                     path: 'nhaxuatban',
                     children: [
                         {
@@ -288,12 +271,6 @@ const UserCreate = Loadable(
 );
 
 const Profile = Loadable(lazy(() => import('../pages/homepages/Profile')))
-
-//-------------------------role-------------------------------------
-const RoleList = Loadable(lazy(() => import('../pages/dashboard/RoleList')));
-const RoleCreate = Loadable(
-    lazy(() => import('../pages/dashboard/RoleCreate')),
-);
 
 //--------------------------nhaxuatban-------------------------------------------
 const NhaXuatBanList = Loadable(

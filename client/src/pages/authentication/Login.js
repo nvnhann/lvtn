@@ -1,4 +1,4 @@
-import {Link as RouterLink, useParams, useSearchParams} from 'react-router-dom';
+import {Link as RouterLink, useSearchParams} from 'react-router-dom';
 // material
 import {styled} from '@material-ui/core/styles';
 import {Box, Card, Container, Link, Stack, Typography,} from '@material-ui/core';
@@ -10,7 +10,7 @@ import AuthLayout from '../../layouts/AuthLayout';
 import Page from '../../components/Page';
 import {MHidden, MIconButton} from '../../components/@material-extend';
 import {LoginForm} from '../../components/authentication/login';
-import { useSnackbar } from 'notistack5';
+import {useSnackbar} from 'notistack5';
 import {Icon} from '@iconify/react';
 import closeFill from '@iconify/icons-eva/close-fill';
 
@@ -48,7 +48,7 @@ export default function Login() {
     let err = errParams.get('noErr');
     const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
-    if(Number(err) === 2){
+    if (Number(err) === 2) {
         enqueueSnackbar('Tài khoản đã bị vô hiệu hóa', {
             variant: 'error',
             action: (key) => (

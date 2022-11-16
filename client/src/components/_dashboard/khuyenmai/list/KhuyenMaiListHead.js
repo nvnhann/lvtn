@@ -17,14 +17,14 @@ KhuyenMaiListHead.propTypes = {
 };
 
 export default function KhuyenMaiListHead({
-                                            order,
-                                            orderBy,
-                                            rowCount,
-                                            headLabel,
-                                            numSelected,
-                                            onRequestSort,
-                                            onSelectAllClick,
-                                        }) {
+                                              order,
+                                              orderBy,
+                                              rowCount,
+                                              headLabel,
+                                              numSelected,
+                                              onRequestSort,
+                                              onSelectAllClick,
+                                          }) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -34,7 +34,7 @@ export default function KhuyenMaiListHead({
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    {isAdmin &&  <Checkbox
+                    {isAdmin && <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}

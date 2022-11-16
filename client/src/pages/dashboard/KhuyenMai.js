@@ -13,7 +13,8 @@ import {
     TableCell,
     TableContainer,
     TablePagination,
-    TableRow, Typography,
+    TableRow,
+    Typography,
 } from '@material-ui/core';
 // routes
 import {PATH_DASHBOARD} from '../../routes/paths';
@@ -24,7 +25,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {getData, postData} from '../../_helper/httpProvider';
+import {getData, putData} from '../../_helper/httpProvider';
 import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
 import {MIconButton} from '../../components/@material-extend';
@@ -127,9 +128,9 @@ export default function KhuyenMai() {
 
     const isRoleNotFound = datas.length === 0;
 
-    const changeActiveRole = async (id, active) => {
+    const changeActiveKhuyenMai = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/khuyenmai/active', {
+            const res = await putData(API_BASE_URL + '/api/khuyenmai-active', {
                 id: id,
                 active: active,
             });
@@ -159,7 +160,7 @@ export default function KhuyenMai() {
 
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
-                        { isAdmin && <KhuyenMaiNewForm
+                        {isAdmin && <KhuyenMaiNewForm
                             isEdit={edit.isEdit}
                             current={edit.current}
                             setEdit={setEdit}
@@ -217,7 +218,7 @@ export default function KhuyenMai() {
                                                             aria-checked={isItemSelected}
                                                         >
                                                             <TableCell padding="checkbox">
-                                                                { isAdmin && <Checkbox
+                                                                {isAdmin && <Checkbox
                                                                     checked={isItemSelected}
                                                                     onChange={(event) =>
                                                                         handleClick(event, km_id)
@@ -230,7 +231,7 @@ export default function KhuyenMai() {
                                                             >
                                                                 {sp_masp}
                                                             </TableCell>
-                                                    
+
                                                             <TableCell
                                                                 component="th"
                                                                 scope="row"
@@ -267,10 +268,11 @@ export default function KhuyenMai() {
                                                                 {isAdmin && <Switch
                                                                     checked={active === 1}
                                                                     onChange={() => {
-                                                                        changeActiveRole(km_id, !active);
+                                                                        changeActiveKhuyenMai(km_id, !active);
                                                                     }}
                                                                 />}
-                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+                                                                {!isAdmin && <Typography
+                                                                    color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                             </TableCell>
 
                                                             <TableCell>

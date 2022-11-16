@@ -127,7 +127,6 @@ export default function CheckoutPayment() {
                 _values.hd_tienvc = totalPrice >= 500000 ? 0 : 30000;
                 _values.hd_diachi = address.dc_diachi;
                 _values.product = product;
-                console.log(_values)
                 await postData(API_BASE_URL + '/hoadon', _values);
                 enqueueSnackbar('Thanh toán thành công', {variant: 'success', autoHideDuration: 2000});
                 product.map(e => {

@@ -26,7 +26,7 @@ import Page from '../../components/Page';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import {getData, postData} from '../../_helper/httpProvider';
+import {getData, putData} from '../../_helper/httpProvider';
 import {API_BASE_URL} from '../../config/configUrl';
 import {useSnackbar} from 'notistack5';
 import {MIconButton} from '../../components/@material-extend';
@@ -126,7 +126,7 @@ export default function DanhMucList() {
 
     const changeActiveRole = async (id, active) => {
         try {
-            const res = await postData(API_BASE_URL + '/danhmuc/active', {
+            const res = await putData(API_BASE_URL + '/api/danhmuc-active', {
                 id: id,
                 active: active,
             });
@@ -155,7 +155,7 @@ export default function DanhMucList() {
                 />
 
                 <Grid container spacing={2}>
-                    {isAdmin &&  <Grid item xs={12} md={3}>
+                    {isAdmin && <Grid item xs={12} md={3}>
                         <DanhMucNewForm
                             isEdit={edit.isEdit}
                             current={edit.current}
@@ -232,12 +232,13 @@ export default function DanhMucList() {
                                                                         changeActiveRole(dm_id, !active);
                                                                     }}
                                                                 />}
-                                                                {!isAdmin && <Typography color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
+                                                                {!isAdmin && <Typography
+                                                                    color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
 
                                                             </TableCell>
 
                                                             <TableCell>
-                                                                {isAdmin &&<IconButton>
+                                                                {isAdmin && <IconButton>
                                                                     <Icon
                                                                         icon="akar-icons:edit"
                                                                         color="#B72136"
