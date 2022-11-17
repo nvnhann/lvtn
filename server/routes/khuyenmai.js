@@ -58,6 +58,7 @@ module.exports = function (app) {
                          khuyen_mai.km_ngayketthuc like '%${search}'
            `;
     }
+    qr += 'km_id ORDER BY DESC';
     return res.status(200).send(await query(db, _qr));
   });
 
