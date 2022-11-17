@@ -62,7 +62,53 @@ module.exports = function (app) {
     );
     return res.status(200).send("Thêm thành công đơn hàng!");
   });
+  app.get('/hoadonnv/:id', async (req, res) => {
+    const {id} = req.params;
+    const {trangthai, search} = req.query;
 
+    let _qr = `SELECT * 
+                                    FROM hoa_don ,
+                                    (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                                                        FROM trang_thai
+                                                        GROUP BY tt_idhd) tt
+                                    WHERE hoa_don.hd_idnv = ? AND hoa_don.hd_id = tt.tt_idhd AND tt.num_tt = ${trangthai}
+                                    ORDER BY hd_id DESC`;
+    if(!!search){
+        _qr = `SELECT * 
+                FROM hoa_don ,
+                (SELECT tt_idhd, MAX(tt_trangthai) num_tt
+                                    FROM trang_thai
+                                    GROUP BY tt_idhd) tt
+                WHERE hoa_don.hd_idnv = ? AND hoa_don.hd_id = tt.tt_idhd AND tt.num_tt = ${trangthai} AND (
+                      hoa_don.hd_id LIKE '%${search}%' OR
+                       hoa_don.hd_tenkh LIKE '%${search}%' OR
+                       hoa_don.hd_diachi LIKE '%${search}%' OR
+                       hoa_don.hd_sdt LIKE '%${search}%' OR 
+                       hoa_don.hd_email LIKE '%${search}%' OR
+                       hoa_don.hd_ngaytao LIKE '%${search}%' OR
+                       hoa_don.hd_hinhthucthanhtoan LIKE '%${search}%'
+                )
+                ORDER BY hd_id DESC`;
+    }
+
+    let _hoadon = await query(db, _qr, id);
+
+    if (_hoadon.length) {
+        let _cthd = "SELECT chi_tiet_hoa_don.*, san_pham.sp_ten, san_pham.sp_masp, ha_max.ha_hinh\n" +
+            "FROM `chi_tiet_hoa_don`\n" +
+            "LEFT JOIN san_pham ON chi_tiet_hoa_don.cthd_idsp = san_pham.sp_id\n" +
+            "LEFT JOIN (SELECT ha_idsp, ha_hinh, MAX(ha_id)  FROM `hinh_anh` GROUP BY ha_idsp) ha_max ON ha_max.ha_idsp = chi_tiet_hoa_don.cthd_idsp\n" +
+            "WHERE chi_tiet_hoa_don.cthd_idhd = ?";
+
+        await Promise.all(await _hoadon.map(async (e, idx) => {
+            _hoadon[idx].cthd = await query(db, _cthd, e.hd_id);
+            let qr = ''
+            _hoadon[idx].trangthai = await query(db, "SELECT * FROM trang_thai WHERE tt_idhd = ?", e.hd_id);
+        }));
+    }
+
+    return res.status(200).send(_hoadon);
+});
   app.get("/hoadon", async (req, res) => {
     let { trangthai, search } = req.query;
 
@@ -297,7 +343,6 @@ module.exports = function (app) {
         )
       );
     }
-
     await query(db, _qr, [data, id]);
     return res.status(200).send("Cập nhật thành công!");
   });

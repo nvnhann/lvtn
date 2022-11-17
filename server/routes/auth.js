@@ -138,7 +138,7 @@ module.exports = function (app) {
       return res.redirect("http://localhost:3000");
     } else {
       let sql =
-        "INSERT INTO `users` (`user_id`, `email`, `fullname`, `verify`) VALUES ?";
+        "INSERT INTO `users` (`user_id`, `email`, `fullname`, `verify`) VALUES (?)";
       let newUser = await query(db, sql, [
         [req.user.id, req.user.email, req.user.displayName, 1],
       ]);
