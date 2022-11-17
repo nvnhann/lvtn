@@ -145,7 +145,7 @@ export default function TheLoaiList() {
     }
   };
   return (
-    <Page title="The Loai|HYPE">
+    <Page title="The Loai | NN">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Thể loại"

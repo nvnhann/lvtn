@@ -147,7 +147,7 @@ export default function NhaXuatBanList() {
     }
   };
   return (
-    <Page title="NXB|HYPE">
+    <Page title="NXB | NN">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Nhà xuất bản"

@@ -26,7 +26,7 @@ import HoaDonMoreMenu from "../../components/_dashboard/Hoadon/list/HoaDonMoreMe
 
 //------------------------------------------------------------------------------------------------------------
 const TABLE_HEAD = [
-    {id: 'id', label: 'ID hóa đơn', alignRight: false},
+    {id: 'id', label: 'ID Đơn hàng', alignRight: false},
     {id: 'ho_ten', label: 'Họ tên', alignRight: false},
     {id: 'sdt', label: 'Số điện thoại', alignRight: false},
     {id: 'tong_don', label: 'Tổng đơn', alignRight: false},
@@ -96,13 +96,13 @@ export default function HoaDon() {
 
     return (
         <>
-            <Page title="Hóa đơn|HYBE">
+            <Page title="Đơn hàng">
                 <Container maxWidth={themeStretch ? false : 'lg'}>
                     <HeaderBreadcrumbs
-                        heading="Hóa đơn"
+                        heading="Đơn hàng"
                         links={[
                             {name: 'Quản lý', href: PATH_DASHBOARD.root},
-                            {name: 'Hóa đơn', href: PATH_DASHBOARD.hoadon.root},
+                            {name: 'Đơn hàng', href: PATH_DASHBOARD.hoadon.root},
                             {name: 'danh sách'},
                         ]}
                     />

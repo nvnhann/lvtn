@@ -150,7 +150,7 @@ export default function UserList() {
     }
   };
   return (
-    <Page title="User: List | HYPE">
+    <Page title="User: List | NN">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh sách người dùng"

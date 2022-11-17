@@ -339,7 +339,7 @@ export default function OrderShipping() {
             <DialogConfirm
                 open={openDetail}
                 handleClose={handleCloseDetail}
-                title='Chi tiết hóa đơn'
+                title='Chi tiết đơn hàng'
                 maxWidth="md"
                 message={
                     <>

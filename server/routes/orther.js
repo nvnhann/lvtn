@@ -81,7 +81,7 @@ module.exports = function (app) {
 
   app.get("/binhluan/:id", async (req, res) => {
     let { id } = req.params;
-    const { pageURL, starr } = req.query;
+    const { pageURL, star } = req.query;
     let limit = 5;
     if (pageURL) {
       limit = limit * pageURL;

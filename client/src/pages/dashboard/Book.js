@@ -1,7 +1,9 @@
 import {Icon} from '@iconify/react';
 import {useEffect, useState} from 'react';
+import { fCurrency } from '../../_helper/formatCurrentCy';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import {Link as RouterLink} from 'react-router-dom';
+
 // material
 import {
     Avatar,
@@ -44,10 +46,10 @@ import {useSelector} from "react-redux";
 const TABLE_HEAD = [
     {id: 'sp_masp', label: 'Mã sách', alignRight: false},
     {id: 'sp_ten', label: 'Tên sách', alignRight: false},
-    {id: 'sp_nxb', label: 'Nhà xuất bản', alignRight: false},
-    {id: 'sp_tg', label: 'Tác giả', alignRight: false},
-    {id: 'sp_tl', label: 'Thể loại', alignRight: false},
-    {id: 'sp_nn', label: 'Ngôn ngữ', alignRight: false},
+    {id: 'sp_soluong_nhap', label: 'Đã nhập', alignRight: false},
+    {id: 'sp_soluong_ban', label: 'Đã bán', alignRight: false},
+    {id: 'sp_soluong_conlai', label: 'Còn lại', alignRight: false},
+    {id: 'sp_giaban', label: 'Giá bán', alignRight: false},
     {id: 'status', label: 'Trạng thái', alignRight: false},
     {id: ''},
 ];
@@ -149,7 +151,7 @@ export default function BookList() {
         }
     };
     return (
-        <Page title="Book: List | HYPE">
+        <Page title="Book: List | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading="Sách"
@@ -199,10 +201,10 @@ export default function BookList() {
                                                 sp_masp,
                                                 sp_ten,
                                                 sp_hinhanh,
-                                                nxb_ten,
-                                                tg_ten,
-                                                tl_ten,
-                                                nn_ten,
+                                                sl_nhap,
+                                                sl_ban,
+                                                gb_soluong,  
+                                                gb_gia, 
                                                 active,
                                             } = row;
                                             const isItemSelected = selected.indexOf(sp_id) !== -1;
@@ -249,17 +251,18 @@ export default function BookList() {
                                                             {sp_ten}
                                                         </Stack>
                                                     </TableCell>
-                                                    <TableCell align="left">{nxb_ten}</TableCell>
-                                                    <TableCell align="left">{tg_ten}</TableCell>
-                                                    <TableCell align="left">{tl_ten}</TableCell>
-                                                    <TableCell align="left">{nn_ten}</TableCell>
+                                                 
+                                                    <TableCell align="left">{sl_nhap}</TableCell>
+                                                    <TableCell align="left">{sl_ban}</TableCell>
+                                                    <TableCell align="left">{gb_soluong}</TableCell>
+                                                    <TableCell align="left">{gb_gia}đ</TableCell>
                                                     <TableCell align="left">
                                                         {isAdmin && <Switch
                                                             checked={active === 1}
                                                             onChange={() => {
                                                                 changeActiveBook(sp_id, !active);
-                                                            }}
-                                                        />}
+                                                            }}/>
+                                                        }
                                                         {!isAdmin && <Typography
                                                             color='lightgreen'>{active ? 'Hiện' : 'Ẩn'}</Typography>}
                                                     </TableCell>
@@ -273,7 +276,7 @@ export default function BookList() {
                                     {emptyRows > 0 && (
                                         <TableRow style={{height: 53 * emptyRows}}>
                                             <TableCell colSpan={6}/>
-                                        </TableRow>
+                                        </TableRow> 
                                     )}
                                 </TableBody>
                                 {isBooksNotFound && (

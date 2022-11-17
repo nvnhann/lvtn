@@ -32,7 +32,7 @@ export default function UserCreate() {
     }, [id, isEdit]);
 
     return (
-        <Page title="Book | HYPE">
+        <Page title="Book | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading={!isEdit ? 'Thêm sách' : 'Chỉnh sửa'}

@@ -132,7 +132,7 @@ export default function BookList() {
     };
 
     return (
-        <Page title="PN | HYPE">
+        <Page title="PN | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading="Nhập hàng"

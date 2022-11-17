@@ -105,7 +105,7 @@ export default function CheckoutPayment() {
             enqueueSnackbar('Thanh toán thành công', {variant: 'success', autoHideDuration: 2000});
             navigate(PATH_PAGE.profile)
         } catch (err) {
-            enqueueSnackbar('Lỗi tạo hóa đơn', {variant: 'error', autoHideDuration: 2000});
+            enqueueSnackbar('Lỗi tạo đơn hàng', {variant: 'error', autoHideDuration: 2000});
         }
 
     }

@@ -60,7 +60,7 @@ module.exports = function (app) {
           )
       )
     );
-    return res.status(200).send("Thêm thành công hóa đơn!");
+    return res.status(200).send("Thêm thành công đơn hàng!");
   });
 
   app.get("/hoadon", async (req, res) => {
@@ -299,6 +299,6 @@ module.exports = function (app) {
     }
 
     await query(db, _qr, [data, id]);
-    return res.status(200).send("Cap nhat thanh cong");
+    return res.status(200).send("Cập nhật thành công!");
   });
 };

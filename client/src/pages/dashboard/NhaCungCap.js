@@ -146,7 +146,7 @@ export default function CungCapList() {
     }
   };
   return (
-    <Page title="NCC|HYPE">
+    <Page title="NCC | NN">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Nhà cung cấp"

@@ -31,7 +31,7 @@ export default function RoleCreate() {
     }, [id]);
 
     return (
-        <Page title="NXB | Hype">
+        <Page title="NXB | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading={!isEdit ? 'Tạo nhà xuất bản' : 'Chỉnh sửa'}

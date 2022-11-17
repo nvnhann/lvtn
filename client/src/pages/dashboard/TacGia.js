@@ -144,7 +144,7 @@ export default function TacGiaList() {
     }
   };
   return (
-    <Page title="Danh Muc|HYPE">
+    <Page title="Danh Muc | NN">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh mục"

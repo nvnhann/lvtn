@@ -31,7 +31,7 @@ export default function NCCCreate() {
     }, [id]);
 
     return (
-        <Page title="NXB | Hype">
+        <Page title="NXB | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading={!isEdit ? 'Tạo nhà cung cấp' : 'Chỉnh sửa'}

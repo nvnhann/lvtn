@@ -101,7 +101,7 @@ export default function HoaDonMoreMenu({hoadon, status, setLoad}) {
             <DialogConfirm
                 open={openDetail}
                 handleClose={handleCloseDetail}
-                title='Chi tiết hóa đơn'
+                title='Chi tiết đơn hàng'
                 maxWidth="md"
                 status={status}
                 idhd={hoadon.hd_id}

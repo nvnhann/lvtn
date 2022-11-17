@@ -38,7 +38,7 @@ export default function PhieuNhapCreate() {
         })();
     }, [id, isEdit, email]);
     return (
-        <Page title="PN | HYPE">
+        <Page title="PN | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading={!isEdit ? 'Phiếu nhập mới' : 'Chỉnh sửa'}

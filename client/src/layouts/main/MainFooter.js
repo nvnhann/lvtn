@@ -18,7 +18,7 @@ const LINKS = [
             {name: 'Điều khoản dịch vụ', href: PATH_PAGE.product},
             {name: 'Chính sách bảo mật thông tin cá nhân', href: PATH_PAGE.product},
             {name: 'Chính sách bảo mật thông tin thanh toán', href: PATH_PAGE.product},
-            {name: 'Giới thiệu HYPE', href: PATH_PAGE.product}
+            {name: 'Giới thiệu NN STORE', href: PATH_PAGE.product}
         ]
     },
     {
@@ -110,7 +110,7 @@ export default function MainFooter() {
                         textAlign: {xs: 'center', md: 'left'}
                     }}
                 >
-                    © 2022. HYPE bookstore
+                    © 2022. NN bookstore
                 </Typography>
             </Container>
         </RootStyle>

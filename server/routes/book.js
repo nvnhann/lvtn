@@ -52,24 +52,27 @@ module.exports = function (app) {
   });
 
   app.get("/books", async (req, res) => {
+    // SELECT 
+    //     sp_masp, sp_ten, san_pham.active, sp_id, gb_soluong, 
+    //     nha_xuat_ban.nxb_ten, the_loai.tl_ten, tac_gia.tg_ten
+    // FROM san_pham
+    //     LEFT JOIN nha_xuat_ban ON nha_xuat_ban.nxb_id = san_pham.sp_idnxb
+    //     LEFT JOIN the_loai ON the_loai.tl_id = san_pham.sp_idtl
+    //     LEFT JOIN tac_gia ON tac_gia.tg_id = san_pham.sp_idtg
+    //    LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id
     let qr = `
-    SELECT 
-        sp_masp, sp_ten, san_pham.active, sp_id, 
-        nha_xuat_ban.nxb_ten, the_loai.tl_ten, tac_gia.tg_ten, ngon_ngu.nn_ten
-    FROM san_pham
-        LEFT JOIN nha_xuat_ban ON nha_xuat_ban.nxb_id = san_pham.sp_idnxb
-        LEFT JOIN the_loai ON the_loai.tl_id = san_pham.sp_idtl
-        LEFT JOIN tac_gia ON tac_gia.tg_id = san_pham.sp_idtg
-        LEFT JOIN ngon_ngu ON ngon_ngu.nn_id = san_pham.sp_idnn
+    SELECT sp_masp, sp_ten, san_pham.active, sp_id, nhapvao.sl_nhap, banra.sl_ban, gb_soluong, gb_gia
+        FROM san_pham LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id,
+            (SELECT ctpn_idsp, SUM(ctpn_soluong) sl_nhap FROM chi_tiet_phieu_nhap
+            LEFT JOIN phieu_nhap ON ctpn_idpn = pn_id 
+            WHERE pn_active = 1 group by ctpn_idsp) nhapvao,
+            (SELECT cthd_idsp, SUM(cthd_soluong) sl_ban FROM chi_tiet_hoa_don 
+            LEFT JOIN trang_thai ON cthd_idhd = tt_idhd 
+            WHERE tt_trangthai = 3 group by cthd_idsp) banra
+        WHERE sp_id = nhapvao.ctpn_idsp AND nhapvao.ctpn_idsp = banra.cthd_idsp
     `;
     if (req.query.search) {
-      qr += `WHERE tl_ten like '%${req.query.search}%' or 
-                  tg_ten like '%${req.query.search}%' or
-                  nn_ten like '%${req.query.search}%' or
-                  sp_ten like '%${req.query.search}%' or 
-                  nxb_ten like '%${req.query.search}%' or 
-                  sp_masp like '%${req.query.search}%'
-      `;
+      qr += `WHERE sp_ten like '%${req.query.search}%'`;
     }
     const _books = await query(db, qr);
     await Promise.all(

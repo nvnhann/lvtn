@@ -72,7 +72,7 @@ module.exports = function (app) {
     } else {
       await query(db, qr, [active, id]);
     }
-    return res.status(200).send("Cập nhật thành công");
+    return res.status(200).send("Cập nhật thành công!");
   });
 
   app.delete("/khuyenmai/delete", async (req, res) => {

@@ -144,7 +144,7 @@ export default function NgonNguList() {
         }
     };
     return (
-        <Page title="Ngôn ngữ|HYPE">
+        <Page title="Ngôn ngữ | NN">
             <Container maxWidth={themeStretch ? false : 'lg'}>
                 <HeaderBreadcrumbs
                     heading="Ngôn ngữ"
