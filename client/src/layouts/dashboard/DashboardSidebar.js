@@ -18,6 +18,7 @@ import {MHidden} from '../../components/@material-extend';
 import sidebarConfig from './SidebarConfig';
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../../redux/slices/user';
+import {API_BASE_URL} from "../../config/configUrl";
 
 // ----------------------------------------------------------------------
 
@@ -189,6 +190,7 @@ export default function DashboardSidebar({isOpenSidebar, onCloseSidebar}) {
                     sx={{px: 5, pb: 5, mt: 2, width: 1, textAlign: 'center'}}
                 >
                     <Button variant='contained' onClick={() => dispatch(logout())}>Đăng xuất</Button>
+                        <a href={`${API_BASE_URL}/api/backup`} >Sao lưu dữ liệu</a>
                     <div>
                         <Typography gutterBottom variant="subtitle1">
                             Hi, {user?.fullname}

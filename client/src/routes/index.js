@@ -244,6 +244,9 @@ export default function Router() {
             }, {
                 path: 'product-detail/:id',
                 element: <ProductDetail/>
+            }, {
+                path: 'profile-shipper',
+                element: <OrderProfile/>
             }
             ]
         },
@@ -335,3 +338,4 @@ const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const Store = Loadable(lazy(() => import('../pages/dashboard/Store')));
 const Analytic = Loadable(lazy(() => import('../pages/dashboard/Analytic')));
 const BinhLuan = Loadable(lazy(() => import('../pages/dashboard/BinhLuan')));
+const OrderProfile = Loadable(lazy(() => import('../pages/homepages/OrderProfile')))
