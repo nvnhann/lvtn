@@ -27,9 +27,7 @@ export default function OrderProfile() {
 
                 <Card
                     sx={{
-                        mb: 3,
-                        height: 280,
-                        position: 'relative'
+                      p: 2
                     }}
                 >
                     <OrderShipping/>

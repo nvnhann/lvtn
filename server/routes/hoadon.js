@@ -346,4 +346,12 @@ module.exports = function (app) {
     await query(db, _qr, [data, id]);
     return res.status(200).send("Cập nhật thành công!");
   });
+
+  app.put('/hoadoncancle/:id', async (req, res)=>{
+    const {id} = req.params;
+    await query(db , "UPDATE hoa_don SET hd_idnv = NULL WHERE hd_id = ?", id);
+    await query(db, `DELETE FROM trang_thai WHERE tt_idhd = ? AND tt_trangthai = 1`, id);
+    return res.status(200).send("OK");
+
+  })
 };

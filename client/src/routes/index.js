@@ -39,6 +39,7 @@ export default function Router() {
     const isLogined = !!useSelector(state => state.user.current?.id);
     const isAdmin = useSelector(state => state.user.current?.role) === "ADMIN";
     const isEmployee = useSelector(state => state.user.current?.role) === "EMPLOYEE";
+    const isShipper = useSelector(state => state.user?.current?.role) === 'SHIPPER';
 
     return useRoutes([
         {
@@ -228,7 +229,7 @@ export default function Router() {
             element: (isAdmin || isEmployee) ? <Navigate to="/dashboard"/> : <MainLayout/>,
             children: [{
                 path: '/',
-                element: <ProductList/>
+                element: isShipper ? <Navigate to='/profile-shipper' /> : <ProductList/>
             }, {
                 path: 'change-password',
                 element: <ChangePassword/>

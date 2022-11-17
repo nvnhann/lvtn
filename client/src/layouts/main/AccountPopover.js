@@ -24,6 +24,7 @@ export default function AccountPopover() {
     const user = useSelector(state => state.user.current);
     const isAdmin = user?.role === 'ADMIN';
     const isEmployee = user?.role === 'EMPLOYEE';
+    const isShipper = useSelector(state => state.user?.current?.role) === 'SHIPPER';
 
     const handleOpen = () => {
         setOpen(true);
@@ -83,24 +84,26 @@ export default function AccountPopover() {
 
                 <Divider sx={{my: 1}}/>
 
-                <MenuItem
-                    to={PATH_PAGE.profile}
-                    component={RouterLink}
-                    onClick={handleClose}
-                    sx={{typography: 'body2', py: 1, px: 2.5}}
-                >
-                    <Box
-                        component={Icon}
-                        icon={personFill}
-                        sx={{
-                            mr: 2,
-                            width: 24,
-                            height: 24,
-                        }}
-                    />
+                {!isShipper && (
+                    <MenuItem
+                        to={PATH_PAGE.profile}
+                        component={RouterLink}
+                        onClick={handleClose}
+                        sx={{typography: 'body2', py: 1, px: 2.5}}
+                    >
+                        <Box
+                            component={Icon}
+                            icon={personFill}
+                            sx={{
+                                mr: 2,
+                                width: 24,
+                                height: 24,
+                            }}
+                        />
 
-                    Thông tin tài khoản
-                </MenuItem>
+                        Thông tin tài khoản
+                    </MenuItem>
+                )}
 
                 {(isAdmin || isEmployee) && (
                     <MenuItem

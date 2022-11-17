@@ -77,6 +77,7 @@ export default function OrderShipping() {
     const [detail, setDetail] = useState({});
     const [search, setSearch] = useState('');
     const [activeStep, setActiveStep] = useState(0);
+    const [openCancel, setOpenCancle] = useState(false);
 
     const handleStep = (step) => () => {
         setActiveStep(step);
@@ -88,6 +89,14 @@ export default function OrderShipping() {
 
     const handleClose = () => {
         setOpen(false);
+    };
+
+    const handleClickOpenCancle = () => {
+        setOpenCancle(true);
+    };
+
+    const handleCloseCancle = () => {
+        setOpenCancle(false);
     };
 
     const handleClickOpenOrder = () => {
@@ -169,6 +178,24 @@ export default function OrderShipping() {
                     variant: 'success',
                 },
             );
+            setIdhd('')
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const changeOrderCancle = async () => {
+        try {
+            if (!idhd) return;
+            await putData(API_BASE_URL + `/hoadoncancle/${idhd}`);
+            setLoad(e => e + 1)
+            enqueueSnackbar(
+                'Từ chối đơn hàng thành công!',
+                {
+                    variant: 'success',
+                },
+            );
+            setIdhd('')
         } catch (err) {
             console.log(err)
         }
@@ -255,12 +282,21 @@ export default function OrderShipping() {
                                         </TableCell>
                                         <TableCell align='right'>
                                             {(hd_trangthai === 1) &&
+                                                <>
                                                 <Button onClick={() => {
                                                     setIdhd(hd_id);
                                                     handleClickOpen()
                                                 }}>
                                                     Lấy hàng
-                                                </Button>}
+                                                </Button>
+                                                    <Button variant='contained' color='error' onClick={() => {
+                                                        setIdhd(hd_id);
+                                                        handleClickOpenCancle()
+                                                    }}>
+                                                        Từ chối
+                                                    </Button>
+
+                                                </>}
                                             {(hd_trangthai === 2) &&
                                                 <Button color='info' onClick={() => {
                                                     setIdhd(hd_id);
@@ -294,6 +330,19 @@ export default function OrderShipping() {
                     </>
                 }
                 excFunc={changeOrder}
+            />
+
+            <DialogConfirm
+                open={openCancel}
+                handleClose={handleCloseCancle}
+                message={
+                    <>
+                        <Typography color="error" variant="h4" align="center">
+                            Bạn muốn từ chối nhận đơn hàng?
+                        </Typography>
+                    </>
+                }
+                excFunc={changeOrderCancle}
             />
 
 

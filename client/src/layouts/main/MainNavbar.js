@@ -52,6 +52,8 @@ export default function MainNavbar() {
     const cartCount = useSelector(cartItemCount);
     const dispatch = useDispatch();
     const store = useSelector(state => state.store.store);
+    const isShipper = useSelector(state => state.user?.current?.role) === 'SHIPPER';
+
 
     return (
         <AppBar sx={{boxShadow: 0, bgcolor: 'transparent'}}>
@@ -79,12 +81,17 @@ export default function MainNavbar() {
                         {store.ch_ten}
                     </Typography>
                     <Box sx={{flexGrow: 1}}/>
-                    <Searchbar/>
-                    <Box mx={2} component={Link} to={PATH_PAGE.shopcart} onClick={() => dispatch(onGotoStep(0))}>
-                        <Badge showZero badgeContent={cartCount} color="error" max={99}>
-                            <IconCart/>
-                        </Badge>
-                    </Box>
+                    {!isShipper && (
+                        <>
+                            <Searchbar/>
+                            <Box mx={2} component={Link} to={PATH_PAGE.shopcart}
+                                 onClick={() => dispatch(onGotoStep(0))}>
+                                <Badge showZero badgeContent={cartCount} color="error" max={99}>
+                                    <IconCart/>
+                                </Badge>
+                            </Box>
+                        </>
+                    )}
                     {isLogined ? (
                         <AccountPopover/>
                     ) : (
