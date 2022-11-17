@@ -73,7 +73,7 @@ module.exports = function (app) {
       ON nhapvao.ctpn_idsp = banra.cthd_idsp
     `;
     if (req.query.search) {
-      qr += ` AND sp_ten like '%${req.query.search}%'`;
+      qr += ` WHERE sp_ten like '%${req.query.search}%'`;
     }
     qr+=' ORDER BY sp_id DESC';
     console.log(qr)
