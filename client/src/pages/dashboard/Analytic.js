@@ -56,6 +56,12 @@ export default function Analytic() {
                 text={'Số lượng sách đã bán'}
               />
             </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <AnalyticNhap
+                  total={thongke?.thongke?.ton_kho}
+                  text={'Tồn kho'}
+              />
+            </Grid>
 
             <Grid item xs={12} sm={6} md={4}>
               <AnalyticNhap
@@ -71,12 +77,7 @@ export default function Analytic() {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6} md={4}>
-              <AnalyticNhap
-                total={thongke?.thongke?.ton_kho}
-                text={'Tồn kho'}
-              />
-            </Grid>
+
 
             <Grid item xs={12} sm={6} md={4}>
               <AnalyticNhap
