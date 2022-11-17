@@ -83,4 +83,7 @@ export const PATH_DASHBOARD = {
   thongke: {
     root: path(ROOTS_DASHBOARD, '/thongke'),
   },
+  binhluan: {
+    root: path(ROOTS_DASHBOARD, '/binhluan'),
+  }
 };

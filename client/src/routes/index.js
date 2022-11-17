@@ -205,6 +205,10 @@ export default function Router() {
                 }, {
                     path: '/store',
                     element: <Store/>
+                },
+                {
+                    path: '/binhluan',
+                    element: <BinhLuan/>
                 }
             ],
         },
@@ -330,3 +334,4 @@ const Page500 = Loadable(lazy(() => import('../pages/Page500')));
 const NotFound = Loadable(lazy(() => import('../pages/Page404')));
 const Store = Loadable(lazy(() => import('../pages/dashboard/Store')));
 const Analytic = Loadable(lazy(() => import('../pages/dashboard/Analytic')));
+const BinhLuan = Loadable(lazy(() => import('../pages/dashboard/BinhLuan')));

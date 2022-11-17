@@ -23,7 +23,8 @@ const ICONS = {
     giamgia: getIcon('ic_discount'),
     order: getIcon('ic_order'),
     store: getIcon('ic_store'),
-    thongke: getIcon('ic_analytics')
+    thongke: getIcon('ic_analytics'),
+    comment: getIcon('ic_comment')
 };
 
 const sidebarConfig = [
@@ -49,6 +50,11 @@ const sidebarConfig = [
                 title: 'Sách',
                 path: PATH_DASHBOARD.book.root,
                 icon: ICONS.book,
+            },
+            {
+                title: 'Bình luận',
+                path: PATH_DASHBOARD.binhluan.root,
+                icon: ICONS.comment,
             },
             {
                 title: 'Nhập hàng',

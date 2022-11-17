@@ -104,6 +104,29 @@ module.exports = function (app) {
     );
     return res.status(200).send(_rs);
   });
+
+  app.get("/binhluan-getall", async (req, res) => {
+    const { pageURL } = req.query;
+    let limit = 5;
+    if (pageURL) {
+      limit = limit * pageURL;
+    }
+    let _rs = {};
+    let _qr = `SELECT * FROM binh_luan LEFT JOIN users ON binh_luan.bl_idkh = users.id`;
+    _qr += " LIMIT ? ";
+    console.log(_qr);
+    _rs.data = await query(db, _qr, [limit]);
+    _rs.rating = await query(
+      db,
+      ` SELECT binh_luan.bl_danhgia rate, COUNT(binh_luan.bl_trangthai) num
+                                          FROM binh_luan 
+                                          GROUP BY binh_luan.bl_danhgia
+                                          ORDER BY binh_luan.bl_danhgia DESC`,
+      
+    );
+    return res.status(200).send(_rs);
+  });
+
   app.get("/thongke", async (req, res) => {
     let _result = {};
     let { year, startdate, enddate } = req.query;
