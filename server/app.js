@@ -10,11 +10,13 @@ global.publicPath = path.resolve("public/images");
 const bodyParser = require("body-parser");
 const db = require("./db");
 const query = require("./lib/query");
+const mysqldump = require('mysqldump');
 //---------------------------------------------------------------------------------------
 const app = express();
 app.use(morgan("dev"));
 app.use(CookieParser());
 app.use(express.json());
+
 
 // cors option
 const corsOptions = {
@@ -75,8 +77,22 @@ require("./routes/hoadon")(app);
 require("./routes/orther")(app);
 
 //######################################################################################
+app.get("/api/backup", async (req, res) => {
+    let filename ='backup_' + Date.now() + '.sql';
+   await mysqldump({
+        connection: {
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'ct593',
+        },
+        dumpToFile: __dirname + `/public/images/${filename}`,
+    });
+    return res.download( __dirname + `/public/images/${filename}`)
+})
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
+
