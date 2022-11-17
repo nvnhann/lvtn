@@ -106,17 +106,16 @@ module.exports = function (app) {
   });
   app.get("/thongke", async (req, res) => {
     let _result = {};
-    const { year } = req.query;
+    let { year, startdate, enddate } = req.query;
+    startdate = new Date(startdate)
+    enddate = new Date(enddate);
+    startdate = startdate.getFullYear()+'-'+(startdate.getUTCMonth() +1 )+'-'+startdate.getDate();
+    enddate = enddate.getFullYear()+'-'+(enddate.getUTCMonth() +1 )+'-'+enddate.getDate();
+    const _thongkes = await query(db, `call thongke_theokhoangtg_thuchi('${startdate}', '${enddate}')`);
 
-    const _thongkes = query(db, `call thongke_theokhoangtg_thuchi(NULL, NULL)`);
     let numYears = await query(
       db,
       `SELECT YEAR(hd_ngaytao) nam FROM hoa_don GROUP BY YEAR(hd_ngaytao) ORDER BY nam DESC`
-    );
-    console.log(
-      `CALL thongke_1nam_temp(${
-        !!year ? year : numYears[numYears.length - 1].nam
-      })`
     );
     let _theo_nam = await query(
       db,
@@ -140,9 +139,17 @@ module.exports = function (app) {
       if (!theonam[0].data[i]) theonam[0].data[i] = 0;
       if (!theonam[1].data[i]) theonam[1].data[i] = 0;
     }
-    _result.thongke = _thongkes;
+    let qr_theloai = `CALL thongke_theokhoangtg_theloaibanchay('${startdate}', '${enddate}')`;
+    let qr_tacgia = `CALL thongke_theokhoangtg_tacgiabanchay('${startdate}', '${enddate}')`;
+
+    const the_loai = await query(db, qr_theloai);
+    const tac_gia = await query(db, qr_tacgia);
+
+    _result.thongke = _thongkes[0][0];
     _result.theo_nam = theonam;
     _result.num_year = numYears;
+    _result.the_loai = the_loai[0];
+    _result.tac_gia = tac_gia[0];
 
     return res.status(200).send(_result);
   });
