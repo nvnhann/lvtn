@@ -8,6 +8,7 @@ module.exports = function (app) {
   app.get("/tacgia", async (req, res) => {
     let qr = "SELECT * FROM tac_gia ";
     if (req.query.search) qr += `WHERE tg_ten like '%${req.query.search}%'`;
+    qr += ' ORDER BY tg_id'
     return res.status(200).send(await query(db, qr));
   });
 

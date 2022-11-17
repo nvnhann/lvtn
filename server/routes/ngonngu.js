@@ -6,6 +6,7 @@ module.exports = function (app) {
   app.get("/ngonngu", async (req, res) => {
     let qr = "SELECT * FROM ngon_ngu ";
     if (req.query.search) qr += `WHERE nn_ten like '%${req.query.search}%'`;
+    qr += ' ORDER BY nn_id DESC';
     return res.status(200).send(await query(db, qr));
   });
 

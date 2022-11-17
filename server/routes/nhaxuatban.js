@@ -4,13 +4,14 @@ const query = require("../lib/query");
 
 module.exports = function (app) {
   app.get("/nhaxuatban", async (req, res) => {
-    let qr = "SELECT * FROM nha_xuat_ban ";
+    let qr = "SELECT * FROM nha_xuat_ban";
     if (req.query.search) {
       qr += `WHERE nxb_ten like '%${req.query.search}%' or 
               nxb_sdt like '%${req.query.search}%' or
               nxb_email like '%${req.query.search}%' or
               nxb_diachi like '%${req.query.search}%'`;
     }
+    qr += ' ORDER BY nxb_id DESC';
     sql.query(qr, (err, data) => {
       if (err) {
         console.log(err);

@@ -11,6 +11,7 @@ module.exports = function (app) {
               ncc_email like '%${req.query.search}%' or
               ncc_diachi like '%${req.query.search}%'`;
     }
+    qr += ' ORDER BY ncc_id DESC';
     sql.query(qr, (err, data) => {
       if (err) {
         console.log(err);

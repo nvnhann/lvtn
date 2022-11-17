@@ -112,7 +112,7 @@ module.exports = function (app) {
       limit = limit * pageURL;
     }
     let _rs = {};
-    let _qr = `SELECT  users.*, san_pham.sp_ten, binh_luan.* FROM binh_luan LEFT JOIN san_pham ON san_pham.sp_id = binh_luan.bl_idsp LEFT JOIN users ON binh_luan.bl_idkh = users.id`;
+    let _qr = `SELECT  users.*, san_pham.sp_ten, binh_luan.* FROM binh_luan LEFT JOIN san_pham ON san_pham.sp_id = binh_luan.bl_idsp LEFT JOIN users ON binh_luan.bl_idkh = users.id ORDER BY bl_id DESC`;
     _qr += " LIMIT ? ";
     console.log(_qr);
     _rs.data = await query(db, _qr, [limit]);
