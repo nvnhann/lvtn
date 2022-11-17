@@ -112,7 +112,7 @@ module.exports = function (app) {
       limit = limit * pageURL;
     }
     let _rs = {};
-    let _qr = `SELECT * FROM binh_luan LEFT JOIN users ON binh_luan.bl_idkh = users.id`;
+    let _qr = `SELECT  users.*, san_pham.sp_ten, binh_luan.* FROM binh_luan LEFT JOIN san_pham ON san_pham.sp_id = binh_luan.bl_idsp LEFT JOIN users ON binh_luan.bl_idkh = users.id`;
     _qr += " LIMIT ? ";
     console.log(_qr);
     _rs.data = await query(db, _qr, [limit]);
@@ -175,5 +175,12 @@ module.exports = function (app) {
     _result.tac_gia = tac_gia[0];
 
     return res.status(200).send(_result);
+  });
+
+  app.put("/api/binhluan-active", async (req, res) => {
+    const { id, active, arrID } = req.body;
+    const qr = `UPDATE binh_luan SET bl_trangthai = ? where bl_id = ?`;
+      await query(db, qr, [active, id]);
+    return res.status(200).send("Cập nhật thành công");
   });
 };
