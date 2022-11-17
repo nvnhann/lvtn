@@ -89,14 +89,14 @@ export default function Analytic() {
               <Card sx={{ p: 2 }}>
                 <Stack direction="col" >
                   <Box width="50%">
-                    <Typography variant="h5">Thể loại bán chạy</Typography>
+                    <Typography variant="h5" align='center'>Thể loại bán chạy</Typography>
                     {thongke?.the_loai?.map((e, idx) => {
                       if (idx < 10) return <Typography>{idx+1}. {e.tl_ten}</Typography>;
                     })}
                   </Box>
 
                   <Box width="50%">
-                    <Typography variant="h5">Tác giả bán chạy</Typography>
+                    <Typography variant="h5" align='center'>Tác giả bán chạy</Typography>
                     {thongke?.tac_gia?.map((e, idx) => {
                       if (idx < 10) return <Typography>{e.tg_ten}</Typography>;
                     })}
