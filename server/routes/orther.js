@@ -88,7 +88,7 @@ module.exports = function (app) {
     }
     let _rs = {};
     let _qr = `SELECT * FROM binh_luan LEFT JOIN users ON binh_luan.bl_idkh = users.id 
-    WHERE bl_idsp = ? AND bl_trangthai = 1`;
+    WHERE bl_idsp = ? AND bl_trangthai = 1 `;
     if (Number(star) !== 0) _qr += `AND bl_danhgia = ${star} `;
     _qr += "LIMIT ?";
     console.log(_qr);
