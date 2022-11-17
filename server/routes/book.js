@@ -62,14 +62,15 @@ module.exports = function (app) {
     //    LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id
     let qr = `
     SELECT sp_masp, sp_ten, san_pham.active, sp_id, nhapvao.sl_nhap, banra.sl_ban, gb_soluong, gb_gia
-        FROM san_pham LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id,
+        FROM san_pham LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id LEFT JOIN
             (SELECT ctpn_idsp, SUM(ctpn_soluong) sl_nhap FROM chi_tiet_phieu_nhap
             LEFT JOIN phieu_nhap ON ctpn_idpn = pn_id 
-            WHERE pn_active = 1 group by ctpn_idsp) nhapvao,
+            WHERE pn_active = 1 group by ctpn_idsp) nhapvao ON sp_id = nhapvao.ctpn_idsp
+						LEFT JOIN
             (SELECT cthd_idsp, SUM(cthd_soluong) sl_ban FROM chi_tiet_hoa_don 
             LEFT JOIN trang_thai ON cthd_idhd = tt_idhd 
             WHERE tt_trangthai = 3 group by cthd_idsp) banra
-        WHERE sp_id = nhapvao.ctpn_idsp AND nhapvao.ctpn_idsp = banra.cthd_idsp
+      ON nhapvao.ctpn_idsp = banra.cthd_idsp
     `;
     if (req.query.search) {
       qr += `WHERE sp_ten like '%${req.query.search}%'`;
