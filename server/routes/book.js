@@ -52,14 +52,6 @@ module.exports = function (app) {
   });
 
   app.get("/books", async (req, res) => {
-    // SELECT 
-    //     sp_masp, sp_ten, san_pham.active, sp_id, gb_soluong, 
-    //     nha_xuat_ban.nxb_ten, the_loai.tl_ten, tac_gia.tg_ten
-    // FROM san_pham
-    //     LEFT JOIN nha_xuat_ban ON nha_xuat_ban.nxb_id = san_pham.sp_idnxb
-    //     LEFT JOIN the_loai ON the_loai.tl_id = san_pham.sp_idtl
-    //     LEFT JOIN tac_gia ON tac_gia.tg_id = san_pham.sp_idtg
-    //    LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id
     let qr = `
     SELECT sp_masp, sp_ten, san_pham.active, sp_id, nhapvao.sl_nhap, banra.sl_ban, gb_soluong, gb_gia
         FROM san_pham LEFT JOIN gia_ban ON gia_ban.gb_idsp = san_pham.sp_id LEFT JOIN
@@ -83,6 +75,84 @@ module.exports = function (app) {
         _hinhanh = await query(
           db,
           "SELECT * FROM hinh_anh WHERE ha_idsp = ?",
+          book.sp_id
+        );
+        _books[idx].sp_hinhanh = _hinhanh;
+      })
+    );
+    res.status(200).send(_books);
+  });
+
+  app.get("/sachbanchay", async (req, res) => {
+    let qr = `
+    SELECT sp.sp_ten, sp.sp_id, sp.sp_masp, banra.sl_ban, gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban, 
+    km.km_phantramgiam, 
+    gb.gb_soluong,
+    (
+        CASE 
+            WHEN km.active = 0 then 0
+            WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+            WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+        ELSE ROUND(((gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) - (gb.gb_gia + gb.gb_gia *ch.ch_loinhuanbanhang / 100) * (km.km_phantramgiam / 100)),0)            
+        END
+    ) as sp_giakhuyenmai
+        FROM cua_hang ch, san_pham sp LEFT JOIN gia_ban gb ON gb.gb_idsp = sp.sp_id
+        LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id
+        LEFT JOIN
+            (SELECT ctpn_idsp, SUM(ctpn_soluong) sl_nhap FROM chi_tiet_phieu_nhap
+            LEFT JOIN phieu_nhap ON ctpn_idpn = pn_id 
+            WHERE pn_active = 1 group by ctpn_idsp) nhapvao ON sp_id = nhapvao.ctpn_idsp
+						LEFT JOIN
+            (SELECT cthd_idsp, SUM(cthd_soluong) sl_ban FROM chi_tiet_hoa_don 
+            LEFT JOIN trang_thai ON cthd_idhd = tt_idhd 
+            WHERE tt_trangthai = 3 group by cthd_idsp) banra
+      ON nhapvao.ctpn_idsp = banra.cthd_idsp ORDER BY sl_ban DESC LIMIT 8;
+    `;
+    console.log(qr)
+    const _books = await query(db, qr);
+    await Promise.all(
+      _books.map(async (book, idx) => {
+        _hinhanh = await query(
+          db,
+          "SELECT * FROM hinh_anh WHERE ha_idsp = ? ORDER BY ha_id DESC",
+          book.sp_id
+        );
+        _books[idx].sp_hinhanh = _hinhanh;
+      })
+    );
+    res.status(200).send(_books);
+  });
+  app.get("/sachmoinhat", async (req, res) => {
+    let qr = ` SELECT sp.sp_ten, sp.sp_id, sp.sp_masp, banra.sl_ban, gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban, 
+    km.km_phantramgiam, 
+    gb.gb_soluong,
+    (
+        CASE 
+            WHEN km.active = 0 then 0
+            WHEN DATE(NOW()) < km.km_ngaybatdau then 0
+            WHEN DATE(NOW()) > km.km_ngayketthuc then 0
+        ELSE ROUND(((gb.gb_gia + gb.gb_gia * ch.ch_loinhuanbanhang / 100) - (gb.gb_gia + gb.gb_gia *ch.ch_loinhuanbanhang / 100) * (km.km_phantramgiam / 100)),0)            
+        END
+    ) as sp_giakhuyenmai
+        FROM cua_hang ch, san_pham sp LEFT JOIN gia_ban gb ON gb.gb_idsp = sp.sp_id
+        LEFT JOIN khuyen_mai km ON km.km_idsp = sp.sp_id
+        LEFT JOIN
+            (SELECT ctpn_idsp, SUM(ctpn_soluong) sl_nhap FROM chi_tiet_phieu_nhap
+            LEFT JOIN phieu_nhap ON ctpn_idpn = pn_id 
+            WHERE pn_active = 1 group by ctpn_idsp) nhapvao ON sp_id = nhapvao.ctpn_idsp
+						LEFT JOIN
+            (SELECT cthd_idsp, SUM(cthd_soluong) sl_ban FROM chi_tiet_hoa_don 
+            LEFT JOIN trang_thai ON cthd_idhd = tt_idhd 
+            WHERE tt_trangthai = 3 group by cthd_idsp) banra
+      ON nhapvao.ctpn_idsp = banra.cthd_idsp ORDER BY sp_id DESC LIMIT 8;
+    `;
+    console.log(qr)
+    const _books = await query(db, qr);
+    await Promise.all(
+      _books.map(async (book, idx) => {
+        _hinhanh = await query(
+          db,
+          "SELECT * FROM hinh_anh WHERE ha_idsp = ? ORDER BY ha_id DESC",
           book.sp_id
         );
         _books[idx].sp_hinhanh = _hinhanh;
@@ -198,13 +268,13 @@ module.exports = function (app) {
 
   app.get("/api/books", async (req, res) => {
     const { pageURL } = req.query;
-    let limit = 32;
+    let limit = 16;
     if (pageURL) {
       limit = limit * pageURL;
     }
     const qr_book = `SELECT 
         sp.sp_ten, sp.sp_id, sp.sp_masp,
-        gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban,km.km_phantramgiam, 
+        gb.gb_gia + (gb.gb_gia * ch.ch_loinhuanbanhang)/100 gia_ban, km.km_phantramgiam, 
         gb.gb_soluong,
         (
             CASE 
