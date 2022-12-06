@@ -191,7 +191,7 @@ export default function CheckoutPayment() {
 
                             {values.delivery === 1 && <Card sx={{my: 4}}>
                                 <PayPalButton
-                                    amount={parseFloat(totalPrice / 24000).toFixed(2)}
+                                    amount={parseFloat((totalPrice+(totalPrice >= 500000 ? 0 : 30000))/ 24000).toFixed(2)}
                                     options={options}
                                     onSuccess={onSuccess}
                                     onError={onError}
