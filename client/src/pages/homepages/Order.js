@@ -106,6 +106,13 @@ export default function Order() {
                     variant: 'error',
                 },
             );
+            const letterNumber = /^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/;
+            if(reason?.match(letterNumber)) return  enqueueSnackbar(
+                'Lý do không hợp lê!',
+                {
+                    variant: 'error',
+                },
+            );
             await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4, tt_idnv: id, tt_note: reason});
             setLoad(e => e + 1)
             enqueueSnackbar(
@@ -114,6 +121,7 @@ export default function Order() {
                     variant: 'success',
                 },
             );
+            setReason('');
             handleClose();
         } catch (err) {
             console.log(err)
