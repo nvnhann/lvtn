@@ -24,6 +24,12 @@ export default function HoaDonStepper({trang_thai}) {
                                     <Typography>Đã lấy hàng bởi: <b>{step.fullname}</b></Typography>}
                                 {step.tt_trangthai === 3 &&
                                     <Typography>Đã giao hàng bởi: <b>{step.fullname}</b></Typography>}
+                                {step.tt_trangthai === 4 &&
+                                    <>
+                                    <Typography>Đã hủy bởi: <b>{step.fullname}</b></Typography>
+                                        <Typography><b>Lý do: </b> {step.tt_note}</Typography>
+                                        </>
+                                }
                             </Typography>
                         </>}>
                             {step.tt_trangthai === 0 && 'Chờ xác nhận'}

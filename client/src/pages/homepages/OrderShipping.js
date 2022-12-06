@@ -15,7 +15,7 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
+    TableRow, TextField,
     Typography
 } from "@material-ui/core";
 import {styled} from "@material-ui/core/styles";
@@ -78,6 +78,8 @@ export default function OrderShipping() {
     const [search, setSearch] = useState('');
     const [activeStep, setActiveStep] = useState(0);
     const [openCancel, setOpenCancle] = useState(false);
+    const [openCancel1, setOpenCancle1] = useState(false);
+    const [reason, setReason] = useState('');
 
     const handleStep = (step) => () => {
         setActiveStep(step);
@@ -94,6 +96,9 @@ export default function OrderShipping() {
     const handleClickOpenCancle = () => {
         setOpenCancle(true);
     };
+    const handleClickOpenCancle1 = () => {
+        setOpenCancle1(true);
+    };
 
     const handleCloseCancle = () => {
         setOpenCancle(false);
@@ -101,6 +106,9 @@ export default function OrderShipping() {
 
     const handleClickOpenOrder = () => {
         setOpenOrder(true);
+    };
+    const handleCloseCancle1 = () => {
+        setOpenCancle1(false);
     };
 
     const handleCloseOrder = () => {
@@ -196,6 +204,29 @@ export default function OrderShipping() {
                 },
             );
             setIdhd('')
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const changeOrderCancle1 = async () => {
+        try {
+            if (!idhd) return;
+            if(reason === '') return  enqueueSnackbar(
+                'Vui lòng nhập lý do hủy!',
+                {
+                    variant: 'error',
+                },
+            );
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4, tt_idnv: id, tt_note: reason});
+            setLoad(e => e + 1)
+            enqueueSnackbar(
+                'Hủy đơn hàng thành công!',
+                {
+                    variant: 'success',
+                },
+            );
+            handleCloseCancle1()
         } catch (err) {
             console.log(err)
         }
@@ -298,13 +329,23 @@ export default function OrderShipping() {
 
                                                 </>}
                                             {(hd_trangthai === 2) &&
+                                                <>
                                                 <Button color='info' onClick={() => {
                                                     setIdhd(hd_id);
                                                     setFieldValue('idhd', hd_id);
                                                     handleClickOpenOrder()
                                                 }}>
                                                     Giao hàng
-                                                </Button>}
+                                                </Button>
+                                                    <Button color='error' onClick={() => {
+                                                        setIdhd(hd_id);
+                                                        handleClickOpenCancle1()
+                                                    }}>
+                                                        Hủy
+                                                    </Button>
+                                                    </>
+
+                                            }
                                             <IconButton onClick={() => {
                                                 setDetail(e);
                                                 handleClickOpenDetail();
@@ -383,6 +424,28 @@ export default function OrderShipping() {
                         </FormikProvider>
                     </>
                 }
+            />
+            <DialogConfirm
+                open={openCancel1}
+                handleClose={handleCloseCancle1}
+                message={
+                    <>
+                        <Typography color="error" variant="h4" align="center">
+                            Bạn chắc chắn muốn hủy đơn hàng?
+                        </Typography>
+                        <TextField
+                            label="Lý do hủy"
+                            fullWidth
+                            multiline
+                            value={reason}
+                            onChange={e=>setReason(e.target.value)}
+                            rows={3}
+                        />
+                    </>
+                }
+                linkTo
+                isClose={true}
+                excFunc={changeOrderCancle1}
             />
 
             <DialogConfirm

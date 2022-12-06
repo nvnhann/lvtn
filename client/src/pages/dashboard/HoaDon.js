@@ -54,6 +54,7 @@ export default function HoaDon() {
             try {
                 const res = await getData(API_BASE_URL + `/hoadon?search=${filterName}&&trangthai=${activeStep}`);
                 setDatas(res.data);
+                console.log(res.data)
             } catch (e) {
                 console.log(e);
             }

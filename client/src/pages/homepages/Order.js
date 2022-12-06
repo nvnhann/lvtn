@@ -106,7 +106,7 @@ export default function Order() {
                     variant: 'error',
                 },
             );
-            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4});
+            await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4, tt_idnv: id, tt_note: reason});
             setLoad(e => e + 1)
             enqueueSnackbar(
                 'Hủy đơn hàng thành công!',
@@ -114,6 +114,7 @@ export default function Order() {
                     variant: 'success',
                 },
             );
+            handleClose();
         } catch (err) {
             console.log(err)
         }
