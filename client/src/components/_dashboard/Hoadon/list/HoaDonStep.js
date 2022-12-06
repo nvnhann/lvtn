@@ -7,7 +7,7 @@ import {formatDateTime} from 'src/_helper/formatDate';
 
 export default function HoaDonStepper({trang_thai}) {
     // eslint-disable-next-line no-unused-vars
-    const [activeStep, setActiveStep] = useState(trang_thai.length + 1);
+    const [activeStep, setActiveStep] = useState(trang_thai?.length + 1);
 
 
     return (

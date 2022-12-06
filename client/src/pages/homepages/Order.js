@@ -1,7 +1,7 @@
 import {
     Box,
     Button,
-    Card,
+    Card, Divider,
     Grid,
     IconButton,
     Link,
@@ -32,6 +32,7 @@ import {Icon} from '@iconify/react';
 import Scrollbar from "../../components/Scrollbar";
 import {Link as RouterLink} from "react-router-dom";
 import {PATH_PAGE} from "../../routes/paths";
+import HoaDonStepper from "../../components/_dashboard/Hoadon/list/HoaDonStep";
 //-----------------------------------------------------------------------------
 const SearchStyle = styled(OutlinedInput)(({theme}) => ({
     transition: theme.transitions.create(['box-shadow', 'width'], {
@@ -68,7 +69,7 @@ export default function Order() {
     const [detail, setDetail] = useState({});
     const [search, setSearch] = useState('');
     const [activeStep, setActiveStep] = useState(0);
-
+    const [reason, setReason] = useState('');
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -99,6 +100,12 @@ export default function Order() {
     const changeOrder = async () => {
         try {
             if (!idhd) return;
+            if(reason === '') return  enqueueSnackbar(
+                'Vui lòng nhập lý do hủy!',
+                {
+                    variant: 'error',
+                },
+            );
             await putData(API_BASE_URL + `/hoadon/${idhd}`, {tt_trangthai: 4});
             setLoad(e => e + 1)
             enqueueSnackbar(
@@ -111,7 +118,6 @@ export default function Order() {
             console.log(err)
         }
     }
-
     return (
         <>
             <Card sx={{my: 2}}>
@@ -236,12 +242,15 @@ export default function Order() {
                             label="Lý do hủy"
                             fullWidth
                             multiline
+                            value={reason}
+                            onChange={e=>setReason(e.target.value)}
                             rows={3}
                         />
                     </>
                 }
                 linkTo
-                excFunc={changeOrder}
+                isClose={true}
+                excFunc={ changeOrder}
             />
 
             <DialogConfirm
@@ -289,6 +298,8 @@ export default function Order() {
                             </Typography>
                             <Typography variant="body2">{fCurrency(detail.hd_tongtien + detail.hd_tienvc)}</Typography>
                         </Stack>
+                        <Divider />
+                        <HoaDonStepper trang_thai={detail?.trang_thai_all}/>
                         <Scrollbar>
                             <TableContainer sx={{minWidth: 720, mt: 2}}>
                                 <Table>

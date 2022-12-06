@@ -38,6 +38,7 @@ const Transition = forwardRef((props, ref) => (
 // ----------------------------------------------------------------------
 
 export default function DialogConfirm({
+                                            isClose,
                                           open,
                                           handleClose,
                                           message,
@@ -110,7 +111,7 @@ export default function DialogConfirm({
 
     const handleConfirm = async () => {
         if (excFunc) await excFunc();
-        handleClose();
+        if(!isClose) handleClose();
     };
 
     return (
