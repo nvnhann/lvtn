@@ -68,7 +68,6 @@ export default function LoadingScreen({ ...other }) {
   return (
     <RootStyle {...other}>
       <ProgressBar />
-
       <motion.div
         initial={{ rotateY: 0 }}
         animate={{ rotateY: 360 }}
