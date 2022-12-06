@@ -296,6 +296,11 @@ module.exports = function (app) {
           _hoadon[idx].cthd = await query(db, _cthd, e.hd_id);
           let qr = "SELECT * FROM trang_thai WHERE tt_idhd = ? ";
           _hoadon[idx].trangthai = await query(db, qr, e.hd_id);
+          _hoadon[idx].trang_thai_all = await query(
+              db,
+              `SELECT trang_thai.*,users.fullname FROM trang_thai LEFT JOIN users ON users.id = trang_thai.tt_idnv WHERE tt_idhd = ?`,
+              e.hd_id
+          );
         })
       );
     }
