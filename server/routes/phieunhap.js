@@ -29,12 +29,18 @@ module.exports = function (app) {
   });
 
   app.get("/phieunhap", async (req, res) => {
-    const qr_pn = `
+    let search  = req.query.search; 
+    let qr_pn = `
         SELECT phieu_nhap.*, users.fullname, nha_cung_cap.ncc_ten
         FROM phieu_nhap
         LEFT JOIN users ON users.id = phieu_nhap.pn_idnv
-        LEFT JOIN nha_cung_cap ON nha_cung_cap.ncc_id = phieu_nhap.pn_idncc ORDER BY pn_id DESC
+        LEFT JOIN nha_cung_cap ON nha_cung_cap.ncc_id = phieu_nhap.pn_idncc
     `;
+    if(search){
+      qr_pn += ` WHERE users.fullname LIKE '%${search}%' 
+                    OR nha_cung_cap.ncc_ten LIKE '%${search}%'`;
+    }
+    qr_pn += `ORDER BY pn_id DESC`;
     return res.status(200).send(await query(db, qr_pn));
   });
 
